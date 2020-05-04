@@ -149,5 +149,7 @@ Course* searchCourseFile(std::string search);
 Date TakeDateStart(std::string current);
 Date TakeDateEnd(std::string current);
 std::string GetFilePath(unsigned __int64 ID);
+void SessionConflict(Course** a, Course** b, int*& Register);
+int fistrun(std::string& current);
 #endif // _Structs
 

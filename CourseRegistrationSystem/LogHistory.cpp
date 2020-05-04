@@ -407,13 +407,13 @@ bool isConflict(Course* a, Course* b)		// true means conflict, false is not
 void SessionConflict(Course** a, Course** b, int*& Register)
 {
 	int n = _msize(a) / sizeof(a);
-	int m = _msize(b) / sizeof(b);
-	Register = new int[n] {};
 
 	for (int i = 0; i < n; i++)
 	{
-		for (int j = 0; j < m; j++)
+		Register[i] = 0;
+		for (int j = 0; j < 5; j++)
 		{
+			if (b[j] == nullptr) break;
 			if (*a[i]->ID == *b[j]->ID)
 			{
 				Register[i] = 1;

@@ -8,7 +8,7 @@
 #include <filesystem>
 #include"Data.h"
 
-int fistrun(std::string current) {
+int fistrun(std::string& current) {
 	std::fstream file("firstrun", std::fstream::in | std::ios::binary);
 	if (!file) return -1;// everything done for this semester
 	int year;
@@ -56,10 +56,11 @@ void main()
 	//int a = InputNumber();
 	//std::cout << '\t' << a;
 	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
-	/*std::string current;
+	std::cout << GetTime();
+	std::string current;
 	std::cout<<fistrun(current);
 	std::cout << current;
-	_getwch();*/
+	_getwch();
 	userTypeMode();
 	//std::cout << SearchCurrent();
 	//std::cout << "dada";

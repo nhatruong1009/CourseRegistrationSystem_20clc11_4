@@ -15,7 +15,7 @@ bool isLoggedIn() {
 	if (un == username && pw == password) return true;
 	return false; 
 }
-
+void registerMenu(Student* stu);
 void enrollCourse(Student student, Course course) {
 	//so luong course da dang ky, max 5
 	int countCourse = student.coursenow ? _msize(student.coursenow) / sizeof(char*) : 0;
@@ -115,9 +115,10 @@ void staffMode()
 	case 1: courseStaff(); break;
 	case 2: schoolPlan(); break;
 	case -1:
-	case 4: userTypeMode(); break;
+	case 4: break;
 	}
 	DealocatedArrString(menu);
+	userTypeMode();
 }
 void staffStudentMenu() {
 	system("cls");
@@ -340,7 +341,7 @@ void CourseInformaion(Student* stu){
 	menu[1] = new char[] {"Completed Courses"};
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2)) {
-	case 0: RegisterCouse(stu); break;
+	case 0: registerMenu(stu); break;
 	case 1: ViewCouse(stu); break;
 	case 2:
 	case -1:
@@ -574,6 +575,8 @@ void timeRegister(std::string sem,Date startReg,Date endReg){
 	std::fstream fo("firstrun", std::fstream::out | std::fstream::binary);
 	fo.write((char*)&year, sizeof(int));
 	fo.write((char*)&semester, sizeof(int));
+	fo.write((char*)&startReg, sizeof(Date));
+	fo.write((char*)&endReg, sizeof(Date));
 	fo.close();
 }
 
@@ -636,35 +639,105 @@ void OpenRegister() {
 	}
 }
 
-void takeCourseReg(Course** course, int*& take) {
-	bool side = 0;
-	int left = 0;
-	int right = 0;
-	int index = 0;
-	int n = _msize(course) / sizeof(course);
-	while (true)
-	{
-		for (int i = 0; i < n; i++) {
-			GotoXY(0, i+3);
-			displayCourse(course[i]);
-			if (take[i] == 1) std::cout << "O";
-			else if (take[i] == -1) std::cout << "X";
+inline void removereg(Course** reg, Course* re) {
+	int n = 0;
+	for (int i = 0; i < 5; i++) {
+		if (reg[i] == re) {
+			n = i;
+			break;
 		}
 	}
-	// do something here
+	for (int i = n; i < 4; i++) {
+		reg[n] = reg[n + 1];
+	}
+	reg[4] = nullptr;
 }
 
-void registerMenu(Student*stu,std::string current) {
+void takeCourseReg(Course** course, int*& take) {
+	system("cls");
+	int index = 0;
+	int n = _msize(course) / sizeof(course);
+	int had = 0;
+	Course** reg = new Course * [5];
+	for (int i = 0; i < 5; i++) {
+		reg[i] = nullptr;
+	}
+	for (int i = 0; i < n; i++) {
+		GotoXY(4, i + 3);
+		displaylistCourse(course[i]);
+		if (take[i] == 1) { std::cout << "O"; reg[had] = course[i]; had += 1; }
+		else if (take[i] == -1) std::cout << "X";
+	}
+	GotoXY(0, 3); std::cout << "->";
+	char get;
+	do
+	{
+		get = toupper(_getwch());
+		if (get == 'W' || get == KEY_UP) {
+			if (index > 0) {
+				GotoXY(0, 3 + index);
+				std::cout << "   ";
+				index -= 1;
+				GotoXY(0, 3 + index);
+				std::cout << "->";
+			}
+		}
+		else if(get=='S' || get==KEY_DOWN){
+			if (index < n-1) {
+				GotoXY(0, 3 + index);
+				std::cout << "   ";
+				index += 1;
+				GotoXY(0, 3 + index);
+				std::cout << "->";
+			}
+		}
+		else if (get == KEY_ENTER) {
+			if (take[index] == 1) {
+				removereg(reg, course[index]);
+				had -= 1;
+				SessionConflict(course, reg, take);
+				for (int i = 0; i < n; i++) {
+					GotoXY(100, i + 3);
+					if (take[i] == 1) { std::cout << 'O'; }
+					else if (take[i] == -1) { std::cout << 'X'; }
+					else std::cout << " ";
+				}
+
+			}
+			else if (take[index] == 0 && had < 5) {
+				reg[had] = course[index];
+				had += 1;
+				SessionConflict(course, reg, take);
+				for (int i = 0; i < n; i++) {
+					GotoXY(100, i + 3);
+					if (take[i] == 1) { std::cout << 'O'; }
+					else if (take[i] == -1) { std::cout << 'X'; }
+					else std::cout << " ";
+				}
+			}
+		}
+	} while (get!='E');
+
+	//register here
+}
+
+void registerMenu(Student*stu) {
+	std::string current;
+	fistrun(current);
 	Filelist* filelist = TakeFileInFolder(current);
 	if (filelist == nullptr) return;
 	int n = CountFile(filelist);
 	Course** course = new Course * [n];
-	int m = _msize(stu->coursenow) / sizeof(stu->coursenow);
+	int m = 0;
+	if(stu->coursenow!=nullptr) m = _msize(stu->coursenow) / sizeof(stu->coursenow);
 	char** registed = new char* [m];
-	for (int i = 0; i < m; i++) {
-		registed[i] = new char[strlen(stu->coursenow[i]) - 4];
-		strcpy_s(registed[i], strlen(stu->coursenow[i]) - 5, stu->coursenow[i]);
-		registed[i][strlen(stu->coursenow[i]) - 5] = '\0';
+	for (int i = 0; i < 5; i++) {
+		if (i < m)
+		{
+			registed[i] = new char[strlen(stu->coursenow[i]) - 4];
+			strcpy_s(registed[i], strlen(stu->coursenow[i]) - 5, stu->coursenow[i]);
+			registed[i][strlen(stu->coursenow[i]) - 5] = '\0';
+		}
 	}
  	int* canReg = new int[n];
 	for (int i = 0; i < n; i++) {
@@ -677,4 +750,5 @@ void registerMenu(Student*stu,std::string current) {
 		}
 	}
 	takeCourseReg(course, canReg);
+	std::cout << "done";
 }

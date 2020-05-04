@@ -335,11 +335,11 @@ void displayCourse(Course* cou) {
 }
 
 void displaylistCourse(Course* cou) {
-	std::cout << cou->ID;
+	std::cout << cou->ID <<'\t';
 	_LText();
-	std::wcout << cou->name << std::setw(20) << cou->teacher;
+	std::wcout << cou->name << '\t' << cou->teacher;
 	_SText();
-	std::cout << std::setw(10) << cou->numberofstudent << "/" << cou->maxstudent << std::setw(10);
+	std::cout << '\t' << cou->numberofstudent << "/" << cou->maxstudent ;
 }
 
 void displayCourse(Course** cou) {
