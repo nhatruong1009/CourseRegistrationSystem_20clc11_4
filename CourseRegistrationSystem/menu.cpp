@@ -71,7 +71,7 @@ void userTypeMode()
 	}
 	DealocatedArrString(menu);
 }
-void studentMode(Student* stu )
+void studentMode(Student* stu)
 {
 	if (stu == nullptr)
 	{
@@ -94,11 +94,12 @@ void studentMode(Student* stu )
 		break;
 	case -1:
 	case 2:
+		Logout(stu);
+		deleteStu(stu);
+		DealocatedArrString(menu);;
+		userTypeMode();
 		break;
 	}
-	Logout(stu);
-	DealocatedArrString(menu);
-	userTypeMode();
 }
 void staffMode()
 {
@@ -115,10 +116,9 @@ void staffMode()
 	case 1: courseStaff(); break;
 	case 2: schoolPlan(); break;
 	case -1:
-	case 4: break;
+	case 3: DealocatedArrString(menu); userTypeMode(); break;
 	}
-	DealocatedArrString(menu);
-	userTypeMode();
+	
 }
 void staffStudentMenu() {
 	system("cls");
@@ -134,9 +134,8 @@ void staffStudentMenu() {
 	case 1: classMenu(); break;
 	case 2: studentMenu(); break;
 	case-1:
-	case 3: staffMode(); break;
+	case 3:DealocatedArrString(menu); staffMode(); break;
 	}
-	DealocatedArrString(menu);
 }
 void gradeMenu() {
 	system("cls");
@@ -327,10 +326,10 @@ void StuInformation(Student* stu){
 	case 0: ChangeInfo(stu);
 	case-1:
 	case 1:
+		DealocatedArrString(menu);
+		studentMode(stu);
 		break;
 	}
-	DealocatedArrString(menu);
-	studentMode(stu);
 }
 
 void viewCourseNow(Student* stu) {
@@ -360,10 +359,10 @@ void CourseInformaion(Student* stu){
 	case 2: viewCourseNow(stu); break;
 	case 3:
 	case -1:
+		DealocatedArrString(menu);
+		studentMode(stu);
 		break;
 	}
-	DealocatedArrString(menu);
-	studentMode(stu);
 }
 
 void ViewCouse(Student* stu) {
@@ -391,11 +390,12 @@ void courseStaff() {
 	case 2: editCourse(); break;
 	case 3:OpenRegister(); break;
 	case -1:
-	case 4: break;
+	case 4:
+		DealocatedArrString(menu);
+		staffMode();
+		break;
 	}
 
-	DealocatedArrString(menu);
-	staffMode();
 }
 
 void schoolPlan() {
@@ -404,11 +404,12 @@ void schoolPlan() {
 	std::cout << "--------- School Plan ---------";
 	std::cout << "\nInput Year (Pass if take current year) :";
 	time = InputNumber();
-	if (time == -1) { staffMode(); return; }
-	if (time == 0) {time = GetTime().yy; std::cout << time << '\n'; }
-	MakeCurentTime(time);
-	std::cout << "\n__________ Sucess _________";
-	_getwch();
+	if (time == 0) {
+		time = GetTime().yy; std::cout << time << '\n';
+		MakeCurentTime(time);
+		std::cout << "\n__________ Sucess _________";
+		_getwch();
+	}
 	staffMode();
 }
 
@@ -471,10 +472,10 @@ void addCourseInSemmester(std::string current){
 	case 1: MakeCourse(current); break; // type in
 	case-1:
 	case 2:
+		DealocatedArrString(menu);
+		courseStaff();
 		break;
 	}
-	DealocatedArrString(menu);
-	courseStaff();
 }
 
 void addCourse(){
@@ -647,7 +648,7 @@ void OpenRegister() {
 		break;
 	case -1:
 	case 1:
-		return;
+		break;
 	}
 }
 
