@@ -21,9 +21,21 @@
     <ClCompile Include="StructFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StructsFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NewStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Staff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Student.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

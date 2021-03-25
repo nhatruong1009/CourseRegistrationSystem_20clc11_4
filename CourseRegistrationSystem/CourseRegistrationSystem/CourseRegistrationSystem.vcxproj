@@ -141,9 +141,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="StructFunction.cpp" />
+    <ClCompile Include="StructsFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataControl.h" />
     <ClInclude Include="NewStructs.h" />
+    <ClInclude Include="Staff.h" />
+    <ClInclude Include="Student.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

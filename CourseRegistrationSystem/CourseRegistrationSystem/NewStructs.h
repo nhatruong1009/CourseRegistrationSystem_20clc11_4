@@ -1,6 +1,12 @@
 #ifndef _NewStructs
 #define _NewStructs
-
+#include<iostream>
+struct Node
+{
+	void* data;
+	Node* pNext;
+	Node* pPrev;
+};
 struct Date
 {
 	unsigned dd, mm, yy;
@@ -29,7 +35,6 @@ struct Course
 		char session[3];
 	};
 	Performed performed;
-
 };
 struct Student
 {
@@ -38,21 +43,29 @@ struct Student
 	bool gender;
 	Date birth;
 	unsigned long long SocialID;
-	Score* score;
-	Course* coursenow;
-	Course* allcourse;
+	Node* coursenow;
+	Node* allcourse;
 	Account account;
 	float GPA;
+};
+struct Semester
+{
+	unsigned int ID;
+	Date start, end;
+	Node* course;
 };
 struct Classes
 {
 	char* name;
-	Student* student;
+	Node* student;
 };
-struct Semester
+struct SchoolYear
 {
-	Date start, end;
-	Course* course;
+	int year;
+	Semester semester[3];
+	Node* classes;
 };
+
+void AddToNode(Node*& pHead, void* data);
 
 #endif // !_NewStruct
