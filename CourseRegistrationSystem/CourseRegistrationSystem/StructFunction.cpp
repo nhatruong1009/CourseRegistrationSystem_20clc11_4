@@ -7,19 +7,20 @@ struct Date
 };
 struct Account
 {
-	char* username;
-	char* password;
+	std::string username;
+	std::string password;
 };
 struct Score
 {
 	unsigned int ID;
-	char* name;
+	std::string name;
 	float totals, finals, mids, others;
 };
 struct Course
 {
-	char* ID;
-	char* teacher;
+	std::string ID;
+	std::string name;
+	std::string teacher;
 	unsigned short credit;
 	unsigned short Maxstudent = 50;
 	Score* score;
@@ -33,33 +34,31 @@ struct Course
 struct Student
 {
 	unsigned int ID;
-	char* name;
+	std::string fistname,lastname;
 	bool gender;
 	Date birth;
 	unsigned long long SocialID;
-	_Course* coursenow;
-	_Course* allcourse;
+	std::string* coursenow;
+	std::string* allcourse;
 	Account account;
 	float GPA;
 };
 struct Semester
 {
-	unsigned int ID;
 	Date start, end;
 	_Course* course;
 };
 struct Classes
 {
-	char* name;
-	_Student* student;
+	std::string name;
+	Student** student;
 };
 struct SchoolYear
 {
 	int year;
-	Semester semester[3];
+	Semester *semester;
 	_Class* classes;
 };
-
 struct _Student
 {
 	Student student;
@@ -79,7 +78,18 @@ struct _Course
 	_Course* pPrev;
 };
 
-Course InputCourse();
+
+void InputCourse() {
+	Course course;
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cout << "ID: "; std::getline(std::cin, course.ID);
+	std::cout << "Course name: "; std::getline(std::cin, course.name);
+	std::cout << "Teacher: "; std::getline(std::cin, course.teacher);
+	std::cout << "Credit: "; std::cin >> course.credit;
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 void AddCourse(_Course courselist, Course course);
 _Course* InputCorse(std::string filein);
 
@@ -96,5 +106,8 @@ void AddClass(SchoolYear schoolyear, std::string filein);
 
 Student* FindStudent(_Student student, unsigned int ID);
 Student* FIndStudent(_Student student, char* username);
-
-Course*FindCourse()
+Course* FindCourse(_Course course, char* ID);
+Course* FindCourse(SchoolYear schoolyear, char* ID);
+Course* FindCourse(SchoolYear* schoolyear, char* ID);
+Score FindScore(char* courseID, unsigned int studentID);
+Classes* FindClass(SchoolYear* schoolyear, char* classname);

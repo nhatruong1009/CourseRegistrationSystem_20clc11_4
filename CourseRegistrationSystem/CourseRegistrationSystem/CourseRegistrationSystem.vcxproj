@@ -141,7 +141,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="StructFunction.cpp" />
-    <ClCompile Include="StructsFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataControl.h" />
