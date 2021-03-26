@@ -2,15 +2,15 @@
 #define DataControl
 #include"NewStructs.h"
 
-void LoadClassInfo(Node*& Classes);
-void LoadCourseInfo(Node*& Course);
-void LoadScoreBoard(Node*& scoreboard);
-void LoadYear(Node*& year);
+void LoadClassInfo(_Class*& Classes);
+void LoadCourseInfo(_Course*& Course);
+void LoadScoreBoard(Score*& scoreboard);
+void LoadYear(SchoolYear*& year);
 
-void SaveClassInfo(Node* Classes);
-void SaveCourseInfo(Node* Course);
-void SaveScoreBoar(Node* scoreboard);
-void SaveYear(Node* year);
+void SaveClassInfo(_Class* Classes);
+void SaveCourseInfo(_Course* Course);
+void SaveScoreBoar(Score* scoreboard);
+void SaveYear(SchoolYear* year);
 
 #endif // !Staff
 

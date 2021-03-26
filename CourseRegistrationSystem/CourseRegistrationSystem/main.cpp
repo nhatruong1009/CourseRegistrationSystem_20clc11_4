@@ -1,5 +1,9 @@
 #include<iostream>
+#include<fstream>
+#include<stdarg.h>
+#include"NewStructs.h"
 
-void main() {
-	std::cout << "hello";
+int main() {
+	int a = 3;
+	return 0;
 }
