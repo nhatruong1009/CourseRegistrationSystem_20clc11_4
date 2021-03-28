@@ -21,6 +21,9 @@
     <ClCompile Include="StructFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataFunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NewStructs.h">
@@ -29,10 +32,10 @@
     <ClInclude Include="Staff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Student.h">
+    <ClInclude Include="DataControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DataControl.h">
+    <ClInclude Include="Student.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
