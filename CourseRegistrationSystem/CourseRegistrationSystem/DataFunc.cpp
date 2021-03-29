@@ -12,6 +12,13 @@ __int64 StringToInt(wchar_t*& ch) {
 	delete[] ch;
 	return a;
 }
+__int64 StringToInt(std::wstring str) {
+	unsigned __int64 a = 0;
+	for (int i = 0; i < str.length(); i++) {
+		a = a * 10 + str[i] - L'0';
+	}
+	return a;
+}
 Date StringToDate(wchar_t*& ch) {
 	Date a;
 	int beg = 0;
@@ -48,6 +55,41 @@ Date StringToDate(wchar_t*& ch) {
 	delete[] ch;
 	return a;
 }
+Date StringToDate(std::wstring str) {
+	Date a;
+	int beg = 0;
+	int end = 0;
+	while (str[end] != L'\0' && str[end] != L'/')
+	{
+		end += 1;
+	}
+	if (str[end] != L'\0') {
+		for (; beg < end; beg++) {
+			a.dd = a.dd * 10 + str[beg] - L'0';
+		}
+		beg = end + 1;
+		end += 1;
+		while (str[end] != L'\0' && str[end] != L'/')
+		{
+			end += 1;
+		}
+		if (str[end] != L'\0') {
+			for (; beg < end; beg++) {
+				a.mm = a.mm * 10 + str[beg] - L'0';
+			}
+			beg = end + 1;
+			end += 1;
+			while (str[end] != L'\0')
+			{
+				end += 1;
+			}
+			for (; beg < end; beg++) {
+				a.yy = a.yy * 10 + str[beg] - L'0';
+			}
+		}
+	}
+	return a;
+}
 Student StringToStudent(std::wstring str) {
 	//No, Student ID, First name, Last name, Gender, Date of Birth, Social ID
 	Student stu;
@@ -59,14 +101,14 @@ Student StringToStudent(std::wstring str) {
 	stu.account.username = new wchar_t[end - beg + 1];
 	str.copy(stu.account.username, end - beg, beg);
 	stu.account.username[end - beg  ] = '\0';
-	stu.account.password = new char[7];
-	strcpy_s(stu.account.password, 7, "123456\0");
+	stu.account.password = new wchar_t[7]{ L"123456" };
+	stu.account.password[6] = '\0';
 	stu.ID = StringToInt(temp);
 	beg = end + 1;
 	end = str.find(',', beg + 1);
-	stu.fistname = new wchar_t[end - beg+1];
-	str.copy(stu.fistname, end - beg, beg);
-	stu.fistname[end - beg] = L'\0';
+	stu.firstname = new wchar_t[end - beg+1];
+	str.copy(stu.firstname, end - beg, beg);
+	stu.firstname[end - beg] = L'\0';
 	beg = end + 1;
 	end = str.find(',', beg + 1);
 	stu.lastname = new wchar_t[end - beg+1];

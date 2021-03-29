@@ -10,7 +10,7 @@ struct Date
 struct Account
 {
 	wchar_t* username;
-	char* password;
+	wchar_t* password;
 };
 struct Score
 {
@@ -37,8 +37,8 @@ struct Course
 struct Student
 {
 	unsigned __int32 ID;
-	wchar_t* fistname, *lastname;
-	char gender;
+	wchar_t* firstname, *lastname;
+	wchar_t gender;
 	Date birth;
 	unsigned __int64 SocialID;
 	char* coursenow=nullptr;
