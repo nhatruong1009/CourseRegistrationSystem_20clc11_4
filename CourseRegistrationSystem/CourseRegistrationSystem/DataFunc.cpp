@@ -1,6 +1,8 @@
 ﻿#include"DataControl.h"
 #include<string>
 #include <fstream>
+#include <locale>
+#include <codecvt>
 __int64 StringToInt(wchar_t*& ch) {
 	wchar_t* temp = ch;
 	unsigned __int64 a = 0;
@@ -18,6 +20,11 @@ __int64 StringToInt(std::wstring str) {
 		a = a * 10 + str[i] - L'0';
 	}
 	return a;
+}
+int lengthStr(wchar_t* ch) {
+	for (int i = 0;; i++) {
+		if (ch[i] == L'\0') return i;
+	}
 }
 Date StringToDate(wchar_t*& ch) {
 	Date a;
@@ -134,3 +141,131 @@ Student StringToStudent(std::wstring str) {
 	stu.SocialID = StringToInt(temp);
 	return stu;
 };
+void SaveStudent(_Student*stu,std::wstring filename){
+	if (stu == nullptr) { return; }
+	std::wfstream fi(filename, std::wfstream::binary | std::wfstream::out);
+	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	_Student *h = stu;
+	int temp;
+	do
+	{
+		std::wcout << fi.tellg() << " ";
+		fi.write((wchar_t*)&stu->student.ID, sizeof(unsigned __int32)/2);
+		
+		temp = lengthStr(stu->student.firstname) + 1;
+		fi.write((wchar_t*)&temp, sizeof(int)/2);
+		fi.write((wchar_t*)&stu->student.firstname, temp);
+
+		temp = lengthStr(stu->student.lastname) + 1;
+		fi.write((wchar_t*)&temp, sizeof(int)/2);
+		fi.write((wchar_t*)&stu->student.lastname,temp);
+
+		fi.write((wchar_t*)&stu->student.gender, 1);
+
+		fi.write((wchar_t*)&stu->student.birth, sizeof(Date)/2);
+
+		fi.write((wchar_t*)&stu->student.SocialID, sizeof(unsigned __int32)/2);
+
+		if (stu->student.coursenow == nullptr)
+			temp = 0;
+		else temp = _msize(stu->student.coursenow) / sizeof(wchar_t*);
+		fi.write((wchar_t*)&temp, sizeof(int)/2);
+		for (int i = 0; i < temp; i++) {
+			int temp1 = lengthStr(stu->student.coursenow[i])+1;
+			fi.write((wchar_t*)&temp1, sizeof(int)/2);
+			fi.write((wchar_t*)stu->student.coursenow[i],temp1);
+		}
+
+		if (stu->student.allcourse == nullptr)
+			temp = 0;
+		else temp = _msize(stu->student.allcourse) / sizeof(wchar_t*);
+		fi.write((wchar_t*)&temp, sizeof(int)/2);
+		for (int i = 0; i < temp; i++) {
+			int temp1 = lengthStr(stu->student.allcourse[i]) + 1;
+			fi.write((wchar_t*)&temp1, sizeof(int)/2);
+			fi.write((wchar_t*)stu->student.allcourse[i], temp1);
+		}
+
+		temp = lengthStr(stu->student.account.username)+1;
+		fi.write((wchar_t*)&temp, sizeof(int)/2);
+		fi.write((wchar_t*)stu->student.account.username,temp);
+
+		temp = lengthStr(stu->student.account.password) + 1;
+		fi.write((wchar_t*)&temp, sizeof(int)/2);
+		fi.write((wchar_t*)stu->student.account.password,temp);
+
+		fi.write((wchar_t*)&stu->student.GPA, sizeof(float)/2);
+
+		stu = stu->pNext;
+	} while (h != stu);
+	fi.close();
+}
+_Student* LoadStudent(std::wstring filename) {
+	 std::wfstream fi(filename, std::wfstream::binary | std::wfstream::in); 
+	 fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	 if (!fi) { return nullptr; }
+	 _Student* result = nullptr;
+	 int temp;
+	 fi.seekg(0, std::ios_base::end);
+	 int end = fi.tellg();
+	 end -= 2;
+	 fi.seekg(0, std::ios_base::beg);
+	 Student a;
+	 while (fi.tellg()<=end)
+	 {
+		 std::wcout << fi.tellg()<<" ";
+		 fi.read((wchar_t*)&a.ID, sizeof(__int32)/2);
+		 fi.read((wchar_t*)&temp, sizeof(int)/2);
+		 a.firstname = new wchar_t[temp];
+		 fi.read((wchar_t*)&a.firstname[0],temp);
+		 a.firstname[temp - 1] = L'\0';
+
+		 fi.read((wchar_t*)&temp, sizeof(int)/2);
+
+		 a.lastname = new wchar_t[temp];
+		 fi.read((wchar_t*)&a.lastname[0],temp);
+
+		 fi.read((wchar_t*)&a.gender, 1);
+
+		 fi.read((wchar_t*)&a.birth, sizeof(Date)/2);
+
+		 fi.read((wchar_t*)&a.SocialID, sizeof(unsigned __int32)/2);
+
+		 fi.read((wchar_t*)&temp, sizeof(int)/2);
+
+		 if (temp != 0) a.coursenow = new wchar_t* [temp];
+		 for (int i = 0; i < temp; i++) {
+			 int temp2;
+			 fi.read((wchar_t*)&temp2, sizeof(int)/2);
+			 if (temp2 != 0) {
+				 a.coursenow[i] = new wchar_t[temp2];
+				 fi.read((wchar_t*)a.coursenow[i], temp2);
+			 }
+		 }
+
+		 fi.read((wchar_t*)&temp, sizeof(int)/2);
+		 if (temp != 0) a.allcourse = new wchar_t* [temp];
+		 for (int i = 0; i < temp; i++) {
+			 int temp2;
+			 fi.read((wchar_t*)&temp2, sizeof(int)/2);
+			 if(temp2!=0)
+			 { 
+			 a.allcourse[i] = new wchar_t[temp2];
+			 fi.read((wchar_t*)a.allcourse[i],temp2);
+			 }
+		 }
+
+		 fi.read((wchar_t*)&temp, sizeof(int)/2);
+		 a.account.username = new wchar_t[temp];
+		 fi.read((wchar_t*)a.account.username, temp);
+
+		 fi.read((wchar_t*)&temp, sizeof(int)/2);
+		 a.account.password = new wchar_t[int(temp)];
+		 fi.read((wchar_t*)a.account.password, temp);
+
+		 fi.read((wchar_t*)&a.GPA, sizeof(float)/2);
+		 PrintStu(&a);
+		 AddStudent(result, a);
+	 }
+	 return result;
+}

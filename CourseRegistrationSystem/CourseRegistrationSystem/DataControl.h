@@ -3,13 +3,14 @@
 #include"NewStructs.h"
 
 void VietNamText();
-void LoadClassInfo(_Class*& Classes);
-void LoadCourseInfo(_Course*& Course);
+void LoadClassInfo(_Class*& classes);
+void LoadCourseInfo(_Course*& course);
 void LoadScoreBoard(Score*& scoreboard);
 void LoadYear(SchoolYear*& year);
-
-void SaveClassInfo(_Class* Classes);
-void SaveCourseInfo(_Course* Course);
+void SaveStudent(_Student* stu, std::wstring filename);
+_Student* LoadStudent(std::wstring filename);
+void SaveClassInfo(_Class* classes);
+void SaveCourseInfo(_Course* course);
 void SaveScoreBoar(Score* scoreboard);
 void SaveYear(SchoolYear* year);
 

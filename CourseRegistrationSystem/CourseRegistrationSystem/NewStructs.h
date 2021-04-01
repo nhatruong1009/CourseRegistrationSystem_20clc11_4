@@ -15,22 +15,22 @@ struct Account
 struct Score
 {
 	unsigned int ID;
-	char* name;
+	wchar_t* name;
 	float totals, finals, mids, others;
 };
 struct Course
 {
-	char* ID;
-	char* name;
-	char* teacher;
+	wchar_t* ID;
+	wchar_t* name;
+	wchar_t* teacher;
 	unsigned short credit;
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
 	Score* score;
 	struct Performed
 	{
-		char day[4];
-		char session[3];
+		wchar_t day[4];
+		wchar_t session[3];
 	};
 	Performed *performed;
 };
@@ -41,8 +41,8 @@ struct Student
 	wchar_t gender;
 	Date birth;
 	unsigned __int64 SocialID;
-	char* coursenow=nullptr;
-	char* allcourse=nullptr;
+	wchar_t** coursenow=nullptr;
+	wchar_t** allcourse=nullptr;
 	Account account;
 	float GPA=0;
 };
@@ -103,16 +103,16 @@ Score InputScore();
 void AddScore(Score* scoreboard, Score score);
 Score* InputScore(std::string filein);
 
-void AddClass(SchoolYear schoolyear, Classes classes);
-void AddClass(SchoolYear schoolyear, std::string filein);
+void AddClass(_Class*& classes, Classes cls);
+void DealloClass(_Class*& cls);
+Classes* FindClass(_Class* cls, wchar_t* name);
 
 Student* FindStudent(_Student* student, unsigned __int32 ID);
-Student* FindStudent(_Student* student, char* username);
-Course* FindCourse(_Course course, char* ID);
-Course* FindCourse(SchoolYear schoolyear, char* ID);
-Course* FindCourse(SchoolYear* schoolyear, char* ID);
-Score FindScore(char* courseID, unsigned __int32 studentID);
-Classes* FindClass(SchoolYear* schoolyear, char* classname);
-
+Student* FindStudent(_Student* student, wchar_t* username);
+Course* FindCourse(_Course course, wchar_t* ID);
+Course* FindCourse(SchoolYear schoolyear, wchar_t* ID);
+Course* FindCourse(SchoolYear* schoolyear, wchar_t* ID);
+Score FindScore(wchar_t* courseID, unsigned __int32 studentID);
+Classes* FindClass(SchoolYear* schoolyear, wchar_t* classname);
 Classes InputClass(std::wstring name, _Student* stu);
 #endif // !_NewStruct

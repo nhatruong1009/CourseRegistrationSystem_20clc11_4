@@ -20,6 +20,15 @@ void VietNamText()
 
 int main() {
 	VietNamText();
-	Student e = InputStudent();
-	PrintStu(&e);
+	std::wstring file;
+	std::wcin >> file;
+	_Student* in = AddStudent(file);
+	PrintStu(in);
+	std::wcin >> file;
+	SaveStudent(in, file);
+	std::wcout << '\n';
+	std::wcin >> file;
+	_Student* a = LoadStudent(file);
+	PrintStu(a);
+	std::wcout <<int( a->student.firstname[0])<<" ";
 }

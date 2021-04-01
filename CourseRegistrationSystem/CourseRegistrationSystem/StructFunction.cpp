@@ -120,13 +120,13 @@ int NumberOfStudent(_Student* stu) {
 }
 void PrintStu(Student *a) {
 	if (a == nullptr) return;
-	std::wcout << a->ID << '\n';
-	std::wcout << a->firstname << '\n';
-	std::wcout << a->lastname << '\n';
-	std::wcout << a->gender << '\n';
-	std::wcout << a->birth << '\n';
-	std::wcout << a->SocialID << '\n';
-	std::wcout << a->account.username << '\n';
+	std::wcout << a->ID << "  ";
+	std::wcout << a->firstname << "\t";
+	std::wcout << a->lastname << "\t";
+	std::wcout << a->gender << '\t';
+	std::wcout << a->birth << '\t';
+	std::wcout << a->SocialID << '\t';
+	std::wcout << a->account.username << '\t';
 	std::wcout << a->account.password << '\n';
 }
 void PrintStu(_Student* stu) {
@@ -189,11 +189,34 @@ Classes InputClass(std::wstring name,_Student* stu=nullptr){
 	} while (stu != temp);
 	return newclass;
 }
+void AddClass(_Class*& classes, Classes cls) {
+	if (classes == nullptr) { classes = new _Class{ cls }; classes->pPrev = classes; classes->pNext = classes; return; }
+	classes->pPrev = new _Class{ cls,classes,classes->pPrev };
+	classes->pPrev->pPrev->pNext = classes->pPrev;
+}
+void DealloClass(_Class*& cls) {
+	if (cls == nullptr) return;
+	_Class* temp = cls;
+	do {
+		_Class* a = cls;
+		cls = cls->pNext;
+		delete a;
+	} while (cls != temp);
+}
+Classes* FindClass(_Class* cls, wchar_t* name) {
+	if (cls == nullptr) return nullptr;
+	_Class* temp = cls;
+	while (wcscmp(cls->classes.name,name)!=0 && cls->pNext!=temp)
+	{
+		cls = cls->pNext;
+	}
+	if (wcscmp(cls->classes.name, name) != 0) return nullptr;
+	return &cls->classes;
+}
 
 Score InputScore();
 void AddScore(Score* scoreboard, Score score);
 Score* InputScore(std::string filein);
-
 void AddClass(SchoolYear schoolyear, Classes classes);
 void AddClass(SchoolYear schoolyear, std::string filein);
 Student* FindStudent(_Student student, char* username);
