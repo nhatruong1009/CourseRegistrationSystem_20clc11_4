@@ -173,6 +173,24 @@ void RemoveStudent(_Student*& studentlist, unsigned __int32 ID) {
 	delete pcur;
 }
 
+
+_Student *ConnectStudent(_Student*& a, _Student*& b) {
+	if (a == nullptr) {
+		_Student* temp = b; b = nullptr; return temp;
+	}
+	if (b == nullptr) {
+		_Student* temp = a; a = nullptr; return temp;
+	}
+	a->pPrev->pNext = b;
+	b->pPrev->pNext = a;
+	_Student* temp = a->pPrev;
+	a->pPrev = b->pPrev;
+	b->pPrev = temp;
+	a = nullptr;
+	b = nullptr;
+	return temp->pNext;
+}
+
 Classes InputClass(std::wstring name,_Student* stu=nullptr){
 	Classes newclass;
 	newclass.name = new wchar_t[name.length() + 1];

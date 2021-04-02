@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <string>
 #include <windows.h>
+#include<ctime>
 void VietNamText()
 {
 	_setmode(_fileno(stdin), _O_U16TEXT);
@@ -18,8 +19,10 @@ void VietNamText()
 	SetCurrentConsoleFontEx(hdlConsole, FALSE, &consoleFont);
 }
 
+
 int main() {
 	VietNamText();
+	
 	std::wstring file;
 	std::wcin >> file;
 	_Student* in = AddStudent(file);
@@ -30,5 +33,4 @@ int main() {
 	std::wcin >> file;
 	_Student* a = LoadStudent(file);
 	PrintStu(a);
-	std::wcout <<int( a->student.firstname[0])<<" ";
 }

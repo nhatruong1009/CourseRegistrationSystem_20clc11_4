@@ -3,6 +3,7 @@
 #include<iostream>
 #include<string>
 #include<wchar.h>
+#include <ctime>
 struct Date
 {
 	unsigned int dd=0, mm=0, yy=0;
@@ -20,6 +21,7 @@ struct Score
 };
 struct Course
 {
+	int year = 1970 + time(0) / 31556926;
 	wchar_t* ID;
 	wchar_t* name;
 	wchar_t* teacher;
