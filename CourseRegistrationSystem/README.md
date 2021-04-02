@@ -1,4 +1,5 @@
 A course registration system (CRS).
+
 Summary:
 1. The CRS stores the following information
 - course id, course name, teacher name, number of credits, the maximum number of students  in the course (default 50), day of the week,
