@@ -1,7 +1,6 @@
-
 #ifndef _Structs
 #define _Structs
-
+#include<iostream>
 struct Date
 {
 	unsigned int dd = 0, mm = 0, yy = 0;
@@ -36,7 +35,7 @@ struct Course
 };
 struct Student
 {
-	unsigned __int32 ID;
+	unsigned __int64 ID;
 	wchar_t* firstname, * lastname;
 	char gender;
 	Date birth;
@@ -82,6 +81,9 @@ struct SchoolYear
 };
 
 void AddStudent(_Student*& studentlist, Student student);
-
+Student StringToStudent(std::wstring str);
+_Student* FileInStudent(std::string filename);
+void PrintStu(Student* a);
+void PrintStu(_Student* stu);
 #endif // _Structs
 

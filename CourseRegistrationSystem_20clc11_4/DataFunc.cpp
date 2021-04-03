@@ -1,6 +1,8 @@
 #include"Data.h"
 #include"CommonFunc.h"
-
+#include<string>
+#include<locale>
+#include<codecvt>
 std::ostream& operator<<(std::ostream& os, const Date& dt)
 {
 	os << dt.dd << '/' << dt.mm << '/' << dt.yy;
@@ -15,45 +17,65 @@ std::wostream& operator<<(std::wostream& os, const tm& t) {
 	os << t.tm_hour << ":" << t.tm_min << ":" << t.tm_sec << " " << t.tm_mday << "/" << t.tm_mon << "/" << t.tm_year;
 	return os;
 }
-tm GetTime()
-{
-	time_t now = time(0);
-	tm t;
-	t = *localtime(&now);
-	return t;
-}
-bool operator>(tm& t1, tm& t2)
-{
-	time_t a, b;
-	a = mktime(&t1);
-	b = mktime(&t2);
-	if (a > b) return 1;
-	else return 0;
-}
-bool operator<(tm& t1, tm& t2)
-{
-	time_t a, b;
-	a = mktime(&t1);
-	b = mktime(&t2);
-	if (a < b) return 1;
-	else return 0;
-}
-void SaveLoginHistory(char* AccountUsername)
-{
-	time_t now = time(0);
-	std::string a;
-	a = ctime(&now);
-	std::ofstream file;
-	file.open("history.txt", std::ios::app);
-	file << AccountUsername << " " << a<<std::endl;
-	file.close();
-}
-
 
 Student StringToStudent(std::wstring str) {
 	//No, Student ID, First name, Last name, Gender, Date of Birth, Social ID
-	
-};
+	Student stu;
+	wchar_t* temp = nullptr;
+	int beg = str.find(L',', 0) + 1;
+	int end = str.find(L',', beg);
+
+	temp = new wchar_t[end - beg +1];
+	temp[end - beg]=L'\0';
+	str.copy(temp, end - beg, beg);
+	_LText();
+	stu.ID = StringToInt(temp);
+	stu.account.username = new char[end - beg + 1];
+	stu.account.username[end - beg];
+	LStrToStr(stu.account.username, end - beg, temp);
+	delete[] temp;
+
+	beg = end + 1;
+	end = str.find(L',', beg);
+	stu.firstname = new wchar_t[end - beg + 1];
+	stu.firstname[end - beg] = L'\0';
+	str.copy(stu.firstname, end - beg, beg);
+
+	beg = end + 1;
+	end = str.find(L',', beg);
+	stu.lastname = new wchar_t[end - beg + 1];
+	stu.lastname[end - beg] = L'\0';
+	str.copy(stu.lastname, end - beg, beg);
+
+	beg = end + 1;
+	end = str.find(L',', beg);
+	temp = new wchar_t[end - beg + 1];
+	temp[end - beg] = L'\0';
+	str.copy(temp, end - beg, beg);
+	if (wcscmp(temp, L"Nam") == 0)stu.gender = 'M';
+	else stu.gender = 'W';
+	delete[] temp;
+
+	beg = end + 1;
+	end = str.find(L',', beg);
+	temp = new wchar_t[end - beg + 1];
+	temp[end - beg] = L'\0';
+	str.copy(temp, end - beg, beg);
+	stu.birth = StringToDate(temp);
+	delete[] temp;
+
+
+	beg = end + 1;
+	end = str.length();
+	temp = new wchar_t[end - beg + 1];
+	temp[end - beg] = L'\0';
+	str.copy(temp, end - beg, beg);
+	stu.SocialID = StringToInt(temp);
+	delete[] temp;
+
+	stu.account.password = new char[7]{ "123456" };
+	return stu;
+}
 
 
 void AddStudent(_Student*& studentlist, Student student) {
@@ -61,7 +83,22 @@ void AddStudent(_Student*& studentlist, Student student) {
 	studentlist->pPrev = new _Student{ student,studentlist,studentlist->pPrev };
 	studentlist->pPrev->pPrev->pNext = studentlist->pPrev;
 }
-void FileOutStudent(_Student* stu, std::wstring fileout) {
+
+_Student* FileInStudent(std::string filename) {
+	std::wfstream fi(filename, std::wfstream::in);
+	if (!fi) { return nullptr; }
+	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	_Student* stu = nullptr;
+	std::wstring temp;
+	while (fi)
+	{
+		std::getline(fi, temp);
+		if (temp.length() != 0) AddStudent(stu, StringToStudent(temp));
+	}
+	return stu;
+}
+
+void FileOutStudent(_Student* stu, std::string fileout) {
 
 }
 

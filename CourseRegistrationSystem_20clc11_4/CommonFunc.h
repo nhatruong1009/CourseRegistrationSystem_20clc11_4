@@ -2,6 +2,7 @@
 #define _CommonFunc
 #include<io.h>
 #include<iostream>
+#include"Data.h"
 #include <fcntl.h>
 #include<fstream>
 void _LText();
@@ -15,4 +16,8 @@ __int64 StringToInt(char* ch);
 __int64 StringToInt(std::wstring str);
 Date StringToDate(wchar_t* ch);
 Date StringToDate(char* ch);
+tm GetTime();
+bool operator>(tm& t1, tm& t2);
+bool operator<(tm& t1, tm& t2);
+void SaveLoginHistory(char* AccountUsername);
 #endif // !_Common

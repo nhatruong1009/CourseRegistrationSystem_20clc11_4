@@ -1,5 +1,6 @@
 #include"CommonFunc.h"
-#include"Data.h"
+#include<ctime>
+#include<locale>
 void _LText()
 {
 	_setmode(_fileno(stdin), _O_U16TEXT);
@@ -132,4 +133,38 @@ Date StringToDate(char* ch) {
 	Date undentity;
 	return undentity;
 }
+tm GetTime()
+{
+	__time32_t now = time(0);
+	tm t;
+	_localtime32_s(&t, &now);
+	return t;
+}
+bool operator>(tm& t1, tm& t2)
+{
+	time_t a, b;
+	a = mktime(&t1);
+	b = mktime(&t2);
+	if (a > b) return 1;
+	else return 0;
+}
+bool operator<(tm& t1, tm& t2)
+{
+	time_t a, b;
+	a = mktime(&t1);
+	b = mktime(&t2);
+	if (a < b) return 1;
+	else return 0;
+}
+void SaveLoginHistory(char* AccountUsername)
+{
+	__time32_t now = time(0);
+	char a[100];
+	_ctime32_s(a, &now);
+	std::ofstream file;
+	file.open("history.txt", std::ios::app);
+	file << AccountUsername << " " << a << std::endl;
+	file.close();
+}
+
 
