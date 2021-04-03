@@ -1,8 +1,6 @@
 #include"Data.h"
 #include"CommonFunc.h"
 #include<string>
-#include<locale>
-#include<codecvt>
 std::ostream& operator<<(std::ostream& os, const Date& dt)
 {
 	os << dt.dd << '/' << dt.mm << '/' << dt.yy;
@@ -25,13 +23,13 @@ Student StringToStudent(std::wstring str) {
 	int beg = str.find(L',', 0) + 1;
 	int end = str.find(L',', beg);
 
-	temp = new wchar_t[end - beg +1];
-	temp[end - beg]=L'\0';
+	temp = new wchar_t[end - beg + 1];
+	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
 	_LText();
 	stu.ID = StringToInt(temp);
 	stu.account.username = new char[end - beg + 1];
-	stu.account.username[end - beg]=L'\0';
+	stu.account.username[end - beg] = L'\0';
 	LStrToStr(stu.account.username, end - beg, temp);
 	delete[] temp;
 
@@ -88,7 +86,7 @@ _Student* FileInStudent(std::string filename) {
 	_LText();
 	std::wfstream fi(filename, std::wfstream::in);
 	if (!fi) { return nullptr; }
-	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
 	_Student* stu = nullptr;
 	std::wstring temp;
 	while (fi)
@@ -102,13 +100,13 @@ _Student* FileInStudent(std::string filename) {
 
 void FileOutStudent(_Student* stu, std::string fileout) {
 	std::wfstream fo(fileout, std::wfstream::out);
-	//fo << wchar_t(237)<<wchar_t(187)<<wchar_t(191);
-	fo << L"ï»¿";
-	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	_LText();
+	fo << L"﻿";
+	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8<wchar_t>));
 	_Student* temp = stu;
 	do
 	{
-		fo << stu->student.ID << ',' << stu->student.firstname << ',' << stu->student.lastname << ',' << stu->student.gender << ',' << stu->student.birth << ',' << stu->student.SocialID << '\n';
+		fo << stu->student.ID << L',' << stu->student.firstname << L',' << stu->student.lastname << L',' << stu->student.gender << L',' << stu->student.birth << L',' << stu->student.SocialID << L'\n';
 		stu = stu->pNext;
 	} while (stu != temp);
 	fo.close();

@@ -1,6 +1,8 @@
 #ifndef _Structs
 #define _Structs
 #include<iostream>
+#include<locale>
+#include<codecvt>
 struct Date
 {
 	unsigned int dd = 0, mm = 0, yy = 0;
@@ -80,9 +82,13 @@ struct SchoolYear
 	_Class* classes;
 };
 
+std::ostream& operator<<(std::ostream& os, const Date& dt);
+std::wostream& operator<<(std::wostream& os, const Date& dt);
+
 void AddStudent(_Student*& studentlist, Student student);
 Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
+
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);

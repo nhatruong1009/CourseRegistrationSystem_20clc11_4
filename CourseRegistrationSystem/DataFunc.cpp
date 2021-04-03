@@ -3,14 +3,14 @@
 #include<locale>
 void _LText()
 {
-	_setmode(_fileno(stdin), _O_U16TEXT);
-	_setmode(_fileno(stdout), _O_U16TEXT);
+	_setmode(_fileno(stdin), _O_U8TEXT);
+	_setmode(_fileno(stdout), _O_U8TEXT);
 }
 void _SText() {
 	_setmode(_fileno(stdin), _O_TEXT);
 	_setmode(_fileno(stdout), _O_TEXT);
 }
-void LStrToStr(char desination[],int size ,std::wstring source) {
+void LStrToStr(char desination[], int size, std::wstring source) {
 	for (int i = 0; i < size; i++) {
 		desination[i] = source[i];
 	}
