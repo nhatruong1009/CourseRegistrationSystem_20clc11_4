@@ -82,15 +82,8 @@ struct SchoolYear
 
 void AddStudent(_Student*& studentlist, Student student);
 Student StringToStudent(std::wstring str);
-<<<<<<< Updated upstream
 _Student* FileInStudent(std::string filename);
 void FileOutStudent(_Student* stu, std::string fileout);
-=======
-_Student* StudentFileIn(std::string filename);
-void StudentFileOut(_Student* stu, std::string fileout);
-void StuSaveToBin(_Student* stu, std::string filename);
-_Student* BinToStu(std::string filename);
->>>>>>> Stashed changes
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
 #endif // _Structs

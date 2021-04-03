@@ -1,9 +1,6 @@
 #include"CommonFunc.h"
-<<<<<<< Updated upstream
 #include<ctime>
 #include<locale>
-=======
->>>>>>> Stashed changes
 void _LText()
 {
 	_setmode(_fileno(stdin), _O_U16TEXT);
