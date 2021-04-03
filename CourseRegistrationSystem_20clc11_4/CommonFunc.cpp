@@ -1,6 +1,9 @@
 #include"CommonFunc.h"
+<<<<<<< Updated upstream
 #include<ctime>
 #include<locale>
+=======
+>>>>>>> Stashed changes
 void _LText()
 {
 	_setmode(_fileno(stdin), _O_U16TEXT);
@@ -14,25 +17,21 @@ void LStrToStr(char desination[],int size ,std::wstring source) {
 	for (int i = 0; i < size; i++) {
 		desination[i] = source[i];
 	}
-	desination[size] = '\0';
 }
 void LStrToStr(char desination[], int size, wchar_t* source) {
 	for (int i = 0; i < size; i++) {
 		desination[i] = source[i];
 	}
-	desination[size] = '\0';
 }
 void StrToLStr(wchar_t desination[], int size, std::string source) {
 	for (int i = 0; i < size; i++) {
 		desination[i] = source[i];
 	}
-	desination[size] = '\0';
 }
 void StrToLStr(wchar_t desination[], int size, char* source) {
 	for (int i = 0; i < size; i++) {
 		desination[i] = source[i];
 	}
-	desination[size] = '\0';
 }
 __int64 StringToInt(wchar_t* ch) {
 	unsigned __int64 a = 0;

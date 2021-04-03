@@ -1,6 +1,7 @@
 #ifndef _CommonFunc
 #define _CommonFunc
 #include<io.h>
+#include"Data.h"
 #include<iostream>
 #include"Data.h"
 #include <fcntl.h>
