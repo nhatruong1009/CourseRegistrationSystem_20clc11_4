@@ -3,6 +3,7 @@
 #include<io.h>
 #include<iostream>
 #include <fcntl.h>
+#include<fstream>
 void _LText();
 void _SText();
 void LStrToStr(char desination[], int size, std::wstring source);

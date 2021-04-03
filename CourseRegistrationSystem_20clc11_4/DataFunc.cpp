@@ -15,6 +15,39 @@ std::wostream& operator<<(std::wostream& os, const tm& t) {
 	os << t.tm_hour << ":" << t.tm_min << ":" << t.tm_sec << " " << t.tm_mday << "/" << t.tm_mon << "/" << t.tm_year;
 	return os;
 }
+tm GetTime()
+{
+	time_t now = time(0);
+	tm t;
+	t = *localtime(&now);
+	return t;
+}
+bool operator>(tm& t1, tm& t2)
+{
+	time_t a, b;
+	a = mktime(&t1);
+	b = mktime(&t2);
+	if (a > b) return 1;
+	else return 0;
+}
+bool operator<(tm& t1, tm& t2)
+{
+	time_t a, b;
+	a = mktime(&t1);
+	b = mktime(&t2);
+	if (a < b) return 1;
+	else return 0;
+}
+void SaveLoginHistory(char* AccountUsername)
+{
+	time_t now = time(0);
+	std::string a;
+	a = ctime(&now);
+	std::ofstream file;
+	file.open("history.txt", std::ios::app);
+	file << AccountUsername << " " << a<<std::endl;
+	file.close();
+}
 
 
 Student StringToStudent(std::wstring str) {
