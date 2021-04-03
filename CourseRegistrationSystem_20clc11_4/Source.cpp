@@ -7,4 +7,6 @@ int main() {
 	std::cin >> fi;
 	_Student* a = FileInStudent(fi);
 	PrintStu(a);
+	std::cin >> fi;
+	FileOutStudent(a, fi);
 }

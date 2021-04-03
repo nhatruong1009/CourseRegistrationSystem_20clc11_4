@@ -99,7 +99,16 @@ _Student* FileInStudent(std::string filename) {
 }
 
 void FileOutStudent(_Student* stu, std::string fileout) {
-
+	std::wfstream fo(fileout, std::wfstream::out);
+	fo << L"﻿";
+	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	_Student* temp = stu;
+	do
+	{
+		fo << stu->student.ID << ',' << stu->student.firstname << ',' << stu->student.lastname << ',' << stu->student.gender << ',' << stu->student.birth << ',' << stu->student.SocialID << '\n';
+		stu = stu->pNext;
+	} while (stu != temp);
+	fo.close();
 }
 
 int NumberOfStudent(_Student* stu) {
