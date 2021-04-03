@@ -1,6 +1,5 @@
 #include"CommonFunc.h"
-#include<ctime>
-#include<locale>
+
 void _LText()
 {
 	_setmode(_fileno(stdin), _O_U8TEXT);

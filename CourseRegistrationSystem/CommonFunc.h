@@ -3,9 +3,10 @@
 #include<io.h>
 #include"Data.h"
 #include<iostream>
-#include"Data.h"
 #include <fcntl.h>
 #include<fstream>
+#include<ctime>
+#include<locale>
 void _LText();
 void _SText();
 void LStrToStr(char desination[], int size, std::wstring source);

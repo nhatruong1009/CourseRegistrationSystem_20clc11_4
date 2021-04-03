@@ -3,6 +3,7 @@
 #include<iostream>
 #include<locale>
 #include<codecvt>
+#include<string>
 struct Date
 {
 	unsigned int dd = 0, mm = 0, yy = 0;
@@ -88,7 +89,8 @@ std::wostream& operator<<(std::wostream& os, const Date& dt);
 void AddStudent(_Student*& studentlist, Student student);
 Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
-
+void StuToBin(_Student* stu, std::string fileout);
+void BinToStu(_Student*& stu, std::string filein);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);

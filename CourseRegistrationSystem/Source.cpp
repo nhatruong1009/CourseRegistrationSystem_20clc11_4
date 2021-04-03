@@ -7,11 +7,13 @@ using namespace std;
 
 
 int main() {
-	std::string fi;
-	std::cin >> fi;
-	_Student* a = FileInStudent(fi);
+	string file;
+	cin >> file;
+	_Student* a = FileInStudent(file);
 	PrintStu(a);
-	std::cin >> fi;
-	FileOutStudent(a, fi);
-
+	cin >> file;
+	_Student* b=nullptr;
+	StuToBin(a, file);
+	BinToStu(b, file);
+	PrintStu(b);
 }
