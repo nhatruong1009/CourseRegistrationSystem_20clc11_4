@@ -73,14 +73,11 @@ Student StringToStudent(std::wstring str) {
 	stu.account.password = new char[7]{ "123456" };
 	return stu;
 }
-
-
 void AddStudent(_Student*& studentlist, Student student) {
 	if (studentlist == nullptr) { studentlist = new _Student{ student }; studentlist->pNext = studentlist, studentlist->pPrev = studentlist; return; }
 	studentlist->pPrev = new _Student{ student,studentlist,studentlist->pPrev };
 	studentlist->pPrev->pPrev->pNext = studentlist->pPrev;
 }
-
 _Student* FileInStudent(std::string filename) {
 	_LText();
 	std::wfstream fi(filename, std::wfstream::in);
@@ -96,7 +93,6 @@ _Student* FileInStudent(std::string filename) {
 	_SText();
 	return stu;
 }
-
 void FileOutStudent(_Student* stu, std::string fileout) {
 	std::wfstream fo(fileout, std::wfstream::out);
 	_LText();
@@ -110,7 +106,6 @@ void FileOutStudent(_Student* stu, std::string fileout) {
 	} while (stu != temp);
 	fo.close();
 }
-
 void StuToBin(_Student* stu, std::string fileout) {
 	if (stu == nullptr) return;
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
@@ -153,11 +148,11 @@ void StuToBin(_Student* stu, std::string fileout) {
 
 		k = strlen(stu->student.account.username) + 1;
 		fo.write((char*)&k, sizeof(int));
-		fo.write((char*)&stu->student.account.username, k);
+		fo.write(stu->student.account.username, k);
 
 		k = strlen(stu->student.account.password) + 1;
 		fo.write((char*)&k, sizeof(int));
-		fo.write((char*)&stu->student.account.password, k);
+		fo.write(stu->student.account.password, k);
 		
 		fo.write((char*)&stu->student.GPA, sizeof(float));
 
@@ -165,7 +160,6 @@ void StuToBin(_Student* stu, std::string fileout) {
 	} while (stu != temp);
 	fo.close();
 }
-
 void BinToStu(_Student*& stu, std::string filein) {
 	std::fstream fi(filein, std::fstream::in | std::fstream::binary);
 	if (!fi) return;
@@ -212,18 +206,18 @@ void BinToStu(_Student*& stu, std::string filein) {
 
 		fi.read((char*)&k, sizeof(int));
 		temp.account.username = new char[k];
-		fi.read((char*)&temp.account.username, k);
+		fi.read(temp.account.username, k);
 
 		fi.read((char*)&k, sizeof(int));
 		temp.account.password = new char[k];
-		fi.read((char*)&temp.account.password, k);
+		fi.read(temp.account.password, k);
 
 		fi.read((char*)&temp.GPA, sizeof(float));
 		
 		AddStudent(stu, temp);
 	}
+	fi.close();
 }
-
 int NumberOfStudent(_Student* stu) {
 	if (stu == nullptr) return 0;
 	int k = 0;
@@ -256,7 +250,7 @@ void PrintStu(_Student* stu) {
 		stu = stu->pNext;
 	} while (stu != temp);
 }
-Student* FindStudent(_Student* studentlist, unsigned __int32 ID) {
+Student* FindStudent(_Student* studentlist, unsigned __int64 ID) {
 	if (studentlist == nullptr) return nullptr;
 	_Student* temp = studentlist;
 	while (studentlist->student.ID != ID && studentlist->pNext != temp)
@@ -275,7 +269,7 @@ void DealloStu(_Student*& stu) {
 		delete a;
 	} while (stu != temp);
 }
-void RemoveStudent(_Student*& studentlist, unsigned __int32 ID) {
+void RemoveStudent(_Student*& studentlist, unsigned __int64 ID) {
 	if (studentlist == nullptr) return;
 	_Student* temp = studentlist;
 	_Student* pcur = studentlist;
@@ -305,4 +299,32 @@ _Student* ConnectStudent(_Student*& a, _Student*& b) {
 	a = nullptr;
 	b = nullptr;
 	return temp->pNext;
+}
+
+void ClassToBin(_Class *cls,std::string filename){
+	if (cls == nullptr) return;
+	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
+	_Class* temp = cls;
+	int k;
+	do {
+		k = strlen(cls->classes.name) + 1;
+		fo.write((char*)&k, sizeof(int));
+		fo.write((char*)&cls->classes.name, k);
+		if (cls->classes.student == nullptr) k = 0;
+		else k = _msize(cls->classes.student) / sizeof(_Student*);
+		fo.write((char*)&k, sizeof(int));
+		for (int i = 0; i < k; i++) {
+
+		}
+		
+	} while (cls != temp);
+}
+
+void SchoolYearToBin(SchoolYear sch) {
+	char* year = NumToStr(sch.year);
+	StrCat(year, 8, "save.bin");
+	std::fstream fo(year, std::fstream::out | std::fstream::binary);
+	fo.write((char*)&sch.year, sizeof(int));
+	int k = 0;
+
 }

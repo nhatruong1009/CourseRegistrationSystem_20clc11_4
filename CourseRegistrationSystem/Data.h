@@ -28,6 +28,7 @@ struct Course
 	unsigned short credit;
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
+	unsigned __int64* ID;
 	Score* score;
 	struct Performed
 	{
@@ -51,7 +52,9 @@ struct Student
 struct Classes
 {
 	char* name;
+	_Student* student = nullptr;
 	Student* student = nullptr;
+	unsigned __int64* ID;
 };
 struct _Student
 {
@@ -91,6 +94,7 @@ Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
 void StuToBin(_Student* stu, std::string fileout);
 void BinToStu(_Student*& stu, std::string filein);
+void SchoolYearToBin(SchoolYear sch);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);

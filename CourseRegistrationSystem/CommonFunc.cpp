@@ -29,6 +29,58 @@ void StrToLStr(wchar_t desination[], int size, char* source) {
 		desination[i] = source[i];
 	}
 }
+void StrCat(char*&destination, int size, std::string source) {
+	int n = strlen(destination);
+	char* temp = new char[n + size + 1];
+	temp[n + size] = '\0';
+	for (int i = 0; i < n; i++) {
+		temp[i] = destination[i];
+	}
+	for (int i = n; i < size + n; i++) {
+		temp[i] = source[i - n];
+	}
+	delete destination;
+	destination = temp;
+}
+void StrCat(char*& destination, int size, char* source) {
+	int n = strlen(destination);
+	char* temp = new char[n + size + 1];
+	temp[n + size] = '\0';
+	for (int i = 0; i < n; i++) {
+		temp[i] = destination[i];
+	}
+	for (int i = n; i < size + n; i++) {
+		temp[i] = source[i - n];
+	}
+	delete destination;
+	destination = temp;
+}
+void StrCat(wchar_t*& destination, int size, std::wstring source) {
+	int n = wcslen(destination);
+	wchar_t* temp = new wchar_t[n + size + 1];
+	temp[n + size] = L'\0';
+	for (int i = 0; i < n; i++) {
+		temp[i] = destination[i];
+	}
+	for (int i = n; i < size + n; i++) {
+		temp[i] = source[i - n];
+	}
+	delete destination;
+	destination = temp;
+}
+void StrCat(wchar_t*& destination, int size, wchar_t* source) {
+	int n = wcslen(destination);
+	wchar_t* temp = new wchar_t[n + size + 1];
+	temp[n + size] = L'\0';
+	for (int i = 0; i < n; i++) {
+		temp[i] = destination[i];
+	}
+	for (int i = n; i < size + n; i++) {
+		temp[i] = source[i - n];
+	}
+	delete destination;
+	destination = temp;
+}
 __int64 StringToInt(wchar_t* ch) {
 	unsigned __int64 a = 0;
 	while (*ch != L'\0')
@@ -128,6 +180,21 @@ Date StringToDate(char* ch) {
 	Date undentity;
 	return undentity;
 }
+char* NumToStr(unsigned __int64 num) {
+	int n = 0;
+	unsigned __int64 temp = num;
+	for (; num != 0; n++) {
+		num = num / 10;
+	}
+	char* result = new char[n + 1];
+	result[n] = '\0';
+	for (int i = n - 1; i >= 0; i--) {
+		result[i] = temp % 10 + '0';
+		temp = temp / 10;
+	}
+	return result;
+}
+
 tm GetTime()
 {
 	__time32_t now = time(0);
@@ -161,5 +228,3 @@ void SaveLoginHistory(char* AccountUsername)
 	file << AccountUsername << " " << a << std::endl;
 	file.close();
 }
-
-
