@@ -26,5 +26,14 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{c0689934-73fb-49c3-a1f9-5944c1128ae9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Samuel">
+      <UniqueIdentifier>{f4e71198-0228-439f-b11b-13d32308b382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaoBao">
+      <UniqueIdentifier>{d5f3b999-c904-43ff-ac56-df43fefa7d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PNguyen">
+      <UniqueIdentifier>{809c1226-3531-40e1-b7fd-4885be8d781c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
