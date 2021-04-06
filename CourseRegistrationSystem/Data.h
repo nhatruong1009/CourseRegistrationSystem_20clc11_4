@@ -28,7 +28,7 @@ struct Course
 	unsigned short credit;
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
-	unsigned __int64* ID;
+	unsigned __int64* stuID;
 	Score* score;
 	struct Performed
 	{
@@ -52,7 +52,6 @@ struct Student
 struct Classes
 {
 	char* name;
-	_Student* student = nullptr;
 	Student* student = nullptr;
 	unsigned __int64* ID;
 };
