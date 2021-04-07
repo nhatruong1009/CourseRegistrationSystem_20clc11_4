@@ -106,117 +106,48 @@ void FileOutStudent(_Student* stu, std::string fileout) {
 	} while (stu != temp);
 	fo.close();
 }
-void StuToBin(_Student* stu, std::string fileout) {
-	if (stu == nullptr) return;
+void StuToBin(Student* stu, std::string fileout) {
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
-	_Student* temp = stu;
 	int k = 0;
-	do {
-		fo.write((char*)&stu->student.ID, sizeof(__int64));
+	k = _msize(stu->account.password) / sizeof(char) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write(stu->account.password, k);
 
-		k = wcslen(stu->student.firstname) + 1;
-		fo.write((char*)&k, sizeof(int));
-		fo.write((char*)&*stu->student.firstname, k * 2);
+	k = _msize(stu->firstname) / sizeof(char) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write((char*)&*stu->firstname, 2 * k);
 
-		k = wcslen(stu->student.lastname) + 1;
-		fo.write((char*)&k, sizeof(int));
-		fo.write((char*)&*stu->student.lastname, k * 2);
+	k = _msize(stu->lastname) / sizeof(char) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write((char*)&*stu->lastname, 2 * k);
 
-		fo.write(&stu->student.gender, 1);
+	fo.write(&stu->gender, 1);
 
-		fo.write((char*)&stu->student.birth, sizeof(Date));
+	fo.write((char*)&stu->birth, sizeof(Date));
 
-		fo.write((char*)&stu->student.SocialID, sizeof(__int64));
+	k = _msize(stu->coursenow) / sizeof(char*);
+	fo.write((char*)&k, sizeof(int));
+	for (int i = 0; i < k; i++) {
+		int e = _msize(stu->coursenow[i]) / sizeof(char)+1;
+		fo.write((char*)&e, sizeof(int));
+		fo.write(stu->coursenow[i], e);
+	}
 
-		if (stu->student.coursenow == nullptr) k = 0;
-		else k = _msize(stu->student.coursenow) / sizeof(char*);
-		fo.write((char*)&k, sizeof(int));
-		for (int i = 0; i < k; i++) {
-			int e = strlen(stu->student.coursenow[i]) + 1;
-			fo.write((char*)&e, sizeof(int));
-			fo.write(stu->student.coursenow[i], e);
-		}
+	k = _msize(stu->allcourse) / sizeof(char*);
+	fo.write((char*)&k, sizeof(int));
+	for (int i = 0; i < k; i++) {
+		int e = _msize(stu->allcourse[i]) / sizeof(char) + 1;
+		fo.write((char*)&e, sizeof(int));
+		fo.write(stu->allcourse[i], e);
+	}
 
-		if (stu->student.allcourse == nullptr) k = 0;
-		else k = _msize(stu->student.allcourse) / sizeof(char*);
-		fo.write((char*)&k, sizeof(int));
-		for (int i = 0; i < k; i++) {
-			int e = strlen(stu->student.allcourse[i]) + 1;
-			fo.write((char*)&e, sizeof(int));
-			fo.write(stu->student.allcourse[i], e);
-		}
+	fo.write((char*)&stu->SocialID, sizeof(__int64));
+	fo.write((char*)&stu->GPA, sizeof(float));
 
-		k = strlen(stu->student.account.username) + 1;
-		fo.write((char*)&k, sizeof(int));
-		fo.write(stu->student.account.username, k);
-
-		k = strlen(stu->student.account.password) + 1;
-		fo.write((char*)&k, sizeof(int));
-		fo.write(stu->student.account.password, k);
-		
-		fo.write((char*)&stu->student.GPA, sizeof(float));
-
-		stu = stu->pNext;
-	} while (stu != temp);
 	fo.close();
 }
-void BinToStu(_Student*& stu, std::string filein) {
-	std::fstream fi(filein, std::fstream::in | std::fstream::binary);
-	if (!fi) return;
-	_LText();
-	fi.seekg(-1, std::ios_base::end);
-	int l = fi.tellp();
-	fi.seekg(0, std::ios_base::beg);
-	int k = 0;
-	Student temp;
-	while(fi.tellp()<l){
-		fi.read((char*)&temp.ID, sizeof(__int64));
-
-		fi.read((char*)&k, sizeof(int));
-		temp.firstname = new wchar_t[k];
-		fi.read((char*)&temp.firstname[0], k * 2);
-
-		fi.read((char*)&k, sizeof(int));
-		temp.lastname = new wchar_t[k];
-		fi.read((char*)&temp.lastname[0], k * 2);
-
-		fi.read(&temp.gender, 1);
-
-		fi.read((char*)&temp.birth, sizeof(Date));
-
-		fi.read((char*)&temp.SocialID, sizeof(__int64));
-
-		fi.read((char*)&k, sizeof(int));
-		if (k != 0) temp.coursenow = new char* [k];
-		for (int i = 0; i < k; i++) {
-			int e=0;
-			fi.write((char*)&e, sizeof(int));
-			if (e != 0) temp.coursenow[i] = new char[e];
-			fi.write(temp.coursenow[i], e);
-		}
-
-		fi.read((char*)&k, sizeof(int));
-		if (k != 0) temp.allcourse = new char* [k];
-		for (int i = 0; i < k; i++) {
-			int e = 0;
-			fi.write((char*)&e, sizeof(int));
-			if (e != 0) temp.allcourse[i] = new char[e];
-			fi.write(temp.allcourse[i], e);
-		}
-
-		fi.read((char*)&k, sizeof(int));
-		temp.account.username = new char[k];
-		fi.read(temp.account.username, k);
-
-		fi.read((char*)&k, sizeof(int));
-		temp.account.password = new char[k];
-		fi.read(temp.account.password, k);
-
-		fi.read((char*)&temp.GPA, sizeof(float));
-		
-		AddStudent(stu, temp);
-	}
-	fi.close();
+void BinToStu(Student*& stu, std::string filein) {
+	
 }
 int NumberOfStudent(_Student* stu) {
 	if (stu == nullptr) return 0;
