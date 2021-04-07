@@ -228,3 +228,25 @@ void SaveLoginHistory(char* AccountUsername)
 	file << AccountUsername << " " << a << std::endl;
 	file.close();
 }
+char* AddTwoStr(const char* a, char* b) {
+	int l1 = strlen(a), l2 = strlen(b);
+	int n = l1 + l2;
+	char* result = new char[n + 1];
+	result[n] = '\0';
+	for(int i=0;i<l1;i++){
+		result[i] = a[i];
+	}
+	for (int i = l1; i < n; i++) {
+		result[i] = b[i - l1];
+	}
+	return result;
+}
+char* StrToChar(std::string source) {
+	int n = source.length();
+	char* result = new char[n + 1];
+	result[n] = '\0';
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
