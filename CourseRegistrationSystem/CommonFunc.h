@@ -27,4 +27,6 @@ tm GetTime();
 bool operator>(tm& t1, tm& t2);
 bool operator<(tm& t1, tm& t2);
 void SaveLoginHistory(char* AccountUsername);
+char* AddTwoStr(const char* a, char* b);
+char* StrToChar(std::string source);
 #endif // !_Common
