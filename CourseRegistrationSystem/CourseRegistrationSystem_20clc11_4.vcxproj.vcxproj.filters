@@ -10,6 +10,9 @@
     <ClCompile Include="DataFunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LogHistory.cpp">
+      <Filter>Samnuel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunc.h">

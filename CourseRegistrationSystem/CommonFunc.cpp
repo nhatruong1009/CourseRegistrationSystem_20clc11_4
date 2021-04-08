@@ -224,7 +224,7 @@ void SaveLoginHistory(char* AccountUsername)
 	char a[100];
 	_ctime32_s(a, &now);
 	std::ofstream file;
-	file.open("history.txt", std::ios::app);
+	file.open("login.txt", std::ios::app);
 	file << AccountUsername << " " << a << std::endl;
 	file.close();
 }
