@@ -8,6 +8,17 @@ void SaveLogoutHistory(char* AccountUsername)
 	_ctime32_s(a, &now);
 	std::ofstream file;
 	file.open("logout.txt", std::ios::app);
-	file << AccountUsername << " " << a << std::endl;
+	file << AccountUsername << " " << a;
+	file.close();
+}
+
+void SaveCourseRegHis(char* AccountUsername)
+{
+	__time32_t now = time(0);
+	char a[100];
+	_ctime32_s(a, &now);
+	std::ofstream file;
+	file.open("coursereg.txt", std::ios::app);
+	file << AccountUsername << " " << a;
 	file.close();
 }
