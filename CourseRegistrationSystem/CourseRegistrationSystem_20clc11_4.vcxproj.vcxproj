@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="DataFunc.cpp" />
     <ClCompile Include="CommonFunc.cpp" />
+    <ClCompile Include="LogHistory.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
