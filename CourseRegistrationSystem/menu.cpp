@@ -6,12 +6,7 @@ void userTypeMenu();
 void studentMenu();
 void staffMenu();
 
-int main()
-{
 
-	userTypeMenu();
-	return 0;
-}
 void userTypeMenu()
 {
 
@@ -38,7 +33,6 @@ void userTypeMenu()
 }
 void studentMenu()
 {
-	printf("\e[1;1H\e[2J");
 	int so;
 	cout << "-------------STUDENT---------------" << endl;
 	cout << "  1. Log In" << endl;
@@ -64,7 +58,6 @@ void studentMenu()
 }
 void staffMenu()
 {
-	printf("\e[1;1H\e[2J");
 	int so;
 	cout << "-------------STAFF---------------" << endl;
 	cout << "  1. Create a csvt" << endl;

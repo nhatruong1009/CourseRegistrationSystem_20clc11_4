@@ -83,6 +83,7 @@ struct SchoolYear
 	int year;
 	Semester* semester;
 	_Class* classes;
+	_Student* student;
 };
 
 std::ostream& operator<<(std::ostream& os, const Date& dt);
@@ -98,5 +99,6 @@ void SchoolYearToBin(SchoolYear sch);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
+SchoolYear* AddSchoolYear();
 #endif // _Structs
 

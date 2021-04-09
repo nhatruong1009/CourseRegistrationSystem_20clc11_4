@@ -1,5 +1,6 @@
 #include"Data.h"
 #include"CommonFunc.h"
+#include <sys/stat.h>
 std::ostream& operator<<(std::ostream& os, const Date& dt)
 {
 	os << dt.dd << '/' << dt.mm << '/' << dt.yy;
@@ -106,8 +107,6 @@ void FileOutStudent(_Student* stu, std::string fileout) {
 	} while (stu != temp);
 	fo.close();
 }
-
-
 void StuToBin(Student* stu, std::string fileout) {
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
 	int k = 0;
@@ -205,7 +204,6 @@ Student BinToStu(std::string filein) {
 	fi.close();
 	return stu;
 }
-
 void SaveNewStu(_Student* stu, const char* directon, const char* savefile) {
 	if (stu == nullptr) return;
 	std::fstream fii(savefile, std::fstream::app);
@@ -220,7 +218,6 @@ void SaveNewStu(_Student* stu, const char* directon, const char* savefile) {
 		stu = stu->pNext;
 	} while (stu != temp);
 }
-
 int NumberOfStudent(_Student* stu) {
 	if (stu == nullptr) return 0;
 	int k = 0;
@@ -244,7 +241,6 @@ void PrintStu(Student* a) {
 	std::wcout << a->account.password << '\n';
 	_SText();
 }
-
 void PrintStu(_Student* stu) {
 	if (stu == nullptr) return;
 	_Student* temp = stu;
@@ -288,47 +284,109 @@ void RemoveStudent(_Student*& studentlist, unsigned __int64 ID) {
 
 	delete pcur;
 }
-_Student* ConnectStudent(_Student*& a, _Student*& b) {
+void ConnectStudent(_Student*& a, _Student*& b) {
 	if (a == nullptr) {
-		_Student* temp = b; b = nullptr; return temp;
+		a = b; b = nullptr; return;
 	}
-	if (b == nullptr) {
-		_Student* temp = a; a = nullptr; return temp;
-	}
+
 	a->pPrev->pNext = b;
 	b->pPrev->pNext = a;
 	_Student* temp = a->pPrev;
 	a->pPrev = b->pPrev;
 	b->pPrev = temp;
-	a = nullptr;
 	b = nullptr;
-	return temp->pNext;
+}
+int CountStudent(_Student* a) {
+	if (a == nullptr) return 0;
+	_Student* flag = a;
+	int num = 0;
+	do {
+		num += 1;
+		a = a->pNext;
+	} while (a != flag);
+	return num;
 }
 
-void ClassToBin(_Class *cls,std::string filename){
-	if (cls == nullptr) return;
-	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
-	_Class* temp = cls;
-	int k;
-	do {
-		k = strlen(cls->classes.name) + 1;
-		fo.write((char*)&k, sizeof(int));
-		fo.write((char*)&cls->classes.name, k);
-		if (cls->classes.student == nullptr) k = 0;
-		else k = _msize(cls->classes.student) / sizeof(_Student*);
-		fo.write((char*)&k, sizeof(int));
-		for (int i = 0; i < k; i++) {
-
+void AddClass(_Class*& cls, Classes sourse) {
+	if (cls == nullptr) { cls = new _Class{ sourse }; cls->pNext = cls, cls->pPrev = cls; return; }
+	cls->pPrev = new _Class{ sourse,cls,cls->pPrev };
+	cls->pPrev->pPrev->pNext = cls->pPrev;
+}
+Classes MakeClass(_Student *&all) {
+	Classes result;
+	std::cout << "ClassName: ";
+	std::string temp;
+	std::cin >> temp;
+	result.name = StrToChar(temp);
+	std::cout << "File in Student(.csv): ";
+	std::cin >> temp;
+	_Student* thisclass = FileInStudent(temp);
+	int numberofstu = CountStudent(thisclass);
+	if (numberofstu != 0) {
+		result.ID = new unsigned __int64[numberofstu];
+		for (int i = 0; i < numberofstu; i++) {
+			result.ID[i] = thisclass->student.ID;
+			thisclass = thisclass->pNext;
 		}
-		
-	} while (cls != temp);
+	}
+	ConnectStudent(all, thisclass);
+	return result;
+}
+void PrintClass(Classes a) {
+	_SText();
+	std::cout << a.name<<'\n';
+	int n = _msize(a.ID) / sizeof(__int64);
+	if (a.ID != nullptr) {
+		for (int i = 0; i < n; i++) {
+			std::cout << a.ID[i] << '\n';
+		}
+	}
+}
+SchoolYear* AddSchoolYear() {
+	wchar_t* data = new wchar_t[] {L"Data"};
+	_wmkdir(data);
+	delete[] data;
+	SchoolYear* a = new SchoolYear;
+	tm now = GetTime();
+	a->year = now.tm_year;
+	wchar_t* yy = NumToLStr(a->year);
+	wchar_t* file = new wchar_t[]{ L"Data\\K" };
+	StrCat(file, wcslen(yy), yy);
+	if (_wmkdir(file)==-1) {
+		std::cout << "School year had made!";
+		delete a;
+		delete[]yy, file;
+		return nullptr;
+	}
+	else {
+		wchar_t* temp = StrCat(file, L"\\Student");
+		_wmkdir(temp);
+		delete[] temp;
+		temp = StrCat(file, L"\\Class");
+		_wmkdir(temp);
+		delete[] temp;
+		temp = StrCat(file, L"\\Course");
+		_wmkdir(temp);
+		wchar_t*temp2 = StrCat(temp, L"\\Score");
+		_wmkdir(temp2);
+		delete[] temp, temp2;
+
+		a->classes = nullptr;
+		a->student = nullptr;
+		int chose;
+		std::cout << "1:AddClass\n";
+		std::cin >> chose;
+		while (chose==1)
+		{
+			Classes tt = MakeClass(a->student);
+			AddClass(a->classes,tt);
+			std::cin >> chose;
+		}
+		delete[]yy, file;
+		return a;
+	}
 }
 
 void SchoolYearToBin(SchoolYear sch) {
-	char* year = NumToStr(sch.year);
-	StrCat(year, 8, "save.bin");
-	std::fstream fo(year, std::fstream::out | std::fstream::binary);
-	fo.write((char*)&sch.year, sizeof(int));
-	int k = 0;
 
 }

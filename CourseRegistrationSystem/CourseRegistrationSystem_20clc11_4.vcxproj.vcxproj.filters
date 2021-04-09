@@ -13,6 +13,9 @@
     <ClCompile Include="LogHistory.cpp">
       <Filter>Samnuel</Filter>
     </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>PNguyen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunc.h">

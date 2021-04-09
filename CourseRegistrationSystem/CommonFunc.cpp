@@ -1,13 +1,18 @@
 #include"CommonFunc.h"
-
 void _LText()
 {
-	_setmode(_fileno(stdin), _O_U8TEXT);
-	_setmode(_fileno(stdout), _O_U8TEXT);
+	_setmode(_fileno(stdin), _O_U16TEXT);
+	_setmode(_fileno(stdout), _O_U16TEXT);
 } 
 void _SText() {
 	_setmode(_fileno(stdin), _O_TEXT);
 	_setmode(_fileno(stdout), _O_TEXT);
+}
+void ClearInput() {
+	_LText();
+	std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	_SText();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 void LStrToStr(char desination[], int size, std::wstring source) {
 	for (int i = 0; i < size; i++) {
@@ -80,6 +85,30 @@ void StrCat(wchar_t*& destination, int size, wchar_t* source) {
 	}
 	delete destination;
 	destination = temp;
+}
+wchar_t* StrCat(wchar_t* source1, wchar_t* source2) {
+	int n = wcslen(source1), m = wcslen(source2);
+	wchar_t* result = new wchar_t[n + m + 1];
+	result[n + m ] = L'\0';
+	for (int i = 0; i < n ; i++) {
+		result[i] = source1[i];
+	}
+	for (int i = 0; i < m; i++) {
+		result[i + n] = source2[i];
+	}
+	return result;
+}
+wchar_t* StrCat(wchar_t* source1,std::wstring source2) {
+	int n = wcslen(source1), m =source2.length();
+	wchar_t* result = new wchar_t[n + m + 1];
+	result[n + m] = L'\0';
+	for (int i = 0; i < n ; i++) {
+		result[i] = source1[i];
+	}
+	for (int i = 0; i < m; i++) {
+		result[i + n] = source2[i];
+	}
+	return result;
 }
 __int64 StringToInt(wchar_t* ch) {
 	unsigned __int64 a = 0;
@@ -180,16 +209,25 @@ Date StringToDate(char* ch) {
 	Date undentity;
 	return undentity;
 }
-char* NumToStr(unsigned __int64 num) {
-	int n = 0;
+ char* NumToStr(unsigned __int64 num) {
+	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
-	for (; num != 0; n++) {
-		num = num / 10;
-	}
 	char* result = new char[n + 1];
 	result[n] = '\0';
 	for (int i = n - 1; i >= 0; i--) {
 		result[i] = temp % 10 + '0';
+		temp = temp / 10;
+	}
+	return result;
+}
+
+wchar_t* NumToLStr(unsigned __int64 num) {
+	int n = ceil(log10f(num));
+	unsigned __int64 temp = num;
+	wchar_t* result = new wchar_t[n + 1];
+	result[n] = L'\0';
+	for (int i = n - 1; i >= 0; i--) {
+		result[i] = temp % 10 + L'0';
 		temp = temp / 10;
 	}
 	return result;
@@ -200,6 +238,8 @@ tm GetTime()
 	__time32_t now = time(0);
 	tm t;
 	_localtime32_s(&t, &now);
+	t.tm_year += 1900;
+	t.tm_mon += 1;
 	return t;
 }
 bool operator>(tm& t1, tm& t2)
