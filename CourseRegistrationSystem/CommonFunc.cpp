@@ -4,7 +4,7 @@ void _LText()
 {
 	_setmode(_fileno(stdin), _O_U8TEXT);
 	_setmode(_fileno(stdout), _O_U8TEXT);
-}
+} 
 void _SText() {
 	_setmode(_fileno(stdin), _O_TEXT);
 	_setmode(_fileno(stdout), _O_TEXT);

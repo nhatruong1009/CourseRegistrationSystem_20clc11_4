@@ -3,9 +3,13 @@
 #include<locale>
 #include<codecvt>
 #include<string>
+
+#include<conio.h>
 using namespace std;
 
 int main(int argc, char*argv[] ) {
+	string ee = "TNTNTNT";
+
 	string filein;
 	cin >> filein;
 	fstream fi(filein, fstream::in);
