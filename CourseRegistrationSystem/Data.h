@@ -94,11 +94,12 @@ Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
 void StuToBin(Student* stu, std::string fileout);
 Student BinToStu(std::string filein);
-void SaveNewStu(_Student* stu, const char* directon,const char* savefile);
+void SaveNewStu(_Student* stu, char* directon,const char* savefile);
 void SchoolYearToBin(SchoolYear sch);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
 SchoolYear* AddSchoolYear();
+void SaveSchoolYear(SchoolYear* sch, const char* savefile);
 #endif // _Structs
 

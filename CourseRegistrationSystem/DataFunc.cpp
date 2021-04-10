@@ -204,19 +204,22 @@ Student BinToStu(std::string filein) {
 	fi.close();
 	return stu;
 }
-void SaveNewStu(_Student* stu, const char* directon, const char* savefile) {
+void SaveNewStu(_Student* stu, char* direction, const char* savefile) {
 	if (stu == nullptr) return;
+	char* direc = StrCat(direction, "\\Student\\");
 	std::fstream fii(savefile, std::fstream::app);
 	_Student* temp = stu;
 	do {
 		char* filename = NumToStr(stu->student.ID);
-		char* fileout = AddTwoStr(directon, filename);
+		char* fileout = AddTwoStr(direc, filename);
 		StuToBin(&stu->student, fileout);
 		fii << filename << " " << fileout << '\n';
 		delete[] filename;
 		delete[] fileout;
 		stu = stu->pNext;
 	} while (stu != temp);
+	delete[] direc;
+	fii.close();
 }
 int NumberOfStudent(_Student* stu) {
 	if (stu == nullptr) return 0;
@@ -332,6 +335,10 @@ Classes MakeClass(_Student *&all) {
 	ConnectStudent(all, thisclass);
 	return result;
 }
+void SaveClass(_Class* cls, char* direction, const char* savefile) {
+
+}
+
 void PrintClass(Classes a) {
 	_SText();
 	std::cout << a.name<<'\n';
@@ -386,7 +393,12 @@ SchoolYear* AddSchoolYear() {
 		return a;
 	}
 }
-
-void SchoolYearToBin(SchoolYear sch) {
-
+void SaveSchoolYear(SchoolYear*sch,const char*savefile) {
+	if (sch == nullptr) return;
+	char* local = new char[] {"Data\\K"};
+	char* year = NumToStr(sch->year);
+	char* direction = StrCat(local, year);
+	SaveNewStu(sch->student, direction, "student.txt");
+	
+	delete[]local, year, direction;
 }
