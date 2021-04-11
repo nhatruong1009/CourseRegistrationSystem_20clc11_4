@@ -16,6 +16,9 @@
     <ClCompile Include="menu.cpp">
       <Filter>PNguyen</Filter>
     </ClCompile>
+    <ClCompile Include="Course.cpp">
+      <Filter>BaoBao</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunc.h">
