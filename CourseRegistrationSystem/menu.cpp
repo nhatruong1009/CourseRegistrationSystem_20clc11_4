@@ -6,7 +6,7 @@ void userTypeMenu();
 void studentMenu();
 void staffMenu();
 
-
+//
 void userTypeMenu()
 {
 
