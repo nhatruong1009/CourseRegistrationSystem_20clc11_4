@@ -336,7 +336,7 @@ Classes MakeClass(_Student *&all) {
 	return result;
 }
 void SaveClass(_Class* cls, char* direction, const char* savefile) {
-
+	
 }
 
 void PrintClass(Classes a) {

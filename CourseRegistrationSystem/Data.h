@@ -21,7 +21,6 @@ struct Score
 };
 struct Course
 {
-
 	char* ID;
 	wchar_t* name;
 	wchar_t* teacher;
