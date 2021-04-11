@@ -335,8 +335,21 @@ Classes MakeClass(_Student *&all) {
 	ConnectStudent(all, thisclass);
 	return result;
 }
+
+void SaveClass(Classes cl, char* fileout) {
+	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
+	int k;
+	if (cl.ID == nullptr) k = 0;
+	else k = _msize(cl.ID) / sizeof(__int64*);
+	fo.write((char*)&k, sizeof(int));
+	for (int i = 0; i < k; i++) {
+		fo.write((char*)&cl.ID[i], sizeof(__int64));
+	}
+	fo.close();
+}
+
 void SaveClass(_Class* cls, char* direction, const char* savefile) {
-	
+
 }
 
 void PrintClass(Classes a) {

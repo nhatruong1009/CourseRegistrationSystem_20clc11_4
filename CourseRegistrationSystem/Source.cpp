@@ -10,7 +10,6 @@ using namespace std;
 
 
 int main(int argc, char* argv[]) {
-	SchoolYear*a= AddSchoolYear();
-	SaveSchoolYear(a,"year.txt");
-	cout << "end";
+	string a = "12324";
+	cout << a[1,4];
 }
