@@ -1,12 +1,6 @@
 #include"CommonFunc.h"
 #include"Data.h"
 
-void AddCourse(_Course*& Courselist, Course Course) {
-	if (Courselist == nullptr) { Courselist = new _Course{ Course }; Courselist->pNext = Courselist, Courselist->pPrev = Courselist; return; }
-	Courselist->pPrev = new _Course{ Course,Courselist,Courselist->pPrev };
-	Courselist->pPrev->pPrev->pNext = Courselist->pPrev;
-}
-
 Course MakeCourse() {
 	Course result;
 	std::cout << "Course name: ";
@@ -15,7 +9,7 @@ Course MakeCourse() {
 	int size = temp.length();
 	result.name = new wchar_t[size + 1];
 	result.name[size] = L'\0';
-	StrToLStr(result.name, size, temp);
+	StrToLStr(result.name, size, temp);  //Not working??
 
 	std::cout << "Course ID: ";
 	std::getline(std::cin, temp);
@@ -31,7 +25,7 @@ Course MakeCourse() {
 	size = temp.length();
 	result.teacher = new wchar_t[size + 1];
 	result.teacher[size] = L'\0';
-	StrToLStr(result.teacher, size, temp);
+	StrToLStr(result.teacher, size, temp); //Not working??
 
 	std::cout << "Number of credits: ";
 	std::cin >> result.credit;
