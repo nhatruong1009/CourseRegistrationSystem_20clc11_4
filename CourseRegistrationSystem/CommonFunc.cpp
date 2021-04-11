@@ -110,6 +110,30 @@ wchar_t* StrCat(wchar_t* source1,std::wstring source2) {
 	}
 	return result;
 }
+char* StrCat(char* source1, char* source2) {
+	int n = strlen(source1), m = strlen(source2);
+	char* result = new char[n + m + 1];
+	result[n + m] = L'\0';
+	for (int i = 0; i < n; i++) {
+		result[i] = source1[i];
+	}
+	for (int i = 0; i < m; i++) {
+		result[i + n] = source2[i];
+	}
+	return result;
+}
+char* StrCat(char* source1, std::string source2) {
+	int n = strlen(source1), m = source2.length();
+	char* result = new char[n + m + 1];
+	result[n + m] = L'\0';
+	for (int i = 0; i < n; i++) {
+		result[i] = source1[i];
+	}
+	for (int i = 0; i < m; i++) {
+		result[i + n] = source2[i];
+	}
+	return result;
+}
 __int64 StringToInt(wchar_t* ch) {
 	unsigned __int64 a = 0;
 	while (*ch != L'\0')
@@ -220,7 +244,6 @@ Date StringToDate(char* ch) {
 	}
 	return result;
 }
-
 wchar_t* NumToLStr(unsigned __int64 num) {
 	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
@@ -232,7 +255,6 @@ wchar_t* NumToLStr(unsigned __int64 num) {
 	}
 	return result;
 }
-
 tm GetTime()
 {
 	__time32_t now = time(0);

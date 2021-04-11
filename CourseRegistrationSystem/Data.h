@@ -1,4 +1,4 @@
-#ifndef _Structs
+ #ifndef _Structs
 #define _Structs
 #include<iostream>
 #include<locale>
@@ -21,7 +21,6 @@ struct Score
 };
 struct Course
 {
-
 	char* ID;
 	wchar_t* name;
 	wchar_t* teacher;
@@ -35,7 +34,7 @@ struct Course
 		char day[4];
 		char session[3];
 	};
-	Performed* performed;
+	Performed* performed = new Performed[2];
 };
 struct Student
 {
@@ -94,11 +93,12 @@ Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
 void StuToBin(Student* stu, std::string fileout);
 Student BinToStu(std::string filein);
-void SaveNewStu(_Student* stu, const char* directon,const char* savefile);
+void SaveNewStu(_Student* stu, char* directon,const char* savefile);
 void SchoolYearToBin(SchoolYear sch);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
 SchoolYear* AddSchoolYear();
+void SaveSchoolYear(SchoolYear* sch, const char* savefile);
 #endif // _Structs
 

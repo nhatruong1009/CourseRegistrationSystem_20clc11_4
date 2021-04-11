@@ -20,6 +20,8 @@ void StrCat(wchar_t*& destination, int size, std::wstring source);
 void StrCat(wchar_t*& destination, int size, wchar_t* source);
 wchar_t* StrCat(wchar_t* destination, wchar_t* source);
 wchar_t* StrCat(wchar_t* source1, std::wstring source2);
+char* StrCat(char* destination, char* source);
+char* StrCat(char* source1, std::string source2);
 __int64 StringToInt(wchar_t* ch);
 __int64 StringToInt(char* ch);
 __int64 StringToInt(std::wstring str);
