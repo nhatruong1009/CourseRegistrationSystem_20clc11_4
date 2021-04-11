@@ -402,3 +402,4 @@ void SaveSchoolYear(SchoolYear*sch,const char*savefile) {
 	
 	delete[]local, year, direction;
 }
+

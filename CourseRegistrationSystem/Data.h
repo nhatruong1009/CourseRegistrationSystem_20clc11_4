@@ -1,4 +1,4 @@
-#ifndef _Structs
+ #ifndef _Structs
 #define _Structs
 #include<iostream>
 #include<locale>
@@ -34,7 +34,7 @@ struct Course
 		char day[4];
 		char session[3];
 	};
-	Performed* performed;
+	Performed* performed = new Performed[2];
 };
 struct Student
 {
