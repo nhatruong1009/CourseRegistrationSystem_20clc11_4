@@ -98,7 +98,7 @@ void FileOutStudent(_Student* stu, std::string fileout) {
 	std::wfstream fo(fileout, std::wfstream::out);
 	_LText();
 	fo << L"﻿";
-	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8<wchar_t>));
+	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
 	_Student* temp = stu;
 	do
 	{
@@ -349,7 +349,18 @@ void SaveClass(Classes cl, char* fileout) {
 }
 
 void SaveClass(_Class* cls, char* direction, const char* savefile) {
-
+	if (cls == nullptr) return;
+	char* direc = StrCat(direction, "\\Class\\");
+	std::fstream fii(savefile, std::fstream::app);
+	_Class* temp = cls;
+	do {
+		char* direction = StrCat(direc, cls->classes.name);
+		SaveClass(cls->classes, direction);
+		fii << cls->classes.name << " " << direc << '\n';
+		delete[] direction;
+		cls = cls->pNext;
+	} while (cls != temp);
+	fii.close();
 }
 
 void PrintClass(Classes a) {
@@ -412,7 +423,9 @@ void SaveSchoolYear(SchoolYear*sch,const char*savefile) {
 	char* year = NumToStr(sch->year);
 	char* direction = StrCat(local, year);
 	SaveNewStu(sch->student, direction, "student.txt");
-	
+	SaveClass(sch->classes, direction, "class.txt");
+	std::fstream fo(savefile, std::fstream::app);
+	fo << sch->year << " " << direction;
 	delete[]local, year, direction;
 }
 
