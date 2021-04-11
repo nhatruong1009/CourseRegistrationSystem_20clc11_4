@@ -14,10 +14,12 @@ void userTypeMenu()
 	cout << "-------------USER TYPE---------------" << endl;
 	cout << "  1. Student" << endl;
 	cout << "  2. Academic Staff" << endl;
+	cout << "  3. Back " <<endl;
 	do
 	{
 		cout << "Your choice: ";
 		cin >> so;
+
 		switch (so)
 		{
 		case 1:
@@ -26,7 +28,7 @@ void userTypeMenu()
 		case 2:
 			staffMenu();
 			return;
-
+		case 3: return;
 		}
 
 	} while (1);
@@ -76,6 +78,7 @@ void staffMenu()
 			return;
 		case 3:
 			userTypeMenu();
+            return;
 		}
 	} while (1);
 }
