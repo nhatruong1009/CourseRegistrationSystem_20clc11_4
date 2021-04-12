@@ -95,17 +95,18 @@ _Student* FileInStudent(std::string filename) {
 	return stu;
 }
 void FileOutStudent(_Student* stu, std::string fileout) {
-	std::wfstream fo(fileout, std::wfstream::out);
 	_LText();
-	fo << L"﻿";
+	std::wfstream fo(fileout, std::wfstream::out);
 	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
 	_Student* temp = stu;
+	fo << wchar_t(0xfeff);
 	do
 	{
 		fo << stu->student.ID << L',' << stu->student.firstname << L',' << stu->student.lastname << L',' << stu->student.gender << L',' << stu->student.birth << L',' << stu->student.SocialID << L'\n';
 		stu = stu->pNext;
 	} while (stu != temp);
 	fo.close();
+	_SText();
 }
 void StuToBin(Student* stu, std::string fileout) {
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
@@ -351,11 +352,13 @@ void SaveClass(Classes cl, char* fileout) {
 void SaveClass(_Class* cls, char* direction, const char* savefile) {
 	if (cls == nullptr) return;
 	char* direc = StrCat(direction, "\\Class\\");
-	std::fstream fii(savefile, std::fstream::app);
+	std::fstream fii(savefile, std::fstream::app | std::fstream::binary);
 	_Class* temp = cls;
+	int n;
 	do {
 		char* direction = StrCat(direc, cls->classes.name);
 		SaveClass(cls->classes, direction);
+		n = strlen(cls->classes.name);
 		fii << cls->classes.name << " " << direc << '\n';
 		delete[] direction;
 		cls = cls->pNext;
