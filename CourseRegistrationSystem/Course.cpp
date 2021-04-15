@@ -3,34 +3,35 @@
 
 Course MakeCourse() {
 	Course result;
-	std::cout << "Course name: ";
-	std::string temp;
-	std::getline(std::cin, temp);
+	_LText();
+	std::wcout << "Course name: ";
+	std::wstring temp;
+	std::getline(std::wcin, temp);
 	int size = temp.length();
 	result.name = new wchar_t[size + 1];
 	result.name[size] = L'\0';
-	StrToLStr(result.name, size, temp);  //Not working??
+	temp.copy(result.name, size);
 
-	std::cout << "Course ID: ";
-	std::getline(std::cin, temp);
+	std::wcout << "Course ID: ";
+	std::getline(std::wcin, temp);
 	size = temp.length();
 	result.ID = new char[size + 1];
 	result.ID[size] = '\0';
-	for (int i = 0; i < size; i++) {
-		result.ID[i] = temp[i];
-	}
+	LStrToStr(result.ID, size, temp);
 
-	std::cout << "Teacher name: ";
-	std::getline(std::cin, temp);
+	std::wcout << "Teacher name: ";
+	std::getline(std::wcin, temp);
 	size = temp.length();
 	result.teacher = new wchar_t[size + 1];
 	result.teacher[size] = L'\0';
-	StrToLStr(result.teacher, size, temp); //Not working??
+	temp.copy(result.teacher, size);
 
-	std::cout << "Number of credits: ";
-	std::cin >> result.credit;
+	std::wcout << "Number of credits: ";
+	std::wcin >> result.credit;
+	std::wcin.ignore(1000, L'\n');
+	_SText();
 
-	std::cout << "Schedule (ex. MON,S1) \n";
+	std::cout << "Schedule (ex. MON,S1) \n";// hmm not workking
 	for (int i = 0; i < 2; i++) {
 		std::cout << "Day: ";
 		std::cin >> result.performed[i].day;

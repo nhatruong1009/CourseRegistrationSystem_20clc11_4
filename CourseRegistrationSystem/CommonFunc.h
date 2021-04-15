@@ -9,6 +9,7 @@
 #include<locale>
 void _LText();
 void _SText();
+
 void LStrToStr(char desination[], int size, std::wstring source);
 void LStrToStr(char desination[], int size, wchar_t* source);
 void StrToLStr(wchar_t desination[], int size, std::string source);
