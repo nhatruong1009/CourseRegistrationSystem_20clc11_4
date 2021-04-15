@@ -154,6 +154,13 @@ __int64 StringToInt(std::wstring str) {
 	}
 	return a;
 }
+__int64 StringToInt(std::string str) {
+	unsigned __int64 a = 0;
+	for (int i = 0; i < str.length(); i++) {
+		a = a * 10 + str[i] - '0';
+	}
+	return a;
+}
 Date StringToDate(wchar_t* ch) {
 	Date a;
 	int beg = 0;
@@ -285,6 +292,8 @@ void SaveLoginHistory(char* AccountUsername)
 	file << AccountUsername << " " << a;
 	file.close();
 }
+
+
 char* AddTwoStr(const char* a, char* b) {
 	int l1 = strlen(a), l2 = strlen(b);
 	int n = l1 + l2;
@@ -295,6 +304,45 @@ char* AddTwoStr(const char* a, char* b) {
 	}
 	for (int i = l1; i < n; i++) {
 		result[i] = b[i - l1];
+	}
+	return result;
+}
+wchar_t* AddTwoStr(const wchar_t* a, wchar_t* b) {
+	int l1 = wcslen(a), l2 = wcslen(b);
+	int n = l1 + l2;
+	wchar_t* result = new wchar_t[n + 1];
+	result[n] = '\0';
+	for (int i = 0; i < l1; i++) {
+		result[i] = a[i];
+	}
+	for (int i = l1; i < n; i++) {
+		result[i] = b[i - l1];
+	}
+	return result;
+}
+std::string AddTwoStr(std::string a, std::string b) {
+	std::string result;
+	int n = a.length();
+	int m = b.length();
+	result.resize(n + m);
+	for (int i = 0; i < n; i++) {
+		result[i] = a[i];
+	}
+	for (int i = 0; i < m; i++) {
+		result[n + i] = b[i];
+	}
+	return result;
+}
+std::wstring AddTwoStr(std::wstring a, std::wstring b) {
+	std::wstring result;
+	int n = a.length();
+	int m = b.length();
+	result.resize(n + m);
+	for (int i = 0; i < n; i++) {
+		result[i] = a[i];
+	}
+	for (int i = 0; i < m; i++) {
+		result[n + i] = b[i];
 	}
 	return result;
 }
@@ -317,18 +365,27 @@ std::string ToString(std::wstring source) {
 	}
 	return result;
 }
-std::wstring ToWstring(std::string source) {
-	std::wstring result;
-	int n = source.length();
+std::string ToString(wchar_t* source) {
+	std::string result;
+	int n = wcslen(source);
 	result.resize(n);
 	for (int i = 0; i < n; i++) {
 		result[i] = source[i];
 	}
 	return result;
 }
-std::string ToString(wchar_t* source) {
+std::string ToString(char* source) {
 	std::string result;
-	int n = wcslen(source);
+	int n = strlen(source);
+	result.resize(n);
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
+std::wstring ToWstring(std::string source) {
+	std::wstring result;
+	int n = source.length();
 	result.resize(n);
 	for (int i = 0; i < n; i++) {
 		result[i] = source[i];
@@ -344,6 +401,16 @@ std::wstring ToWstring(char* source) {
 	}
 	return result;
 }
+std::wstring ToWstring(wchar_t* source) {
+	std::wstring result;
+	int n = wcslen(source);
+	result.resize(n);
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
+
 
 Filelist* TakeFileInFolder(const std::wstring& name)
 {
