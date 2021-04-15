@@ -51,7 +51,6 @@ struct Student
 struct Classes
 {
 	char* name;
-	Student* student = nullptr;
 	unsigned __int64* ID;
 };
 struct _Student
@@ -84,21 +83,26 @@ struct SchoolYear
 	_Class* classes;
 	_Student* student;
 };
-
+struct Filelist {
+	std::string filename;
+	Filelist* pNext = nullptr;
+	Filelist* pPrev = nullptr;
+};
 std::ostream& operator<<(std::ostream& os, const Date& dt);
 std::wostream& operator<<(std::wostream& os, const Date& dt);
 
+void AddInListFile(Filelist*& direc, std::string add);
 void AddStudent(_Student*& studentlist, Student student);
 Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
 void StuToBin(Student* stu, std::string fileout);
 Student BinToStu(std::string filein);
-void SaveNewStu(_Student* stu, char* directon,const char* savefile);
+void SaveNewStu(_Student* stu, char* directon);
 void SchoolYearToBin(SchoolYear sch);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
 SchoolYear* AddSchoolYear();
-void SaveSchoolYear(SchoolYear* sch, const char* savefile);
+void SaveSchoolYear(SchoolYear* sch);
 #endif // _Structs
 

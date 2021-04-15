@@ -1,15 +1,14 @@
-﻿#include"CommonFunc.h"
-#include"Data.h"
-#include<locale>
-#include<codecvt>
+﻿#include <windows.h>
+#include<iostream>
+#include<vector>
 #include<string>
+#include"CommonFunc.h"
+void main() {
 
-#include<conio.h>
-using namespace std;
- 
-
-
-int main(int argc, char* argv[]) {
-	SchoolYear *a= AddSchoolYear();
-	SaveSchoolYear(a,"Schoolyear.txt");
+    Filelist* a =TakeFileInFolder("Data\\K2021\\Student");
+    Filelist* b = a;
+    do {
+        std::cout << a->filename<<'\n';
+        a = a->pNext;
+    } while (a != b);
 }

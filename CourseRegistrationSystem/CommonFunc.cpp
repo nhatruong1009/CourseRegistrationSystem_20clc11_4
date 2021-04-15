@@ -1,4 +1,5 @@
 #include"CommonFunc.h"
+#include <windows.h>
 void _LText()
 {
 	_setmode(_fileno(stdin), _O_U16TEXT);
@@ -7,12 +8,6 @@ void _LText()
 void _SText() {
 	_setmode(_fileno(stdin), _O_TEXT);
 	_setmode(_fileno(stdout), _O_TEXT);
-}
-void ClearInput() {
-	_LText();
-	std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	_SText();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 void LStrToStr(char desination[], int size, std::wstring source) {
 	for (int i = 0; i < size; i++) {
@@ -311,4 +306,60 @@ char* StrToChar(std::string source) {
 		result[i] = source[i];
 	}
 	return result;
+}
+
+std::string ToString(std::wstring source) {
+	std::string result;
+	int n = source.length();
+	result.resize(n);
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
+std::wstring ToWstring(std::string source) {
+	std::wstring result;
+	int n = source.length();
+	result.resize(n);
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
+std::string ToString(wchar_t* source) {
+	std::string result;
+	int n = wcslen(source);
+	result.resize(n);
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
+std::wstring ToWstring(char* source) {
+	std::wstring result;
+	int n = strlen(source);
+	result.resize(n);
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
+
+Filelist* TakeFileInFolder(const std::wstring& name)
+{
+	Filelist* result = nullptr;
+	std::wstring pattern(name);
+	pattern.append(L"\\*");
+	WIN32_FIND_DATA data;
+	HANDLE hFind;
+	if ((hFind = FindFirstFile(pattern.c_str(), &data)) != INVALID_HANDLE_VALUE) {
+		do {
+			AddInListFile(result, ToString(data.cFileName));
+		} while (FindNextFile(hFind, &data) != 0);
+		FindClose(hFind);
+	}
+	return result;
+}
+Filelist* TakeFileInFolder(const std::string& name) {
+	return TakeFileInFolder(ToWstring(name));
 }

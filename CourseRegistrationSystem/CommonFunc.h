@@ -22,6 +22,10 @@ wchar_t* StrCat(wchar_t* destination, wchar_t* source);
 wchar_t* StrCat(wchar_t* source1, std::wstring source2);
 char* StrCat(char* destination, char* source);
 char* StrCat(char* source1, std::string source2);
+std::string ToString(std::wstring source);
+std::wstring ToWstring(std::string source);
+std::string ToString(wchar_t* source);
+std::wstring ToWstring(char* source);
 __int64 StringToInt(wchar_t* ch);
 __int64 StringToInt(char* ch);
 __int64 StringToInt(std::wstring str);
@@ -35,4 +39,6 @@ bool operator<(tm& t1, tm& t2);
 void SaveLoginHistory(char* AccountUsername);
 char* AddTwoStr(const char* a, char* b);
 char* StrToChar(std::string source);
+Filelist* TakeFileInFolder(const std::wstring& name);
+Filelist* TakeFileInFolder(const std::string& name);
 #endif // !_Common

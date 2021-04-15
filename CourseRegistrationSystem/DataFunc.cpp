@@ -205,7 +205,7 @@ Student BinToStu(std::string filein) {
 	fi.close();
 	return stu;
 }
-void SaveNewStu(_Student* stu, char* direction, const char* savefile) {
+void SaveNewStu(_Student* stu, char* direction) {
 	if (stu == nullptr) return;
 	char* direc = StrCat(direction, "\\Student\\");
 	std::fstream fii(savefile, std::fstream::app);
@@ -349,16 +349,14 @@ void SaveClass(Classes cl, char* fileout) {
 	fo.close();
 }
 
-void SaveClass(_Class* cls, char* direction, const char* savefile) {
+void SaveClass(_Class* cls, char* direction) {
 	if (cls == nullptr) return;
 	char* direc = StrCat(direction, "\\Class\\");
-	std::fstream fii(savefile, std::fstream::app | std::fstream::binary);
+	std::fstream fii(savefile, std::fstream::app );
 	_Class* temp = cls;
-	int n;
 	do {
 		char* direction = StrCat(direc, cls->classes.name);
 		SaveClass(cls->classes, direction);
-		n = strlen(cls->classes.name);
 		fii << cls->classes.name << " " << direc << '\n';
 		delete[] direction;
 		cls = cls->pNext;
@@ -399,12 +397,6 @@ SchoolYear* AddSchoolYear() {
 		temp = StrCat(file, L"\\Class");
 		_wmkdir(temp);
 		delete[] temp;
-		temp = StrCat(file, L"\\Course");
-		_wmkdir(temp);
-		wchar_t*temp2 = StrCat(temp, L"\\Score");
-		_wmkdir(temp2);
-		delete[] temp, temp2;
-
 		a->classes = nullptr;
 		a->student = nullptr;
 		int chose;
@@ -420,7 +412,7 @@ SchoolYear* AddSchoolYear() {
 		return a;
 	}
 }
-void SaveSchoolYear(SchoolYear*sch,const char*savefile) {
+void SaveSchoolYear(SchoolYear*sch) {
 	if (sch == nullptr) return;
 	char* local = new char[] {"Data\\K"};
 	char* year = NumToStr(sch->year);
@@ -432,3 +424,8 @@ void SaveSchoolYear(SchoolYear*sch,const char*savefile) {
 	delete[]local, year, direction;
 }
 
+void AddInListFile(Filelist*& direc, std::string add) {
+	if (direc == nullptr) { direc = new Filelist{ add }; direc->pNext = direc, direc->pPrev = direc; return; }
+	direc->pPrev = new Filelist{ add,direc,direc->pPrev };
+	direc->pPrev->pPrev->pNext = direc->pPrev;
+}
