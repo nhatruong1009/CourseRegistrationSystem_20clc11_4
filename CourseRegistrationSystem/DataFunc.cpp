@@ -208,19 +208,16 @@ Student BinToStu(std::string filein) {
 void SaveNewStu(_Student* stu, char* direction) {
 	if (stu == nullptr) return;
 	char* direc = StrCat(direction, "\\Student\\");
-	std::fstream fii(savefile, std::fstream::app);
 	_Student* temp = stu;
 	do {
 		char* filename = NumToStr(stu->student.ID);
 		char* fileout = AddTwoStr(direc, filename);
 		StuToBin(&stu->student, fileout);
-		fii << filename << " " << fileout << '\n';
 		delete[] filename;
 		delete[] fileout;
 		stu = stu->pNext;
 	} while (stu != temp);
 	delete[] direc;
-	fii.close();
 }
 int NumberOfStudent(_Student* stu) {
 	if (stu == nullptr) return 0;
@@ -352,16 +349,13 @@ void SaveClass(Classes cl, char* fileout) {
 void SaveClass(_Class* cls, char* direction) {
 	if (cls == nullptr) return;
 	char* direc = StrCat(direction, "\\Class\\");
-	std::fstream fii(savefile, std::fstream::app );
 	_Class* temp = cls;
 	do {
 		char* direction = StrCat(direc, cls->classes.name);
 		SaveClass(cls->classes, direction);
-		fii << cls->classes.name << " " << direc << '\n';
 		delete[] direction;
 		cls = cls->pNext;
 	} while (cls != temp);
-	fii.close();
 }
 
 void PrintClass(Classes a) {
@@ -417,10 +411,8 @@ void SaveSchoolYear(SchoolYear*sch) {
 	char* local = new char[] {"Data\\K"};
 	char* year = NumToStr(sch->year);
 	char* direction = StrCat(local, year);
-	SaveNewStu(sch->student, direction, "student.txt");
-	SaveClass(sch->classes, direction, "class.txt");
-	std::fstream fo(savefile, std::fstream::app);
-	fo << sch->year << " " << direction;
+	SaveNewStu(sch->student, direction);
+	SaveClass(sch->classes, direction);
 	delete[]local, year, direction;
 }
 
