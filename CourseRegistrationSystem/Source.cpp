@@ -3,3 +3,8 @@
 #include<vector>
 #include<string>
 #include"CommonFunc.h"
+
+void main()
+{
+
+}
