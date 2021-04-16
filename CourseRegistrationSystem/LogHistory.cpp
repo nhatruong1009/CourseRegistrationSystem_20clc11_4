@@ -37,38 +37,33 @@ void SaveCourseCancelHis(char* AccountUsername, Course course)
 void LoginStu()
 {
 	system("cls");	//clear the screen
-	char* U, *P;
-	U = new char[50];
-	P = new char[50];
+	std::string U, P;
 	Filelist* list = TakeFileInFolder("Data\\K2021\\Student");
-	Filelist* cur = list;
 	do
 	{
+		Filelist* cur = list;
 		std::cout << "Username: ";
 		std::cin >> U;
 		std::cout << "Password: ";
 		std::cin >> P;
 		// Read Account File
+		// 2 file dau co ten la "." voi "..", lay du file???
 		do
 		{
-		if (*U != *StrToChar(cur->filename))
-			break;
+			if (U == cur->filename)
+				break;
 			cur = cur->pNext;
 		} while (cur != list);
-		if (*U != *StrToChar(cur->filename))
+		if (U != cur->filename)
 		{
-			std::cout << "Username is invalid, please try again.";
+			std::cout << "Username is invalid, please try again." << std::endl;
 			continue;
 		}
-		Student a = BinToStu("Data\\K2021\\Student\\" + list->filename);
-		if (*P == *a.account.password)
+		Student a = BinToStu("Data\\K2021\\Student\\" + cur->filename);
+		if (P == ToString(a.account.password))
 			break;
-		else
-		{
-			std::cout << "Password is invalid, please try again.";
-		}
+		else std::cout << "Password is invalid, please try again. " << std::endl;
 	} while (1);
-	delete[]U;
-	delete[]P;
+	std::cout << "Successful";
 	// Go to Student menu
 }
