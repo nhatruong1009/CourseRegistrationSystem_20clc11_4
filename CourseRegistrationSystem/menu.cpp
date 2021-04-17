@@ -19,6 +19,17 @@ void studentMenu();
 void staffMenu();
 
 //
+void enrollCourse() {
+	
+}
+bool isEnrolled() {
+	// sufficient time
+	// still has free slot
+	
+}
+void updateStudentsInClass() {
+
+}
 void userTypeMenu()
 {
 
