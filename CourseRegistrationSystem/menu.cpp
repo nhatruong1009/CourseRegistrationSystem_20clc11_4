@@ -1,7 +1,19 @@
-#include <iostream>
-
+#include"CommonFunc.h"
+#include"Data.h"
 using namespace std;
 
+bool isLoggedIn() {
+	std::wstring username, password, un, pw;
+	std::wcout << "Enter username: ";
+	std::wcin >> username;
+	std::wcout << "Enter password: ";
+	std::wcin >> password;
+	std::wifstream read("testLogIn\\testLogIn.txt");
+	std::getline(read, un);
+	std::getline(read, pw);
+	if (un == username && pw == password) return true;
+	return false;
+}
 void userTypeMenu();
 void studentMenu();
 void staffMenu();
