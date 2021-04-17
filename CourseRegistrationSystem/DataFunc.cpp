@@ -491,5 +491,5 @@ Course BinToCourse(std::string filename) {
 	course.scorefile = new char[k];
 	fi.read(course.scorefile, k);
 	// take some score here
-
+	return course;
 }

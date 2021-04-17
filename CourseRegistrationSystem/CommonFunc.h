@@ -1,4 +1,4 @@
-#ifndef _CommonFunc
+﻿#ifndef _CommonFunc
 #define _CommonFunc
 #include<io.h>
 #include"Data.h"
@@ -7,6 +7,8 @@
 #include<fstream>
 #include<ctime>
 #include<locale>
+
+
 void _LText();
 void _SText();
 
@@ -54,4 +56,29 @@ char* StrToChar(std::string source);
 
 Filelist* TakeFileInFolder(const std::wstring& name);
 Filelist* TakeFileInFolder(const std::string& name);
+short Menu(wchar_t** list, short Xposition, short Yposition, const char* Color1, const char* Color2);
 #endif // !_Common
+
+
+#ifndef _SOMEKEYCODE
+#define _SOMEKEYCODE
+#define On_Black  "\033[40m"
+#define On_White  "\033[0;107m" 
+#define On_Yellow  "\033[0;103m" 
+#define RESET   "\033[0m" 
+#define BLACK   "\033[1m\033[30m" 
+#define ALLBLACK   "\033[30m" 
+#define RED     "\033[31m" 
+#define GREEN   "\033[32m" 
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define WHITE   "\033[37m"
+#define KEY_UP 72 
+#define KEY_DOWN 80
+#define KEY_LEFT 75 
+#define KEY_RIGHT 77
+#define KEY_ENTER 13
+#define KEY_ESC 27
+#endif // _SOMEKEYCODE

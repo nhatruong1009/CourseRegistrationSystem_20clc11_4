@@ -430,3 +430,62 @@ Filelist* TakeFileInFolder(const std::wstring& name)
 Filelist* TakeFileInFolder(const std::string& name) {
 	return TakeFileInFolder(ToWstring(name));
 }
+
+void GotoXY(short x, short y) {
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+short Menu(wchar_t** list, short Xposition, short Yposition, const char* Color1, const char* Color2) {
+	//ham nay ve ra 1 danh sach co the chon 1 vi tri trong danh sach do dua vao mang 1 chieu dua vao, kich co toi da, va vi tri bat dau ve mang
+	char book;
+	_LText();
+	int size = _msize(list) / sizeof(wchar_t*);
+	std::wcout << Color1;
+	for (short i = 0; i < size; i++)
+	{
+		GotoXY(Xposition, Yposition + i);
+		std::wcout << list[i];
+	}
+	GotoXY(Xposition, Yposition);
+	std::wcout << Color2 << list[0];
+	GotoXY(Xposition - 1, Yposition);
+	short index = 0;
+	while (true)
+	{
+		book = _getwch();
+		book = toupper(book);
+		if (book == 'W' || book == KEY_UP) {
+			GotoXY(Xposition, Yposition + index);
+			std::wcout << Color1 << list[index];
+			if (index == 0) { index = size - 1; }
+			else { index--; }
+			GotoXY(Xposition, Yposition + index);
+			std::wcout << Color2 << list[index];
+			GotoXY(Xposition - 1, Yposition + index);
+		}
+		else if (book == 'S' || book == KEY_DOWN) {
+			GotoXY(Xposition, Yposition + index);
+			std::wcout << Color1 << list[index];
+			if (index == size - 1) { index = 0; }
+			else { index++; }
+			GotoXY(Xposition, Yposition + index);
+			std::wcout << Color2 << list[index];
+			GotoXY(Xposition - 1, Yposition + index);
+		}
+		else if (book == KEY_ENTER || book == ' ') {
+			GotoXY(0, Yposition + size);
+			std::wcout << WHITE;
+			_SText();
+			return index;
+		}
+		else if (book == KEY_ESC) {
+			GotoXY(0, Yposition + size);
+			std::wcout << WHITE;
+			_SText();
+			return -1;
+		}
+	}
+}
