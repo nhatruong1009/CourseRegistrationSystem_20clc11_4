@@ -34,7 +34,7 @@ void SaveCourseCancelHis(char* AccountUsername, Course course)
 	file.close();
 }
 
-void LoginStu()
+void LoginStu(Student& CurrentUser)
 {
 	system("cls");	//clear the screen
 	std::string U, P;
@@ -61,9 +61,35 @@ void LoginStu()
 		}
 		Student a = BinToStu("Data\\K2021\\Student\\" + cur->filename);
 		if (P == ToString(a.account.password))
+		{
+			CurrentUser = a;
 			break;
+		}
 		else std::cout << "Password is invalid, please try again. " << std::endl;
 	} while (1);
 	std::cout << "Successful";
 	// Go to Student menu
+}
+
+void Logout()
+{
+	system("cls");
+	// Go to menu
+}
+
+void ChangePassword(Student CurrentUser)
+{
+	std::string pass1, pass2;
+	system("cls");
+	do
+	{
+		std::cout << "Enter your new password: ";
+		std::cin >> pass1;
+		std::cout << "Enter your new password to confirm: ";
+		std::cin >> pass2;
+		if (pass1 != pass2) std::cout << "Your password and confirmation password do not match, please try again." << std::endl;
+	} while (pass1 != pass2);
+	CurrentUser.account.password = StrToChar(pass1);
+	std::cout << CurrentUser.account.password;
+	StuToBin(&CurrentUser, "Data\\K2021\\Student\\" + ToString(CurrentUser.account.username));
 }
