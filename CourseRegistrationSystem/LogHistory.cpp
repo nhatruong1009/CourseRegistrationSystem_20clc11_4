@@ -63,6 +63,7 @@ void LoginStu(Student& CurrentUser)
 		if (P == ToString(a.account.password))
 		{
 			CurrentUser = a;
+			SaveLoginHistory(a.account.username);
 			break;
 		}
 		else std::cout << "Password is invalid, please try again. " << std::endl;
@@ -71,16 +72,17 @@ void LoginStu(Student& CurrentUser)
 	// Go to Student menu
 }
 
-void Logout()
+void Logout(Student CurrentUser)
 {
 	system("cls");
+	SaveLogoutHistory(CurrentUser.account.username);
 	// Go to menu
 }
 
 void ChangePassword(Student CurrentUser)
 {
-	std::string pass1, pass2;
 	system("cls");
+	std::string pass1, pass2;
 	do
 	{
 		std::cout << "Enter your new password: ";
@@ -90,6 +92,5 @@ void ChangePassword(Student CurrentUser)
 		if (pass1 != pass2) std::cout << "Your password and confirmation password do not match, please try again." << std::endl;
 	} while (pass1 != pass2);
 	CurrentUser.account.password = StrToChar(pass1);
-	std::cout << CurrentUser.account.password;
 	StuToBin(&CurrentUser, "Data\\K2021\\Student\\" + ToString(CurrentUser.account.username));
 }
