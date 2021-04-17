@@ -84,6 +84,7 @@ _Student* FileInStudent(std::string filename) {
 	std::wfstream fi(filename, std::wfstream::in);
 	if (!fi) { return nullptr; }
 	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
+	fi.ignore(1i64, wchar_t(0xfeff));
 	_Student* stu = nullptr;
 	std::wstring temp;
 	while (fi)
@@ -420,4 +421,75 @@ void AddInListFile(Filelist*& direc, std::string add) {
 	if (direc == nullptr) { direc = new Filelist{ add }; direc->pNext = direc, direc->pPrev = direc; return; }
 	direc->pPrev = new Filelist{ add,direc,direc->pPrev };
 	direc->pPrev->pPrev->pNext = direc->pPrev;
+}
+
+void CourseToBIn(Course* course, std::string filename) {
+	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
+	int k;
+
+	k = strlen(course->ID) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write(course->ID, k);
+
+	k = wcslen(course->name) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write((char*)&course->name, 2 * k);
+
+	k = wcslen(course->teacher) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write((char*)&course->teacher, 2 * k);
+
+	fo.write(course->performed[0].day, 4);
+	fo.write(course->performed[0].session, 3);
+	fo.write(course->performed[1].day, 4);
+	fo.write(course->performed[1].session, 3);
+
+	fo.write((char*)&course->credit, sizeof(short));
+	fo.write((char*)&course->maxstudent, sizeof(short));
+	fo.write((char*)&course->numberofstudent, sizeof(short));
+	
+	for (int i = 0; i < course->numberofstudent; i++) {
+		fo.write((char*)&course->ID[i], sizeof(__int64));
+	}
+
+	k = strlen(course->scorefile) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write(course->scorefile, k);
+}
+
+Course BinToCourse(std::string filename) {
+	Course course;
+	std::fstream fi(filename, std::fstream::in | std::fstream::binary);
+	int k;
+
+	fi.read((char*)&k, sizeof(int));
+	course.ID = new char[k];
+	fi.read(course.ID, k);
+
+	fi.read((char*)&k, sizeof(int));
+	course.name = new wchar_t[k];
+	fi.read((char*)&course.name, 2 * k);
+
+	fi.read((char*)&k, sizeof(int));
+	course.teacher = new wchar_t[k];
+	fi.read((char*)&course.teacher, 2 * k);
+
+	fi.read(course.performed[0].day, 4);
+	fi.read(course.performed[0].session, 3);
+	fi.read(course.performed[1].day, 4);
+	fi.read(course.performed[1].session, 3);
+
+	fi.read((char*)&course.credit, sizeof(short));
+	fi.read((char*)&course.maxstudent, sizeof(short));
+	fi.read((char*)&course.numberofstudent, sizeof(short));
+
+	for (int i = 0; i < course.numberofstudent; i++) {
+		fi.read((char*)&course.ID[i], sizeof(__int64));
+	}
+
+	fi.read((char*)&k, sizeof(int));
+	course.scorefile = new char[k];
+	fi.read(course.scorefile, k);
+	// take some score here
+
 }

@@ -25,16 +25,18 @@ struct Course
 	wchar_t* name;
 	wchar_t* teacher;
 	unsigned short credit;
-	unsigned short numberofstudent = 0;
-	unsigned short maxstudent = 50;
-	unsigned __int64* stuID;
-	Score* score;
 	struct Performed
 	{
 		char day[4];
 		char session[3];
 	};
 	Performed* performed = new Performed[2];
+	unsigned short numberofstudent = 0;
+	unsigned short maxstudent = 50;
+	unsigned __int64* stuID;
+
+	char* scorefile;
+	Score* score;
 };
 struct Student
 {
@@ -98,11 +100,12 @@ _Student* FileInStudent(std::string filename);
 void StuToBin(Student* stu, std::string fileout);
 Student BinToStu(std::string filein);
 void SaveNewStu(_Student* stu, char* directon);
-void SchoolYearToBin(SchoolYear sch);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
 SchoolYear* AddSchoolYear();
 void SaveSchoolYear(SchoolYear* sch);
+void CourseToBIn(Course* course, std::string filename);
+Course BinToCourse(std::string filename);
 #endif // _Structs
 

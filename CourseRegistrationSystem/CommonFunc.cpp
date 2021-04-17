@@ -2,8 +2,8 @@
 #include <windows.h>
 void _LText()
 {
-	_setmode(_fileno(stdin), _O_U16TEXT);
-	_setmode(_fileno(stdout), _O_U16TEXT);
+	_setmode(_fileno(stdin), _O_WTEXT);
+	_setmode(_fileno(stdout), _O_WTEXT);
 } 
 void _SText() {
 	_setmode(_fileno(stdin), _O_TEXT);
