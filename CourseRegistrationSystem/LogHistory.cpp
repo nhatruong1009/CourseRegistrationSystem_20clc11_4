@@ -38,7 +38,7 @@ void LoginStu(Student& CurrentUser)
 {
 	system("cls");	//clear the screen
 	std::string U, P;
-	Filelist* list = TakeFileInFolder("Data\\K2021\\Student");
+	Filelist* list = TakeFileInFolder("Data\\K2021\\Student");// cai nay hoi sai , minh phai lay 2 so dau tien cua mssv de loc file
 	do
 	{
 		Filelist* cur = list;

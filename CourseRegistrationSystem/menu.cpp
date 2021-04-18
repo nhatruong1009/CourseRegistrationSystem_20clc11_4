@@ -3,6 +3,7 @@
 using namespace std;
 
 bool isLoggedIn() {
+	_LText();
 	std::wstring username, password, un, pw;
 	std::wcout << "Enter username: ";
 	std::wcin >> username;
@@ -11,6 +12,7 @@ bool isLoggedIn() {
 	std::wifstream read("testLogIn\\testLogIn.txt");
 	std::getline(read, un);
 	std::getline(read, pw);
+	_SText();
 	if (un == username && pw == password) return true;
 	return false;
 }
@@ -29,6 +31,7 @@ void enrollCourse(Student student, Course course) {
 	}
 	for (int i = 0; i < countCourse; i++) {
 		for (int j = 0; j < 2; ++j) {
+			//all course la lich su hoc ,minh phai so sanh voi course now thoi
 			if (course.performed[0].session == student.allcourse[i][j] &&
 				course.performed[1].session == student.allcourse[i][j] &&
 				course.performed[0].day == student.allcourse[i][j] &&
@@ -46,8 +49,7 @@ void enrollCourse(Student student, Course course) {
 
 }
 
-void updateStudentsInClass(Classes a) {
-	_SText();
+void updateStudentsInClass(Classes &a) {
 	std::cout << a.name << '\n';
 	int n = _msize(a.ID) / sizeof(__int64);
 	if (a.ID != nullptr) {
