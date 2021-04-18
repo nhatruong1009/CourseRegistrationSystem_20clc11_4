@@ -32,6 +32,9 @@ wchar_t* StrCat(wchar_t* source1, std::wstring source2);
 char* StrCat(char* destination, char* source);
 char* StrCat(char* source1, std::string source2);
 
+wchar_t* StrToChar(std::wstring str);
+char* StrToChar(std::string str);
+
 std::string ToString(std::wstring source);
 std::string ToString(wchar_t* source);
 std::string ToString(char* source);

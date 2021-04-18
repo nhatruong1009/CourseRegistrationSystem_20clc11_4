@@ -463,10 +463,25 @@ std::wstring ChooseCurrentTime() {
 	int size = CountFile(a);
 	wchar_t** list = new wchar_t* [size];
 	for (int i = 0; i < size; i++) {
-		//list[i] = new wchar_t[a->filename.length() + 1];
+		list[i] = StrToChar(a->filename);
+		a = a->pNext;
 	}
-	return a->filename;
+	std::wstring current = L"Data\\SchoolYear\\"+ToWstring(list[Menu(list, 10, 10)]);
+	wchar_t** k = new wchar_t* [3];
+	for (int i = 0; i < 3; i++) {
+		k[i] = new wchar_t[10] {L"Semester"};
+		k[i][8] = i + 1 + L'0';
+		k[i][9] = L'\0';
+	}
+	current += L"\\Semester" + std::to_wstring(Menu(k, 20, 20) + 1) + L"\\";
+	delete[] list, k;
+	std::wfstream fo("beggin", std::wfstream::out);
+	fo << current;
+	fo.close();
+	return current;
 }
+
+
 
 void AddInListFile(Filelist*& direc, std::wstring add) {
 	if (direc == nullptr) { direc = new Filelist{ add }; direc->pNext = direc, direc->pPrev = direc; return; }
@@ -474,8 +489,28 @@ void AddInListFile(Filelist*& direc, std::wstring add) {
 	direc->pPrev->pPrev->pNext = direc->pPrev;
 }
 
-void CourseToBIn(Course* course, std::string filename) {
+void SaveScore(Score* score, std::string filename) {
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
+	if (score == nullptr) { fo.close(); return; }
+	int n = _msize(score) / sizeof(score);
+	for (int i = 0; i < n; i++) {
+		fo.write((char*)&score[i], sizeof(Score));
+	}
+	fo.close();
+}
+
+void LoadScore(Score*score, std::string filename) {
+	if (score == nullptr) return;
+	std::fstream fi(filename, std::fstream::in | std::fstream::binary);
+	int n = _msize(score) / sizeof(Score);
+	for(int i=0;i<n;i++){
+		fi.read((char*)&score[i], sizeof(Score));
+	}
+	fi.close();
+}
+
+void CourseToBIn(Course* course, std::string filename,std::wstring current) {
+	std::fstream fo(ToString(current)+filename, std::fstream::out | std::fstream::binary);
 	int k;
 
 	k = strlen(course->ID) + 1;
@@ -502,10 +537,8 @@ void CourseToBIn(Course* course, std::string filename) {
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fo.write((char*)&course->ID[i], sizeof(__int64));
 	}
-
-	k = strlen(course->scorefile) + 1;
-	fo.write((char*)&k, sizeof(int));
-	fo.write(course->scorefile, k);
+	SaveScore(course->score, ToString(current) + filename + "Score");
+	fo.close();
 }
 
 Course BinToCourse(std::string filename) {
@@ -537,10 +570,7 @@ Course BinToCourse(std::string filename) {
 	for (int i = 0; i < course.numberofstudent; i++) {
 		fi.read((char*)&course.ID[i], sizeof(__int64));
 	}
-
-	fi.read((char*)&k, sizeof(int));
-	course.scorefile = new char[k];
-	fi.read(course.scorefile, k);
-	// take some score here
+	course.score = new Score[course.numberofstudent];
+	LoadScore(course.score, filename + "Score");
 	return course;
 }

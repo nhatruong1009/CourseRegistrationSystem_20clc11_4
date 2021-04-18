@@ -34,9 +34,7 @@ struct Course
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
 	unsigned __int64* stuID;
-
-	char* scorefile;
-	Score* score;
+	Score* score=nullptr;
 };
 struct Student
 {
@@ -105,8 +103,9 @@ void PrintStu(Student* a);
 void PrintStu(_Student* stu);
 SchoolYear* AddSchoolYear();
 void SaveSchoolYear(SchoolYear* sch);
-void CourseToBIn(Course* course, std::string filename);
+void CourseToBIn(Course* course, std::string filename, std::wstring current);
 Course BinToCourse(std::string filename);
 void MakeCurentTime(__int64 year);
+std::wstring ChooseCurrentTime();
 #endif // _Structs
 

@@ -355,6 +355,16 @@ char* StrToChar(std::string source) {
 	return result;
 }
 
+wchar_t* StrToChar(std::wstring source) {
+	int n = source.length();
+	wchar_t* result = new wchar_t[n + 1];
+	result[n] = '\0';
+	for (int i = 0; i < n; i++) {
+		result[i] = source[i];
+	}
+	return result;
+}
+
 std::string ToString(std::wstring source) {
 	std::string result;
 	int n = source.length();
