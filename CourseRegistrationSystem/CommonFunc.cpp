@@ -2,8 +2,8 @@
 #include <windows.h>
 void _LText()
 {
-	_setmode(_fileno(stdin), _O_WTEXT);
-	_setmode(_fileno(stdout), _O_WTEXT);
+	_setmode(_fileno(stdin), _O_U16TEXT); 
+	_setmode(_fileno(stdout), _O_U16TEXT);
 } 
 void _SText() {
 	_setmode(_fileno(stdin), _O_TEXT);
@@ -438,19 +438,17 @@ void GotoXY(short x, short y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-short Menu(wchar_t** list, short Xposition, short Yposition, const char* Color1, const char* Color2) {
-	//ham nay ve ra 1 danh sach co the chon 1 vi tri trong danh sach do dua vao mang 1 chieu dua vao, kich co toi da, va vi tri bat dau ve mang
+short Menu(wchar_t** list, short Xposition, short Yposition) {
 	char book;
 	_LText();
 	int size = _msize(list) / sizeof(wchar_t*);
-	std::wcout << Color1;
 	for (short i = 0; i < size; i++)
 	{
 		GotoXY(Xposition, Yposition + i);
 		std::wcout << list[i];
 	}
 	GotoXY(Xposition, Yposition);
-	std::wcout << Color2 << list[0];
+	std::wcout << L"> " << list[0]<<L" <";
 	GotoXY(Xposition - 1, Yposition);
 	short index = 0;
 	while (true)
@@ -459,33 +457,73 @@ short Menu(wchar_t** list, short Xposition, short Yposition, const char* Color1,
 		book = toupper(book);
 		if (book == 'W' || book == KEY_UP) {
 			GotoXY(Xposition, Yposition + index);
-			std::wcout << Color1 << list[index];
+			std::wcout << list[index]<<L"    ";
 			if (index == 0) { index = size - 1; }
 			else { index--; }
 			GotoXY(Xposition, Yposition + index);
-			std::wcout << Color2 << list[index];
+			std::wcout << L"> " << list[index]<<L" <";
 			GotoXY(Xposition - 1, Yposition + index);
 		}
 		else if (book == 'S' || book == KEY_DOWN) {
 			GotoXY(Xposition, Yposition + index);
-			std::wcout << Color1 << list[index];
+			std::wcout << list[index] << L"    ";
 			if (index == size - 1) { index = 0; }
 			else { index++; }
 			GotoXY(Xposition, Yposition + index);
-			std::wcout << Color2 << list[index];
+			std::wcout << L"> " << list[index]<<L" <";
 			GotoXY(Xposition - 1, Yposition + index);
 		}
 		else if (book == KEY_ENTER || book == ' ') {
 			GotoXY(0, Yposition + size);
-			std::wcout << WHITE;
 			_SText();
 			return index;
 		}
 		else if (book == KEY_ESC) {
 			GotoXY(0, Yposition + size);
-			std::wcout << WHITE;
 			_SText();
 			return -1;
+		}
+	}
+}
+
+short Choose(wchar_t** list,short X,short Y) {
+	int n = _msize(list) / sizeof(wchar_t*);
+	int* size = new int[n];
+	int longest = 0;
+	for (int i = 0; i < n; i++) {
+		GotoXY(X, Y);
+		size[i] = wcslen(list[i]);
+		if (size[i] > longest) longest = size[i];
+	}
+	char book;
+	_LText();
+	std::wcout << list[0];
+	for (int i = 0; i < longest - size[0]; i++) std::wcout << L' ';
+	int index = 0;
+	while(true){
+		book = _getwch();
+		book = toupper(book);
+		if (book == 'W' || book == KEY_UP) {
+			index == 0 ? index = n - 1 : index -= 1;
+			GotoXY(X, Y);
+			std::wcout << list[index];
+			for (int i = 0; i < longest - size[index]; i++) std::wcout << L' ';
+		}
+		else if (book == 'S' || book == KEY_DOWN) {
+			index == n - 1 ? index = 0 : index += 1;
+			GotoXY(X, Y);
+			std::wcout << list[index];
+			for (int i = 0; i < longest - size[index]; i++) std::wcout << L' ';
+		}
+		else if (book == KEY_ENTER || book == ' ') {
+			GotoXY(0, Y + 1);
+			_SText();
+			return index;
+		}
+		else if (book == KEY_ESC) {
+			GotoXY(0, Y + 1);
+			_SText();
+			return index;
 		}
 	}
 }

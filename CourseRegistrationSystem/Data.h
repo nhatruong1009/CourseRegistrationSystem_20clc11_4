@@ -27,8 +27,8 @@ struct Course
 	unsigned short credit;
 	struct Performed
 	{
-		char day[4];
-		char session[3];
+		short day=0;
+		short session=0;
 	};
 	Performed* performed = new Performed[2];
 	unsigned short numberofstudent = 0;

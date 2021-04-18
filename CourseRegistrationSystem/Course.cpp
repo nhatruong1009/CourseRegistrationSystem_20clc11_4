@@ -33,13 +33,15 @@ Course MakeCourse() {
 
 	std::cout << "Schedule (ex. MON,S1) \n";// hmm not workking
 	for (int i = 0; i < 2; i++) {
-		std::cout << "Day: ";
+		/*std::cout << "Day: ";
 		std::cin >> result.performed[i].day;
 		result.performed[i].day[3] = '\0';
 
 		std::cout << "Session: ";
 		std::cin >> result.performed[i].session;
-		result.performed[i].session[2] = '\0';
+		result.performed[i].session[2] = '\0';*/
+
+		// this will repaired to choosing, not type in;
 	}
 	return result;
 }

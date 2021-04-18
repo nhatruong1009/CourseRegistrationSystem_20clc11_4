@@ -439,10 +439,10 @@ void CourseToBIn(Course* course, std::string filename) {
 	fo.write((char*)&k, sizeof(int));
 	fo.write((char*)&course->teacher, 2 * k);
 
-	fo.write(course->performed[0].day, 4);
-	fo.write(course->performed[0].session, 3);
-	fo.write(course->performed[1].day, 4);
-	fo.write(course->performed[1].session, 3);
+	fo.write((char*)&course->performed[0].day, sizeof(short));
+	fo.write((char*)&course->performed[0].session, sizeof(short));
+	fo.write((char*)&course->performed[1].day, sizeof(short));
+	fo.write((char*)&course->performed[1].session, sizeof(short));
 
 	fo.write((char*)&course->credit, sizeof(short));
 	fo.write((char*)&course->maxstudent, sizeof(short));
@@ -474,10 +474,10 @@ Course BinToCourse(std::string filename) {
 	course.teacher = new wchar_t[k];
 	fi.read((char*)&course.teacher, 2 * k);
 
-	fi.read(course.performed[0].day, 4);
-	fi.read(course.performed[0].session, 3);
-	fi.read(course.performed[1].day, 4);
-	fi.read(course.performed[1].session, 3);
+	fi.read((char*)&course.performed[0].day, sizeof(short));
+	fi.read((char*)&course.performed[0].session, sizeof(short));
+	fi.read((char*)&course.performed[1].day, sizeof(short));
+	fi.read((char*)&course.performed[1].session, sizeof(short));
 
 	fi.read((char*)&course.credit, sizeof(short));
 	fi.read((char*)&course.maxstudent, sizeof(short));

@@ -25,7 +25,7 @@ void enrollCourse() {
 bool isEnrolled() {
 	// sufficient time
 	// still has free slot
-	
+	return true;
 }
 void updateStudentsInClass() {
 
