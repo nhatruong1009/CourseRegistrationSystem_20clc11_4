@@ -8,7 +8,11 @@ std::ostream& operator<<(std::ostream& os, const Date& dt)
 }
 std::wostream& operator<<(std::wostream& os, const Date& dt)
 {
-	os << dt.dd << '/' << dt.mm << '/' << dt.yy;
+	if (dt.dd < 10) os << "0" << dt.dd << '/';
+	else os << dt.dd << '/';
+	if (dt.mm < 10) os << "0" << dt.mm << '/';
+	else os << dt.mm << '/';
+	os << dt.yy;
 	return os;
 }
 std::wostream& operator<<(std::wostream& os, const tm& t) {
@@ -70,8 +74,12 @@ Student StringToStudent(std::wstring str) {
 	str.copy(temp, end - beg, beg);
 	stu.SocialID = StringToInt(temp);
 	delete[] temp;
-
-	stu.account.password = new char[7]{ "123456" };
+	std::string pass = std::to_string(stu.birth.dd) + std::to_string(stu.birth.mm) + std::to_string(stu.birth.yy);
+	stu.account.password = new char[pass.length()+1];
+	for (int i = 0; i < pass.length(); i++) {
+		stu.account.password[i] = pass[i];
+	}
+	stu.account.password[pass.length()] = '\0';
 	return stu;
 }
 void AddStudent(_Student*& studentlist, Student student) {

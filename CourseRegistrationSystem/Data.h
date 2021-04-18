@@ -107,5 +107,7 @@ void CourseToBIn(Course* course, std::string filename, std::wstring current);
 Course BinToCourse(std::string filename);
 void MakeCurentTime(__int64 year);
 std::wstring ChooseCurrentTime();
+
+Course MakeCourse();
 #endif // _Structs
 

@@ -7,4 +7,5 @@
 using namespace std;
 void main()
 {
+	MakeCourse();
 }

@@ -66,6 +66,7 @@ char* StrToChar(std::string source);
 
 Filelist* TakeFileInFolder(const std::wstring& name);
 Filelist* TakeFileInFolder(const std::string& name);
+void GotoXY(short x, short y);
 short Menu(wchar_t** list, short Xposition, short Yposition);
 short Choose(wchar_t** list, short X, short Y);
 #endif
