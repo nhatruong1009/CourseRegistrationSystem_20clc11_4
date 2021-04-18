@@ -19,16 +19,42 @@ void studentMenu();
 void staffMenu();
 
 //
-void enrollCourse() {
-	
-}
-bool isEnrolled() {
-	// sufficient time
-	// still has free slot
-	return true;
-}
-void updateStudentsInClass() {
+void enrollCourse(Student student, Course course) {
+	//so luong course da dang ky, max 5
+	int countCourse = student.coursenow ? _msize(student.coursenow) / sizeof(char*) : 0;
 
+	if (countCourse >= 5 && course.numberofstudent >= course.maxstudent) {
+		// cant enroll
+		return;
+	}
+	for (int i = 0; i < countCourse; i++) {
+		for (int j = 0; j < 2; ++j) {
+			if (course.performed[0].session == student.allcourse[i][j] &&
+				course.performed[1].session == student.allcourse[i][j] &&
+				course.performed[0].day == student.allcourse[i][j] &&
+				course.performed[1].day == student.allcourse[i][j]) {
+				//cant enroll
+				return;
+			}
+		}
+
+	}
+	//enroll
+	student.coursenow[countCourse][0] = course.performed->day;
+	student.coursenow[countCourse][1] = course.performed->session;
+	//addStudent();
+
+}
+
+void updateStudentsInClass(Classes a) {
+	_SText();
+	std::cout << a.name << '\n';
+	int n = _msize(a.ID) / sizeof(__int64);
+	if (a.ID != nullptr) {
+		for (int i = 0; i < n; i++) {
+			std::cout << a.ID[i] << '\n';
+		}
+	}
 }
 void userTypeMenu()
 {
@@ -37,7 +63,7 @@ void userTypeMenu()
 	cout << "-------------USER TYPE---------------" << endl;
 	cout << "  1. Student" << endl;
 	cout << "  2. Academic Staff" << endl;
-	cout << "  3. Back " <<endl;
+	cout << "  3. Back " << endl;
 	do
 	{
 		cout << "Your choice: ";
@@ -101,7 +127,7 @@ void staffMenu()
 			return;
 		case 3:
 			userTypeMenu();
-            return;
+			return;
 		}
 	} while (1);
 }
