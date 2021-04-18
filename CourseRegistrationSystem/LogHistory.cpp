@@ -85,12 +85,58 @@ void ChangePassword(Student CurrentUser)
 	std::string pass1, pass2;
 	do
 	{
-		std::cout << "Enter your new password: ";
+		std::cout << "New password: ";
 		std::cin >> pass1;
-		std::cout << "Enter your new password to confirm: ";
+		std::cout << "Confirm password: ";
 		std::cin >> pass2;
 		if (pass1 != pass2) std::cout << "Your password and confirmation password do not match, please try again." << std::endl;
 	} while (pass1 != pass2);
 	CurrentUser.account.password = StrToChar(pass1);
 	StuToBin(&CurrentUser, "Data\\K2021\\Student\\" + ToString(CurrentUser.account.username));
+	short n;
+	do
+	{
+		std::cout << "Enter 0 to go back ";
+		std::cin >> n;
+	} while (n != 0);
+	// Go back to Student menu
+}
+
+void ChangeSocialID(Student CurrentUser)
+{
+	unsigned __int64 newSocialID1, newSocialID2;
+	do
+	{
+		std::cout << "New Social ID: ";
+		std::cin >> newSocialID1;
+		std::cout << "Confirm new Social ID: ";
+		std::cin >> newSocialID2;
+	} while (newSocialID1 != newSocialID2);
+	CurrentUser.SocialID = newSocialID1;
+	StuToBin(&CurrentUser, "Data\\K2021\\Student\\" + ToString(CurrentUser.account.username));
+	short n;
+	do
+	{
+		std::cout << "Enter 0 to go back ";
+		std::cin >> n;
+	} while (n != 0);
+	// Go back to Student menu
+}
+
+void ChangeInfo(Student CurrentUser)
+{
+	system("cls");
+	int num;
+	std::cout << "Change information" << std::endl;
+	std::cout << "Choose "<<std::endl;
+	std::cout << "0. Go back ";
+	std::cout << "1. Social ID ";
+	std::cin >> num;
+	switch (num)
+	{
+	case 0: // Go to Student menu
+	case 1: 
+		ChangeSocialID(CurrentUser);
+		break;
+	}
 }
