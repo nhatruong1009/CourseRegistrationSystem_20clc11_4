@@ -46,16 +46,17 @@ __int64 StringToInt(std::string str);
 
 char* NumToStr(unsigned __int64 num);
 wchar_t* NumToLStr(unsigned __int64 num);
-Date StringToDate(wchar_t* ch);
-Date StringToDate(char* ch);
-
+Date StringToDate(const wchar_t* ch);
+Date StringToDate(const char* ch);
+Date StringToDate(std::wstring ch);
+Date StringToDate(std::string ch);
 tm GetTime();
 bool operator>(tm& t1, tm& t2);
 bool operator<(tm& t1, tm& t2);
 void SaveLoginHistory(char* AccountUsername);
 
-char* AddTwoStr(const char* a, char* b);
-wchar_t* AddTwoStr(const wchar_t* a, wchar_t* b);
+char* AddTwoStr(const char* a, const char* b);
+wchar_t* AddTwoStr(const wchar_t* a, const wchar_t* b);
 std::string AddTwoStr(std::string a, std::string b);
 std::wstring AddTwoStr(std::wstring a, std::wstring b);
 char* StrToChar(std::string source);

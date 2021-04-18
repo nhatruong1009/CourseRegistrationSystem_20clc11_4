@@ -86,14 +86,14 @@ struct SchoolYear
 	_Student* student;
 };
 struct Filelist {
-	std::string filename;
+	std::wstring filename;
 	Filelist* pNext = nullptr;
 	Filelist* pPrev = nullptr;
 };
 std::ostream& operator<<(std::ostream& os, const Date& dt);
 std::wostream& operator<<(std::wostream& os, const Date& dt);
 
-void AddInListFile(Filelist*& direc, std::string add);
+void AddInListFile(Filelist*& direc, std::wstring add);
 void AddStudent(_Student*& studentlist, Student student);
 Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
@@ -107,5 +107,6 @@ SchoolYear* AddSchoolYear();
 void SaveSchoolYear(SchoolYear* sch);
 void CourseToBIn(Course* course, std::string filename);
 Course BinToCourse(std::string filename);
+void MakeCurentTime(__int64 year);
 #endif // _Structs
 

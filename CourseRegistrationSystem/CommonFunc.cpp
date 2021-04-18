@@ -161,80 +161,79 @@ __int64 StringToInt(std::string str) {
 	}
 	return a;
 }
-Date StringToDate(wchar_t* ch) {
-	Date a;
-	int beg = 0;
-	int end = 0;
-	while (ch[end] != L'\0' && ch[end] != L'/')
-	{
-		end += 1;
+Date StringToDate(const wchar_t* ch) {
+	int n = wcslen(ch);
+	int i = 0;
+	Date result{ 0,0,0 };
+	for (; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.dd = result.dd * 10 + ch[i] - '0';
+		else break;
 	}
-	if (ch[end] != L'\0') {
-		for (; beg < end; beg++) {
-			a.dd = a.dd * 10 + ch[beg] - L'0';
-		}
-		beg = end + 1;
-		end += 1;
-		while (ch[end] != L'\0' && ch[end] != L'/')
-		{
-			end += 1;
-		}
-		if (ch[end] != L'\0') {
-			for (; beg < end; beg++) {
-				a.mm = a.mm * 10 + ch[beg] - L'0';
-			}
-			beg = end + 1;
-			end += 1;
-			while (ch[end] != L'\0')
-			{
-				end += 1;
-			}
-			for (; beg < end; beg++) {
-				a.yy = a.yy * 10 + ch[beg] - L'0';
-			}
-			return a;
-		}
+	for (i = i + 1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.mm = result.mm * 10 + ch[i] - '0';
+		else break;
 	}
-	Date undentity;
-	return undentity;
+	for (i = i + 1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.yy = result.yy * 10 + ch[i] - '0';
+		else break;
+	}
+	return result;
 }
-Date StringToDate(char* ch) {
-	Date a;
-	int beg = 0;
-	int end = 0;
-	while (ch[end] != '\0' && ch[end] != '/')
-	{
-		end += 1;
+Date StringToDate(const char* ch) {
+	int n = strlen(ch);
+	int i = 0;
+	Date result{ 0,0,0 };
+	for (; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.dd = result.dd * 10 + ch[i] - '0';
+		else break;
 	}
-	if (ch[end] != '\0') {
-		for (; beg < end; beg++) {
-			a.dd = a.dd * 10 + ch[beg] - '0';
-		}
-		beg = end + 1;
-		end += 1;
-		while (ch[end] != '\0' && ch[end] != '/')
-		{
-			end += 1;
-		}
-		if (ch[end] != '\0') {
-			for (; beg < end; beg++) {
-				a.mm = a.mm * 10 + ch[beg] - '0';
-			}
-			beg = end + 1;
-			end += 1;
-			while (ch[end] != '\0')
-			{
-				end += 1;
-			}
-			for (; beg < end; beg++) {
-				a.yy = a.yy * 10 + ch[beg] - L'0';
-			}
-			return a;
-		}
+	for (i=i+1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.mm = result.mm * 10 + ch[i] - '0';
+		else break;
 	}
-	Date undentity;
-	return undentity;
+	for (i=i+1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.yy = result.yy * 10 + ch[i] - '0';
+		else break;
+	}
+	return result;
 }
+Date StringToDate(std::wstring ch) {
+	int n = ch.length();
+	int i = 0;
+	Date result{ 0,0,0 };
+	for (; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.dd = result.dd * 10 + ch[i] - '0';
+		else break;
+	}
+	for (i = i + 1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.mm = result.mm * 10 + ch[i] - '0';
+		else break;
+	}
+	for (i = i + 1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.yy = result.yy * 10 + ch[i] - '0';
+		else break;
+	}
+	return result;
+}
+Date StringToDate(std::string ch) {
+	int n = ch.length();
+	int i = 0;
+	Date result{ 0,0,0 };
+	for (; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.dd = result.dd * 10 + ch[i] - '0';
+		else break;
+	}
+	for (i = i + 1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.mm = result.mm * 10 + ch[i] - '0';
+		else break;
+	}
+	for (i = i + 1; i < n; i++) {
+		if (ch[i] <= '9' && ch[i] >= '0') result.yy = result.yy * 10 + ch[i] - '0';
+		else break;
+	}
+	return result;
+}
+
  char* NumToStr(unsigned __int64 num) {
 	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
@@ -294,7 +293,7 @@ void SaveLoginHistory(char* AccountUsername)
 }
 
 
-char* AddTwoStr(const char* a, char* b) {
+char* AddTwoStr(const char* a, const char* b) {
 	int l1 = strlen(a), l2 = strlen(b);
 	int n = l1 + l2;
 	char* result = new char[n + 1];
@@ -307,7 +306,7 @@ char* AddTwoStr(const char* a, char* b) {
 	}
 	return result;
 }
-wchar_t* AddTwoStr(const wchar_t* a, wchar_t* b) {
+wchar_t* AddTwoStr(const wchar_t* a, const wchar_t* b) {
 	int l1 = wcslen(a), l2 = wcslen(b);
 	int n = l1 + l2;
 	wchar_t* result = new wchar_t[n + 1];
@@ -420,8 +419,11 @@ Filelist* TakeFileInFolder(const std::wstring& name)
 	WIN32_FIND_DATA data;
 	HANDLE hFind;
 	if ((hFind = FindFirstFile(pattern.c_str(), &data)) != INVALID_HANDLE_VALUE) {
+		for (int i = 0; i < 2; i++) {
+			FindNextFile(hFind, &data);
+		}
 		do {
-			AddInListFile(result, ToString(data.cFileName));
+			AddInListFile(result, ToWstring(data.cFileName));
 		} while (FindNextFile(hFind, &data) != 0);
 		FindClose(hFind);
 	}

@@ -417,7 +417,58 @@ void SaveSchoolYear(SchoolYear*sch) {
 	delete[]local, year, direction;
 }
 
-void AddInListFile(Filelist*& direc, std::string add) {
+void MakeCurentTime(__int64 year) {
+	wchar_t* curent = new wchar_t[] {L"Data\\SchoolYear"};
+	_wmkdir(curent);
+	wchar_t* temp = StrCat(curent, L"\\");
+	StrCat(temp, std::to_string(year).length(), std::to_wstring(year));
+	_wmkdir(temp);
+	StrCat(temp, 2, L"\\");
+	for (int i = 0; i < 3; i++) {
+		wchar_t* semester = StrCat(temp, L"Semester" + std::to_wstring(i + 1));
+		_wmkdir(semester);
+		delete[] semester;
+	}
+	wchar_t* SemesterTime = StrCat(temp, L"time");
+	std::fstream fo(SemesterTime,std::fstream::out|std::fstream::binary);
+	std::cin.ignore(1i64, '\n');
+	for (int i = 0; i < 3; i++) {
+		Date a;
+		std::cout << "Date start semester " << i + 1 << ": ";
+		std::string k;;
+		std::getline(std::cin, k);
+		a = StringToDate(k);
+		fo.write((char*)&a, sizeof(Date));
+		std::cout << "Date end semester " << i + 1 << ": ";
+		std::getline(std::cin, k);
+		a = StringToDate(k);
+		fo.write((char*)&a, sizeof(Date));
+	}
+	fo.close();
+}
+
+int CountFile(Filelist* a) {
+	if (a == nullptr) return 0;
+	Filelist* flag = a;
+	int num = 0;
+	do {
+		num += 1;
+		a = a->pNext;
+	} while (a != flag);
+	return num;
+}
+
+std::wstring ChooseCurrentTime() {
+	Filelist* a = TakeFileInFolder("Data\\SchoolYear");
+	int size = CountFile(a);
+	wchar_t** list = new wchar_t* [size];
+	for (int i = 0; i < size; i++) {
+		//list[i] = new wchar_t[a->filename.length() + 1];
+	}
+	return a->filename;
+}
+
+void AddInListFile(Filelist*& direc, std::wstring add) {
 	if (direc == nullptr) { direc = new Filelist{ add }; direc->pNext = direc, direc->pPrev = direc; return; }
 	direc->pPrev = new Filelist{ add,direc,direc->pPrev };
 	direc->pPrev->pPrev->pNext = direc->pPrev;

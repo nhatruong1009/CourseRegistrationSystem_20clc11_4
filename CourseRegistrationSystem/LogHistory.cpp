@@ -50,16 +50,16 @@ void LoginStu(Student& CurrentUser)
 		// 2 file dau co ten la "." voi "..", lay du file???
 		do
 		{
-			if (U == cur->filename)
+			if (U == ToString(cur->filename))
 				break;
 			cur = cur->pNext;
 		} while (cur != list);
-		if (U != cur->filename)
+		if (U != ToString(cur->filename))
 		{
 			std::cout << "Username is invalid, please try again." << std::endl;
 			continue;
 		}
-		Student a = BinToStu("Data\\K2021\\Student\\" + cur->filename);
+		Student a = BinToStu("Data\\K2021\\Student\\" + ToString(cur->filename));
 		if (P == ToString(a.account.password))
 		{
 			CurrentUser = a;
