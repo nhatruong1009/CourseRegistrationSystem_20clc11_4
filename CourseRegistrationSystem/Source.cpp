@@ -8,5 +8,5 @@
 using namespace std;
 void main()
 {
-	userTypeMenu();
+	userTypeMode();
 }

@@ -5,7 +5,12 @@
 bool isLoggedIn();
 void enrollCourse(Student student, Course course);
 void updateStudentsInClass(Classes& a);
-void userTypeMenu();
+void userTypeMode();
+void studentMode();
+void staffMode();
 void studentMenu();
-void staffMenu();
+void gradeMenu();
+void classMenu();
+void addGrade();
+void staffStudentMenu();
 #endif // !_Menu

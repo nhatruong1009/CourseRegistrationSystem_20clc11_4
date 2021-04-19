@@ -102,6 +102,7 @@ void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
 SchoolYear* AddSchoolYear(int year);
+_Student* TypeInStudent();
 void SaveSchoolYear(SchoolYear* sch);
 void CourseToBIn(Course* course, std::string filename, std::wstring current);
 Course BinToCourse(std::string filename);

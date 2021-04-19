@@ -52,7 +52,7 @@ void updateStudentsInClass(Classes &a) {
 		}
 	}
 }
-void userTypeMenu()
+void userTypeMode()
 {
 	system("cls");
 	int so;
@@ -66,15 +66,15 @@ void userTypeMenu()
 	switch (so)
 	{
 	case 0:
-		studentMenu();
+		studentMode();
 		return;
 	case 1:
-		staffMenu();
+		staffMode();
 		return;
 	case 2: return;
 	}
 }
-void studentMenu()
+void studentMode()
 {
 	int so;
 	system("cls");
@@ -94,33 +94,116 @@ void studentMenu()
 		std::cout << "   Ban da chon 2";
 		return;
 	case 2:
-		userTypeMenu();
+		userTypeMode();
 		return;
 	}
 }
-void staffMenu()
+void staffMode()
 {
 	int so;
 	system("cls");
 	std::cout << "-------------STAFF---------------";
+	char** menu = new char* [5];
+	menu[0] = new char[] {"Student"}; // in side this, creative class / grande
+	menu[1] = new char[] {"Course"}; // in side this, edit course 
+	menu[2] = new char[] {"School year"}; // make school plan
+	menu[3] = new char[] {"View semester time"}; //change to another semester of any year(but can't changed if time out)
+	menu[4] = new char[] {"Back"};
+	so = Menu(menu, 5, 2);
+	DealocatedArrString(menu);
+	switch (so)
+	{
+	case 0: staffStudentMenu(); return;
+	case 1: return;
+	case 2: return;
+	case 3: return;
+	case 4: userTypeMode(); return;
+	}
+}
+
+void staffStudentMenu() {
+	int so;
+	system("cls");
+	std::cout << "------- Student Infomation ---------";
 	char** menu = new char* [4];
-	menu[0] = new char[] {"Create a csvt"};
-	menu[1] = new char[] {"Export scoreboard"};
-	menu[2] = new char[] {"View semester time"};
+	menu[0] = new char[] {"Grade"};
+	menu[1] = new char[] {"Class"};  
+	menu[2] = new char[] {"Student"}; 
 	menu[3] = new char[] {"Back"};
 	so = Menu(menu, 5, 2);
 	DealocatedArrString(menu);
 	switch (so)
 	{
-	case 0:
-		return;
-	case 1:
-		return;
-	case 2:
-		ViewSemesterTime();
-		return;
-	case 3:
-		userTypeMenu();
-		return;
+	case 0: gradeMenu(); return;
+	case 1: classMenu(); return;
+	case 2: studentMenu(); return;
+	case 3: staffMode(); return;
 	}
+}
+
+void gradeMenu() {
+	int so;
+	system("cls");
+	std::cout << "------------ Grade --------------";
+	char** menu = new char* [4];
+	menu[0] = new char[] {"Add Grade"}; 
+	menu[1] = new char[] {"View Grade"};  
+	menu[2] = new char[] {"Remove Grade"};
+	menu[3] = new char[] {"Back"};
+	so = Menu(menu, 5, 2);
+	DealocatedArrString(menu);
+	switch (so)
+	{
+	case 0: addGrade(); return;
+	case 1: return;
+	case 2: return;
+	case 3: staffStudentMenu(); return;
+	}
+}
+void classMenu() {
+	int so;
+	system("cls");
+	std::cout << "------------ Class --------------";
+	char** menu = new char* [4];
+	menu[0] = new char[] {"Add Class"}; 
+	menu[1] = new char[] {"View Class"};  
+	menu[2] = new char[] {"Remove Class"}; 
+	menu[3] = new char[] {"Back"};
+	so = Menu(menu, 5, 2);
+	DealocatedArrString(menu);
+	switch (so)
+	{
+	case 0: return;
+	case 1: return;
+	case 2: return;
+	case 3: staffStudentMenu(); return;
+	}
+}
+void studentMenu() {
+	int so;
+	system("cls");
+	std::cout << "------------ Student --------------";
+	char** menu = new char* [4];
+	menu[0] = new char[] {"Add Student"};
+	menu[1] = new char[] {"View Student"}; 
+	menu[2] = new char[] {"Remove Student"}; 
+	menu[3] = new char[] {"Back"};
+	so = Menu(menu, 5, 2);
+	DealocatedArrString(menu);
+	switch (so)
+	{
+	case 0: return;
+	case 1: return;
+	case 2: return;
+	case 3: staffStudentMenu(); return;
+	}
+}
+
+void addGrade() {
+	system("cls");
+	std::cout << "Grande: ";
+	int grade;
+	std::cin >> grade;
+	SchoolYear* a = AddSchoolYear(grade);
+	SaveSchoolYear(a);
 }
