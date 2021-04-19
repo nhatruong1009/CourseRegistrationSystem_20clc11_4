@@ -1,5 +1,6 @@
 #include"menu.h"
 #include"Data.h"
+#include"CommonFunc.h"
 bool isLoggedIn() {
 	_LText();
 	std::wstring username, password, un, pw;
@@ -155,7 +156,7 @@ void gradeMenu() {
 	switch (so)
 	{
 	case 0: addGrade(); return;
-	case 1: return;
+	case 1: ViewGrade(); return;
 	case 2: return;
 	case 3: staffStudentMenu(); return;
 	}
@@ -206,4 +207,8 @@ void addGrade() {
 	std::cin >> grade;
 	SchoolYear* a = AddSchoolYear(grade);
 	SaveSchoolYear(a);
+}
+
+void ViewGrade() {
+	Filelist* list = TakeFileInFolder("Data\\Grade");
 }

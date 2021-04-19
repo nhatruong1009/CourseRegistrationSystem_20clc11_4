@@ -13,4 +13,5 @@ void gradeMenu();
 void classMenu();
 void addGrade();
 void staffStudentMenu();
+void ViewGrade();
 #endif // !_Menu

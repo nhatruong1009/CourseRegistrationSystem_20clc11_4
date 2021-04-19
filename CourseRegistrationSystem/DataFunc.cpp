@@ -454,11 +454,14 @@ void PrintClass(Classes a) {
 SchoolYear* AddSchoolYear(int year) {
 	wchar_t* data = new wchar_t[] {L"Data"};
 	_wmkdir(data);
+	delete[]data;
+	data = new wchar_t[] {L"Data\\Grade"};
+	_wmkdir(data);
 	delete[] data;
 	SchoolYear* a = new SchoolYear;
 	a->year = year;
 	wchar_t* yy = NumToLStr(a->year);
-	wchar_t* file = new wchar_t[]{ L"Data\\K" };
+	wchar_t* file = new wchar_t[]{ L"Data\\Grade\\K" };
 	StrCat(file, wcslen(yy), yy);
 	if (_wmkdir(file)==-1) {
 		std::cout << "School year had made!";
@@ -496,7 +499,7 @@ SchoolYear* AddSchoolYear(int year) {
 }
 void SaveSchoolYear(SchoolYear*sch) {
 	if (sch == nullptr) return;
-	char* local = new char[] {"Data\\K"};
+	char* local = new char[] {"Data\\Grade\\K"};
 	char* year = NumToStr(sch->year);
 	char* direction = StrCat(local, year);
 	SaveNewStu(sch->student, direction);
