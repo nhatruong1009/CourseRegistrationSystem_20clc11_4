@@ -66,7 +66,13 @@ char* StrToChar(std::string source);
 
 Filelist* TakeFileInFolder(const std::wstring& name);
 Filelist* TakeFileInFolder(const std::string& name);
+
+void DealocatedArrString(char**& stringarr);
+void DealocatedArrString(wchar_t**& stringarr);
+
 void GotoXY(short x, short y);
 short Menu(wchar_t** list, short Xposition, short Yposition);
 short Choose(wchar_t** list, short X, short Y);
+short Menu(char** list, short Xposition, short Yposition);
+short Choose(char** list, short X, short Y);
 #endif

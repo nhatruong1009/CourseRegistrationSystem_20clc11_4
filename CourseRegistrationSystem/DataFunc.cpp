@@ -377,13 +377,12 @@ void PrintClass(Classes a) {
 		}
 	}
 }
-SchoolYear* AddSchoolYear() {
+SchoolYear* AddSchoolYear(int year) {
 	wchar_t* data = new wchar_t[] {L"Data"};
 	_wmkdir(data);
 	delete[] data;
 	SchoolYear* a = new SchoolYear;
-	tm now = GetTime();
-	a->year = now.tm_year;
+	a->year = year;
 	wchar_t* yy = NumToLStr(a->year);
 	wchar_t* file = new wchar_t[]{ L"Data\\K" };
 	StrCat(file, wcslen(yy), yy);
@@ -466,7 +465,7 @@ int CountFile(Filelist* a) {
 	return num;
 }
 
-std::wstring ChooseCurrentTime() {
+std::wstring ViewSemesterTime() {
 	Filelist* a = TakeFileInFolder("Data\\SchoolYear");
 	int size = CountFile(a);
 	wchar_t** list = new wchar_t* [size];

@@ -3,9 +3,10 @@
 #include<vector>
 #include<string>
 #include"CommonFunc.h"
+#include"menu.h"
 
 using namespace std;
 void main()
 {
-	MakeCourse();
+	userTypeMenu();
 }

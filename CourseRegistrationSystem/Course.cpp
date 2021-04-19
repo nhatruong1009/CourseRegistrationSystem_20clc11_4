@@ -55,13 +55,8 @@ Course MakeCourse() {
 		std::wcout << "Ses: ";
 		result.performed[i].session = Choose(ses, 25, 10 + i);
 	}
-	for (int i = 0; i < 4; i++) {
-		delete[] day[i],ses[i];
-	}
-	for (int i = 4; i < 7; i++) {
-		delete[] day[i];
-	}
-	delete[] day, ses;
+	DealocatedArrString(ses);
+	DealocatedArrString(day);
 	_SText();
 	return result;
 }
