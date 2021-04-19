@@ -498,6 +498,51 @@ short Menu(wchar_t** list, short Xposition, short Yposition) {
 	}
 }
 
+short Menu(char** list, short Xposition, short Yposition) {
+	char book;
+	int size = _msize(list) / sizeof(char*);
+	for (short i = 0; i < size; i++)
+	{
+		GotoXY(Xposition, Yposition + i);
+		std::cout << list[i];
+	}
+	GotoXY(Xposition, Yposition);
+	std::cout << "> " << list[0] << " <";
+	GotoXY(Xposition - 1, Yposition);
+	short index = 0;
+	while (true)
+	{
+		book = _getwch();
+		book = toupper(book);
+		if (book == 'W' || book == KEY_UP) {
+			GotoXY(Xposition, Yposition + index);
+			std::cout << list[index] << "    ";
+			if (index == 0) { index = size - 1; }
+			else { index--; }
+			GotoXY(Xposition, Yposition + index);
+			std::cout << "> " << list[index] << " <";
+			GotoXY(Xposition - 1, Yposition + index);
+		}
+		else if (book == 'S' || book == KEY_DOWN) {
+			GotoXY(Xposition, Yposition + index);
+			std::cout << list[index] << "    ";
+			if (index == size - 1) { index = 0; }
+			else { index++; }
+			GotoXY(Xposition, Yposition + index);
+			std::cout << "> " << list[index] << " <";
+			GotoXY(Xposition - 1, Yposition + index);
+		}
+		else if (book == KEY_ENTER || book == ' ') {
+			GotoXY(0, Yposition + size);
+			return index;
+		}
+		else if (book == KEY_ESC) {
+			GotoXY(0, Yposition + size);
+			return -1;
+		}
+	}
+}
+
 short Choose(wchar_t** list,short X,short Y) {
 	int n = _msize(list) / sizeof(wchar_t*);
 	int* size = new int[n];
@@ -538,4 +583,61 @@ short Choose(wchar_t** list,short X,short Y) {
 			return index;
 		}
 	}
+}
+
+short Choose(char** list, short X, short Y) {
+	int n = _msize(list) / sizeof(char*);
+	int* size = new int[n];
+	int longest = 0;
+	for (int i = 0; i < n; i++) {
+		GotoXY(X, Y);
+		size[i] = strlen(list[i]);
+		if (size[i] > longest) longest = size[i];
+	}
+	char book;
+	std::cout << list[0];
+	for (int i = 0; i < longest - size[0]; i++) std::cout << ' ';
+	int index = 0;
+	while (true) {
+		book = _getwch();
+		book = toupper(book);
+		if (book == 'W' || book == KEY_UP) {
+			index == 0 ? index = n - 1 : index -= 1;
+			GotoXY(X, Y);
+			std::cout << list[index];
+			for (int i = 0; i < longest - size[index]; i++) std::cout << ' ';
+		}
+		else if (book == 'S' || book == KEY_DOWN) {
+			index == n - 1 ? index = 0 : index += 1;
+			GotoXY(X, Y);
+			std::cout << list[index];
+			for (int i = 0; i < longest - size[index]; i++) std::cout << ' ';
+		}
+		else if (book == KEY_ENTER || book == ' ') {
+			GotoXY(0, Y + 1);
+			return index;
+		}
+		else if (book == KEY_ESC) {
+			GotoXY(0, Y + 1);
+			return index;
+		}
+	}
+}
+
+void DealocatedArrString(char**& stringarr) {
+	int n = _msize(stringarr) / sizeof(char*);
+	for (int i = 0; i < n; i++) {
+		delete[] stringarr[i];
+	}
+	delete[] stringarr;
+	stringarr = nullptr;
+}
+
+void DealocatedArrString(wchar_t**& stringarr) {
+	int n = _msize(stringarr) / sizeof(wchar_t*);
+	for (int i = 0; i < n; i++) {
+		delete[] stringarr[i];
+	}
+	delete[] stringarr;
+	stringarr = nullptr;
 }

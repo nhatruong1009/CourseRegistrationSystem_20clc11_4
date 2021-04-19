@@ -101,11 +101,14 @@ void SaveNewStu(_Student* stu, char* directon);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
-SchoolYear* AddSchoolYear();
+SchoolYear* AddSchoolYear(int year);
+_Student* TypeInStudent();
 void SaveSchoolYear(SchoolYear* sch);
 void CourseToBIn(Course* course, std::string filename, std::wstring current);
 Course BinToCourse(std::string filename);
 void MakeCurentTime(__int64 year);
-std::wstring ChooseCurrentTime();
+std::wstring ViewSemesterTime();
+
+Course MakeCourse();
 #endif // _Structs
 

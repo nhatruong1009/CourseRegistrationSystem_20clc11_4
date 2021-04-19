@@ -29,19 +29,34 @@ Course MakeCourse() {
 	std::wcout << "Number of credits: ";
 	std::wcin >> result.credit;
 	std::wcin.ignore(1000, L'\n');
-	_SText();
 
-	std::cout << "Schedule (ex. MON,S1) \n";// hmm not workking
+	std::wcout << "Schedule (ex. MON,S1) \n";// hmm not workking
+
+	wchar_t** day = new wchar_t* [7];
+	wchar_t**ses = new wchar_t* [4];
+	day[0] = new wchar_t[4]{ L"MON" };
+	day[1] = new wchar_t[4]{ L"TUE" };
+	day[2] = new wchar_t[4]{ L"WED" };
+	day[3] = new wchar_t[4]{ L"THU" };
+	day[4] = new wchar_t[4]{ L"FRI" };
+	day[5] = new wchar_t[4]{ L"SAT" };
+	day[6] = new wchar_t[4]{ L"SUN" };
+
+	ses[0] = new wchar_t[3]{ L"S1" };
+	ses[1] = new wchar_t[3]{ L"S2" };
+	ses[2] = new wchar_t[3]{ L"S3" };
+	ses[3] = new wchar_t[3]{ L"S4" };
+
 	for (int i = 0; i < 2; i++) {
-		/*std::cout << "Day: ";
-		std::cin >> result.performed[i].day;
-		result.performed[i].day[3] = '\0';
-
-		std::cout << "Session: ";
-		std::cin >> result.performed[i].session;
-		result.performed[i].session[2] = '\0';*/
-
-		// this will repaired to choosing, not type in;
+		GotoXY(10, 10 + i);
+		std::wcout << "Day: ";
+		result.performed[i].day = Choose(day, 15, 10 + i);
+		GotoXY(20, 10 + i);
+		std::wcout << "Ses: ";
+		result.performed[i].session = Choose(ses, 25, 10 + i);
 	}
+	DealocatedArrString(ses);
+	DealocatedArrString(day);
+	_SText();
 	return result;
 }

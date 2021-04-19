@@ -8,7 +8,11 @@ std::ostream& operator<<(std::ostream& os, const Date& dt)
 }
 std::wostream& operator<<(std::wostream& os, const Date& dt)
 {
-	os << dt.dd << '/' << dt.mm << '/' << dt.yy;
+	if (dt.dd < 10) os << "0" << dt.dd << '/';
+	else os << dt.dd << '/';
+	if (dt.mm < 10) os << "0" << dt.mm << '/';
+	else os << dt.mm << '/';
+	os << dt.yy;
 	return os;
 }
 std::wostream& operator<<(std::wostream& os, const tm& t) {
@@ -70,8 +74,15 @@ Student StringToStudent(std::wstring str) {
 	str.copy(temp, end - beg, beg);
 	stu.SocialID = StringToInt(temp);
 	delete[] temp;
-
-	stu.account.password = new char[7]{ "123456" };
+	std::string pass;
+	stu.birth.dd < 10 ? pass += "0" + std::to_string(stu.birth.dd) : pass += std::to_string(stu.birth.dd);
+	stu.birth.mm < 10 ? pass += "0" + std::to_string(stu.birth.mm) : pass += std::to_string(stu.birth.mm);
+	pass += std::to_string(stu.birth.yy);
+	stu.account.password = new char[pass.length() + 1];
+	for (int i = 0; i < pass.length(); i++) {
+		stu.account.password[i] = pass[i];
+	}
+	stu.account.password[pass.length()] = '\0';
 	return stu;
 }
 void AddStudent(_Student*& studentlist, Student student) {
@@ -314,24 +325,95 @@ void AddClass(_Class*& cls, Classes sourse) {
 	cls->pPrev = new _Class{ sourse,cls,cls->pPrev };
 	cls->pPrev->pPrev->pNext = cls->pPrev;
 }
+
+
 Classes MakeClass(_Student *&all) {
+	system("cls");
 	Classes result;
 	std::cout << "ClassName: ";
 	std::string temp;
 	std::cin >> temp;
 	result.name = StrToChar(temp);
-	std::cout << "File in Student(.csv): ";
-	std::cin >> temp;
-	_Student* thisclass = FileInStudent(temp);
-	int numberofstu = CountStudent(thisclass);
-	if (numberofstu != 0) {
-		result.ID = new unsigned __int64[numberofstu];
-		for (int i = 0; i < numberofstu; i++) {
-			result.ID[i] = thisclass->student.ID;
-			thisclass = thisclass->pNext;
+
+	char** chooselist = new char* [3];
+	std::cout << "--------Add Student-------";
+	chooselist[0] = new char[] {"From CSV"};
+	chooselist[1] = new char[] {"TypeIn"};
+	chooselist[2] = new char[] {"Add Later"};
+	
+	int take = Menu(chooselist, 5, 2);
+	DealocatedArrString(chooselist);
+	if (take == 0) {
+		std::cout << "File in Student(.csv): ";
+		std::cin >> temp;
+		_Student* thisclass = FileInStudent(temp);
+		int numberofstu = CountStudent(thisclass);
+		if (numberofstu != 0) {
+			result.ID = new unsigned __int64[numberofstu];
+			for (int i = 0; i < numberofstu; i++) {
+				result.ID[i] = thisclass->student.ID;
+				thisclass = thisclass->pNext;
+			}
 		}
+		ConnectStudent(all, thisclass);
+		return result;
 	}
-	ConnectStudent(all, thisclass);
+	if (take == 1) {
+		_Student* thisclass = TypeInStudent();
+		int numberofstu = CountStudent(thisclass);
+		if (numberofstu != 0) {
+			result.ID = new unsigned __int64[numberofstu];
+			for (int i = 0; i < numberofstu; i++) {
+				result.ID[i] = thisclass->student.ID;
+				thisclass = thisclass->pNext;
+			}
+		}
+		ConnectStudent(all, thisclass);
+		return result;
+	}
+	else {
+		result.ID = nullptr;
+		return result;
+	}
+
+}
+
+_Student* TypeInStudent() {
+	_Student* result = nullptr;
+	char** chooselist = new char* [2];
+	chooselist[0] = new char[] {"Add"};
+	chooselist[1] = new char[] {"Done"};
+	Student stu;
+	std::wstring temp;
+	std::string temp1;
+	int choose;
+	do {
+		std::cout << "ID: "; std::cin >> stu.ID;
+		std::cin.ignore(1i64, '\n');
+		_LText();
+		std::wcout << "Fistname: "; std::getline(std::wcin, temp); stu.firstname = StrToChar(temp);
+		std::wcout << "Lastname: "; std::getline(std::wcin, temp); stu.lastname = StrToChar(temp);
+		_SText();
+		std::cout << "Gender: "; std::cin >> stu.gender; stu.gender = toupper(stu.gender);
+		std::cout << "Birth(dd/mm/yy): "; std::cin.ignore(1000, '\n'); std::getline(std::cin, temp1); stu.birth = StringToDate(temp1);
+		std::cout << "Social ID: "; std::cin >> stu.SocialID;
+
+		stu.account.username = NumToStr(stu.ID);
+		temp1 = "";
+		stu.birth.dd < 10 ? temp1 += "0" + std::to_string(stu.birth.dd) : temp1 += std::to_string(stu.birth.dd);
+		stu.birth.mm < 10 ? temp1 += "0" + std::to_string(stu.birth.mm) : temp1 += std::to_string(stu.birth.mm);
+		temp1 += std::to_string(stu.birth.yy);
+		stu.account.password = new char[temp1.length() + 1];
+		for (int i = 0; i < temp1.length(); i++) {
+			stu.account.password[i] = temp1[i];
+		}
+		stu.account.password[temp1.length()] = '\0';
+		AddStudent(result, stu);
+		system("cls");
+		std::cout << "------- Add Student -------";
+		choose = Menu(chooselist, 5, 1);
+	} while (choose==0);
+	DealocatedArrString(chooselist);
 	return result;
 }
 
@@ -369,15 +451,17 @@ void PrintClass(Classes a) {
 		}
 	}
 }
-SchoolYear* AddSchoolYear() {
+SchoolYear* AddSchoolYear(int year) {
 	wchar_t* data = new wchar_t[] {L"Data"};
+	_wmkdir(data);
+	delete[]data;
+	data = new wchar_t[] {L"Data\\Grade"};
 	_wmkdir(data);
 	delete[] data;
 	SchoolYear* a = new SchoolYear;
-	tm now = GetTime();
-	a->year = now.tm_year;
+	a->year = year;
 	wchar_t* yy = NumToLStr(a->year);
-	wchar_t* file = new wchar_t[]{ L"Data\\K" };
+	wchar_t* file = new wchar_t[]{ L"Data\\Grade\\K" };
 	StrCat(file, wcslen(yy), yy);
 	if (_wmkdir(file)==-1) {
 		std::cout << "School year had made!";
@@ -395,21 +479,27 @@ SchoolYear* AddSchoolYear() {
 		a->classes = nullptr;
 		a->student = nullptr;
 		int chose;
-		std::cout << "1:AddClass\n";
-		std::cin >> chose;
-		while (chose==1)
+		char** choselist = new char* [2];
+		choselist[0] = new char[] {"AddClass"};
+		choselist[1] = new char[] {"Done"};
+		system("cls");
+		chose = Menu(choselist, 5, 0);
+		while (chose==0)
 		{
 			Classes tt = MakeClass(a->student);
 			AddClass(a->classes,tt);
-			std::cin >> chose;
+			system("cls");
+			std::cout << "------- Add Class -------";
+			chose = Menu(choselist, 5, 1);
 		}
+		DealocatedArrString(choselist);
 		delete[]yy, file;
 		return a;
 	}
 }
 void SaveSchoolYear(SchoolYear*sch) {
 	if (sch == nullptr) return;
-	char* local = new char[] {"Data\\K"};
+	char* local = new char[] {"Data\\Grade\\K"};
 	char* year = NumToStr(sch->year);
 	char* direction = StrCat(local, year);
 	SaveNewStu(sch->student, direction);
@@ -458,7 +548,7 @@ int CountFile(Filelist* a) {
 	return num;
 }
 
-std::wstring ChooseCurrentTime() {
+std::wstring ViewSemesterTime() {
 	Filelist* a = TakeFileInFolder("Data\\SchoolYear");
 	int size = CountFile(a);
 	wchar_t** list = new wchar_t* [size];
