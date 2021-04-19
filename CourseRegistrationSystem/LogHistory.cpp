@@ -112,6 +112,7 @@ void ChangeSocialID(Student CurrentUser)
 		std::cout << "Confirm new Social ID: ";
 		std::cin >> newSocialID2;
 	} while (newSocialID1 != newSocialID2);
+	std::cout << "Change succesfully " << std::endl;
 	CurrentUser.SocialID = newSocialID1;
 	StuToBin(&CurrentUser, "Data\\K2021\\Student\\" + ToString(CurrentUser.account.username));
 	short n;
@@ -120,7 +121,21 @@ void ChangeSocialID(Student CurrentUser)
 		std::cout << "Enter 0 to go back ";
 		std::cin >> n;
 	} while (n != 0);
-	// Go back to Student menu
+	ChangeInfo(CurrentUser);
+}
+
+void ChangeDOB(Student CurrentUser)
+{
+	unsigned int d, m, y;
+	do
+	{
+		std::cout << "Day: ";
+		std::cin >> d;
+		std::cout << "Month: ";
+		std::cin >> m;
+		std::cout << "Year: ";
+		std::cin >> y;
+	} while (1);
 }
 
 void ChangeInfo(Student CurrentUser)
@@ -128,14 +143,14 @@ void ChangeInfo(Student CurrentUser)
 	system("cls");
 	int num;
 	std::cout << "Change information" << std::endl;
-	std::cout << "Choose "<<std::endl;
-	std::cout << "0. Go back ";
-	std::cout << "1. Social ID ";
+	std::cout << "Choose " << std::endl;
+	std::cout << "0. Go back " << std::endl;
+	std::cout << "1. Social ID " << std::endl;
 	std::cin >> num;
 	switch (num)
 	{
-	case 0: // Go to Student menu
-	case 1: 
+	case 0: break; // Go to Student menu
+	case 1:
 		ChangeSocialID(CurrentUser);
 		break;
 	}
