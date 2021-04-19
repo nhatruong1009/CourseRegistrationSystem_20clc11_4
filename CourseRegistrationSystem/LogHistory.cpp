@@ -1,6 +1,6 @@
 #include"CommonFunc.h"
 #include"Data.h"
-
+void ChangeInfo(Student CurrentUser);
 void SaveLogoutHistory(char* AccountUsername)
 {
 	__time32_t now = time(0);
@@ -38,16 +38,22 @@ void LoginStu(Student& CurrentUser)
 {
 	system("cls");	//clear the screen
 	std::string U, P;
-	Filelist* list = TakeFileInFolder("Data\\K2021\\Student");// cai nay hoi sai , minh phai lay 2 so dau tien cua mssv de loc file
 	do
 	{
-		Filelist* cur = list;
 		std::cout << "Username: ";
 		std::cin >> U;
 		std::cout << "Password: ";
 		std::cin >> P;
+		std::string foldername = "K20";
+		foldername = foldername + U[0] + U[1];
+		Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
+		if (list == nullptr)
+		{
+			std::cout << "Username is invalid, please try again." << std::endl;
+			continue;
+		}
+		Filelist* cur = list;
 		// Read Account File
-		// 2 file dau co ten la "." voi "..", lay du file???
 		do
 		{
 			if (U == ToString(cur->filename))
@@ -59,7 +65,7 @@ void LoginStu(Student& CurrentUser)
 			std::cout << "Username is invalid, please try again." << std::endl;
 			continue;
 		}
-		Student a = BinToStu("Data\\K2021\\Student\\" + ToString(cur->filename));
+		Student a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + ToString(cur->filename));
 		if (P == ToString(a.account.password))
 		{
 			CurrentUser = a;
