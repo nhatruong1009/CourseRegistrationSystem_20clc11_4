@@ -44,7 +44,7 @@ void LoginStu(Student& CurrentUser)
 		std::cin >> U;
 		std::cout << "Password: ";
 		std::cin >> P;
-		std::string foldername = "K20";
+		std::string foldername = "K20"; // 21st century, will update later when 22nd century come
 		foldername = foldername + U[0] + U[1];
 		Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
 		if (list == nullptr)
@@ -95,21 +95,25 @@ void ChangePassword(Student CurrentUser)
 		std::cin >> pass1;
 		std::cout << "Confirm password: ";
 		std::cin >> pass2;
-		if (pass1 != pass2) std::cout << "Your password and confirmation password do not match, please try again." << std::endl;
+		if (pass1 != pass2) std::cout << "Your password and confirmation password do not match, try again." << std::endl << std::endl;
 	} while (pass1 != pass2);
+	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
+	foldername = foldername + CurrentUser.account.username[0] + CurrentUser.account.username[1];
 	CurrentUser.account.password = StrToChar(pass1);
-	StuToBin(&CurrentUser, "Data\\K2021\\Student\\" + ToString(CurrentUser.account.username));
+	StuToBin(&CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser.account.username));
 	short n;
+	std::cout << "Change successfully " << std::endl;
 	do
 	{
 		std::cout << "Enter 0 to go back ";
 		std::cin >> n;
 	} while (n != 0);
-	// Go back to Student menu
+	ChangeInfo(CurrentUser);
 }
 
 void ChangeSocialID(Student CurrentUser)
 {
+	system("cls");
 	unsigned __int64 newSocialID1, newSocialID2;
 	do
 	{
@@ -117,10 +121,14 @@ void ChangeSocialID(Student CurrentUser)
 		std::cin >> newSocialID1;
 		std::cout << "Confirm new Social ID: ";
 		std::cin >> newSocialID2;
+		if (newSocialID1 != newSocialID2)
+			std::cout << "New Social ID and Confirm Social ID do not match, try again " << std::endl << std::endl;
 	} while (newSocialID1 != newSocialID2);
 	std::cout << "Change succesfully " << std::endl;
 	CurrentUser.SocialID = newSocialID1;
-	StuToBin(&CurrentUser, "Data\\K2021\\Student\\" + ToString(CurrentUser.account.username));
+	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
+	foldername = foldername + CurrentUser.account.username[0] + CurrentUser.account.username[1];
+	StuToBin(&CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser.account.username));
 	short n;
 	do
 	{
@@ -162,8 +170,9 @@ bool CheckDate(int d, int m, int y)
 
 void ChangeDOB(Student CurrentUser)
 {
+	system("cls");
 	unsigned int d, m, y;
-	do
+	while(1)
 	{
 		std::cout << "Day: ";
 		std::cin >> d;
@@ -171,7 +180,28 @@ void ChangeDOB(Student CurrentUser)
 		std::cin >> m;
 		std::cout << "Year: ";
 		std::cin >> y;
-	} while (1);
+		if (CheckDate(d, m, y))
+			break;
+		else 
+		{
+			std::cout << "Date is invalid, try again. "<<std::endl<<std::endl;
+			continue;
+		}
+	} 
+	std::cout << "Change successfully " << std::endl;
+	CurrentUser.birth.dd = d;
+	CurrentUser.birth.mm = m;
+	CurrentUser.birth.yy = y;
+	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
+	foldername = foldername + CurrentUser.account.username[0] + CurrentUser.account.username[1];
+	StuToBin(&CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser.account.username));
+	short n;
+	do
+	{
+		std::cout << "Enter 0 to go back ";
+		std::cin >> n;
+	} while (n != 0);
+	ChangeInfo(CurrentUser);
 }
 
 void ChangeInfo(Student CurrentUser)
@@ -180,14 +210,22 @@ void ChangeInfo(Student CurrentUser)
 	int num;
 	std::cout << "Change information" << std::endl;
 	std::cout << "Choose " << std::endl;
+	std::cout << "1. Password " << std::endl;
+	std::cout << "2. Social ID " << std::endl;
+	std::cout << "3. Date of Birth " << std::endl;
 	std::cout << "0. Go back " << std::endl;
-	std::cout << "1. Social ID " << std::endl;
 	std::cin >> num;
 	switch (num)
 	{
 	case 0: break; // Go to Student menu
 	case 1:
+		ChangePassword(CurrentUser);
+		break;
+	case 2:
 		ChangeSocialID(CurrentUser);
+		break;
+	case 3:
+		ChangeDOB(CurrentUser);
 		break;
 	}
 }
