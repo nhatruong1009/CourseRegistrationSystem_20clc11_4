@@ -2,81 +2,82 @@
 #include"Data.h"
 
 //---17/04/2021
-Course StringToCourse(std::wstring str) {
-	//ID, Course name, Teacher, Credits, Dates, Sessions
-	Course cou;
-	wchar_t* temp = nullptr;
-	int beg = str.find(L',', 0) + 1;
-	int end = str.find(L',', beg);
-
-	temp = new wchar_t[end - beg + 1];
-	temp[end - beg] = L'\0';
-	str.copy(temp, end - beg, beg);
-	_LText();
-
-	cou.ID = new char[end - beg + 1];
-	cou.ID[end - beg] = L'\0';
-	LStrToStr(cou.ID, end - beg, temp);
-	delete[] temp;
-
-	beg = end + 1;
-	end = str.find(L',', beg);
-	cou.name = new wchar_t[end - beg + 1];
-	cou.name[end - beg] = L'\0';
-	str.copy(cou.name, end - beg, beg);
-
-	beg = end + 1;
-	end = str.find(L',', beg);
-	cou.teacher = new wchar_t[end - beg + 1];
-	cou.teacher[end - beg] = L'\0';
-	str.copy(cou.teacher, end - beg, beg);
-
-	beg = end + 1;
-	end = str.find(L',', beg);
-	temp = new wchar_t[end - beg + 1];
-	temp[end - beg] = L'\0';
-	str.copy(temp, end - beg, beg);
-	cou.credit = StringToInt(temp);
-	delete[] temp;
-
-	beg = end + 1;
-	end = str.find(L',', beg);
-	temp = new wchar_t[end - beg + 1];
-	temp[end - beg] = L'\0';
-	str.copy(temp, end - beg, beg);
-	cou.performed[0].day[3] = L'\0';
-	LStrToStr(cou.ID, end - beg, temp);
-	delete[] temp;
-
-	beg = end + 1;
-	end = str.find(L',', beg);
-	temp = new wchar_t[end - beg + 1];
-	temp[end - beg] = L'\0';
-	str.copy(temp, end - beg, beg);
-	cou.performed[0].session[2] = L'\0';
-	LStrToStr(cou.ID, end - beg, temp);
-	delete[] temp;
-
-	beg = end + 1;
-	end = str.find(L',', beg);
-	temp = new wchar_t[end - beg + 1];
-	temp[end - beg] = L'\0';
-	str.copy(temp, end - beg, beg);
-	cou.performed[1].day[3] = L'\0';
-	LStrToStr(cou.ID, end - beg, temp);
-	delete[] temp;
-
-	beg = end + 1;
-	end = str.find(L',', beg);
-	temp = new wchar_t[end - beg + 1];
-	temp[end - beg] = L'\0';
-	str.copy(temp, end - beg, beg);
-	cou.performed[1].session[2] = L'\0';
-	LStrToStr(cou.ID, end - beg, temp);
-	delete[] temp;
-
-	return cou;
-}
+// //fix latter
+//Course StringToCourse(std::wstring str) {
+//	//ID, Course name, Teacher, Credits, Dates, Sessions
+//	Course cou;
+//	wchar_t* temp = nullptr;
+//	int beg = str.find(L',', 0) + 1;
+//	int end = str.find(L',', beg);
+//
+//	temp = new wchar_t[end - beg + 1];
+//	temp[end - beg] = L'\0';
+//	str.copy(temp, end - beg, beg);
+//	_LText();
+//
+//	cou.ID = new char[end - beg + 1];
+//	cou.ID[end - beg] = L'\0';
+//	LStrToStr(cou.ID, end - beg, temp);
+//	delete[] temp;
+//
+//	beg = end + 1;
+//	end = str.find(L',', beg);
+//	cou.name = new wchar_t[end - beg + 1];
+//	cou.name[end - beg] = L'\0';
+//	str.copy(cou.name, end - beg, beg);
+//
+//	beg = end + 1;
+//	end = str.find(L',', beg);
+//	cou.teacher = new wchar_t[end - beg + 1];
+//	cou.teacher[end - beg] = L'\0';
+//	str.copy(cou.teacher, end - beg, beg);
+//
+//	beg = end + 1;
+//	end = str.find(L',', beg);
+//	temp = new wchar_t[end - beg + 1];
+//	temp[end - beg] = L'\0';
+//	str.copy(temp, end - beg, beg);
+//	cou.credit = StringToInt(temp);
+//	delete[] temp;
+//
+//	beg = end + 1;
+//	end = str.find(L',', beg);
+//	temp = new wchar_t[end - beg + 1];
+//	temp[end - beg] = L'\0';
+//	str.copy(temp, end - beg, beg);
+//	cou.performed[0].day[3] = L'\0';
+//	LStrToStr(cou.ID, end - beg, temp);
+//	delete[] temp;
+//
+//	beg = end + 1;
+//	end = str.find(L',', beg);
+//	temp = new wchar_t[end - beg + 1];
+//	temp[end - beg] = L'\0';
+//	str.copy(temp, end - beg, beg);
+//	cou.performed[0].session[2] = L'\0';
+//	LStrToStr(cou.ID, end - beg, temp);
+//	delete[] temp;
+//
+//	beg = end + 1;
+//	end = str.find(L',', beg);
+//	temp = new wchar_t[end - beg + 1];
+//	temp[end - beg] = L'\0';
+//	str.copy(temp, end - beg, beg);
+//	cou.performed[1].day[3] = L'\0';
+//	LStrToStr(cou.ID, end - beg, temp);
+//	delete[] temp;
+//
+//	beg = end + 1;
+//	end = str.find(L',', beg);
+//	temp = new wchar_t[end - beg + 1];
+//	temp[end - beg] = L'\0';
+//	str.copy(temp, end - beg, beg);
+//	cou.performed[1].session[2] = L'\0';
+//	LStrToStr(cou.ID, end - beg, temp);
+//	delete[] temp;
+//
+//	return cou;
+//}
 
 void AddCourse(_Course*& courselist, Course course) {
 	if (courselist == nullptr) { courselist = new _Course{ course }; courselist->pNext = courselist, courselist->pPrev = courselist; return; }
@@ -84,21 +85,21 @@ void AddCourse(_Course*& courselist, Course course) {
 	courselist->pPrev->pPrev->pNext = courselist->pPrev;
 }
 
-_Course* FileInCourse(std::string filename) {
-	_LText();
-	std::wfstream fi(filename, std::wfstream::in);
-	if (!fi) { return nullptr; }
-	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
-	_Course* allCourse = nullptr;
-	std::wstring temp;
-	while (fi)
-	{
-		std::getline(fi, temp);
-		if (temp.length() != 0) AddCourse(allCourse, StringToCourse(temp));
-	}
-	_SText();
-	return allCourse;
-}
+//_Course* FileInCourse(std::string filename) {
+//	_LText();
+//	std::wfstream fi(filename, std::wfstream::in);
+//	if (!fi) { return nullptr; }
+//	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
+//	_Course* allCourse = nullptr;
+//	std::wstring temp;
+//	while (fi)
+//	{
+//		std::getline(fi, temp);
+//		if (temp.length() != 0) AddCourse(allCourse, StringToCourse(temp));
+//	}
+//	_SText();
+//	return allCourse;
+//}
 
 void FileOutCourse(_Course* cou, std::string fileout) {
 	_LText();

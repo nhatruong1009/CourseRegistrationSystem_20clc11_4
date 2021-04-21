@@ -75,4 +75,5 @@ short Menu(wchar_t** list, short Xposition, short Yposition);
 short Choose(wchar_t** list, short X, short Y);
 short Menu(char** list, short Xposition, short Yposition);
 short Choose(char** list, short X, short Y);
+std::wstring ChoseFolder(Filelist* list, short x, short y);
 #endif

@@ -4,8 +4,8 @@
 #include<string>
 #include"CommonFunc.h"
 #include"menu.h"
-
-using namespace std;
+#include <cstdint>
+#include <filesystem>
 void main()
 {
 	userTypeMode();

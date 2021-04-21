@@ -51,6 +51,7 @@ struct Student
 struct Classes
 {
 	char* name;
+	int numberofstudent=0;
 	unsigned __int64* ID;
 };
 struct _Student
@@ -101,6 +102,7 @@ void SaveNewStu(_Student* stu, char* directon);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
+Classes* LoadClass(const char* filein);
 SchoolYear* AddSchoolYear(int year);
 _Student* TypeInStudent();
 void SaveSchoolYear(SchoolYear* sch);
@@ -108,7 +110,9 @@ void CourseToBIn(Course* course, std::string filename, std::wstring current);
 Course BinToCourse(std::string filename);
 void MakeCurentTime(__int64 year);
 std::wstring ViewSemesterTime();
-
+int CountFile(Filelist* a);
 Course MakeCourse();
+Classes MakeClass(_Student*& all);
+void SaveClass(Classes cl,const char* fileout);
 #endif // _Structs
 

@@ -43,7 +43,6 @@ void enrollCourse(Student student, Course course) {
 	//addStudent();
 
 }
-
 void updateStudentsInClass(Classes &a) {
 	std::cout << a.name << '\n';
 	int n = _msize(a.ID) / sizeof(__int64);
@@ -61,7 +60,7 @@ void userTypeMode()
 	char** menu = new char* [3];
 	menu[0] = new char[] {"Student"};
 	menu[1] = new char[] {"Academic Staff"};
-	menu[2] = new char[] {"Back"};
+	menu[2] = new char[] {"Exit"};
 	so = Menu(menu, 4, 2);
 	DealocatedArrString(menu);
 	switch (so)
@@ -77,31 +76,31 @@ void userTypeMode()
 }
 void studentMode()
 {
-	int so;
 	system("cls");
 	std::cout << "-------------STUDENT---------------";
 	char** menu = new char* [3];
 	menu[0] = new char[] {"Log In"};
 	menu[1] = new char[] {"Register"};
 	menu[2] = new char[] {"Back"};
-	so = Menu(menu, 5, 2);
-	DealocatedArrString(menu);
-	switch (so)
+	switch (Menu(menu, 5, 2))
 	{
 	case 0:
 		std::cout << "   Ban da chon 1";
+		DealocatedArrString(menu);
 		return;
 	case 1:
 		std::cout << "   Ban da chon 2";
+		DealocatedArrString(menu);
 		return;
+	case -1:
 	case 2:
 		userTypeMode();
+		DealocatedArrString(menu);
 		return;
 	}
 }
 void staffMode()
 {
-	int so;
 	system("cls");
 	std::cout << "-------------STAFF---------------";
 	char** menu = new char* [5];
@@ -110,20 +109,17 @@ void staffMode()
 	menu[2] = new char[] {"School year"}; // make school plan
 	menu[3] = new char[] {"View semester time"}; //change to another semester of any year(but can't changed if time out)
 	menu[4] = new char[] {"Back"};
-	so = Menu(menu, 5, 2);
-	DealocatedArrString(menu);
-	switch (so)
+	switch (Menu(menu, 5, 2))
 	{
-	case 0: staffStudentMenu(); return;
-	case 1: return;
-	case 2: return;
-	case 3: return;
-	case 4: userTypeMode(); return;
+	case 0: staffStudentMenu(); DealocatedArrString(menu); return;
+	case 1: DealocatedArrString(menu); return;
+	case 2: DealocatedArrString(menu); return;
+	case 3: DealocatedArrString(menu); return;
+	case -1:
+	case 4: userTypeMode(); DealocatedArrString(menu); return;
 	}
 }
-
 void staffStudentMenu() {
-	int so;
 	system("cls");
 	std::cout << "------- Student Infomation ---------";
 	char** menu = new char* [4];
@@ -131,84 +127,124 @@ void staffStudentMenu() {
 	menu[1] = new char[] {"Class"};  
 	menu[2] = new char[] {"Student"}; 
 	menu[3] = new char[] {"Back"};
-	so = Menu(menu, 5, 2);
-	DealocatedArrString(menu);
-	switch (so)
+	switch (Menu(menu, 5, 2))
 	{
-	case 0: gradeMenu(); return;
-	case 1: classMenu(); return;
-	case 2: studentMenu(); return;
-	case 3: staffMode(); return;
+	case 0: gradeMenu(); DealocatedArrString(menu); return;
+	case 1: classMenu(); DealocatedArrString(menu); return;
+	case 2: studentMenu(); DealocatedArrString(menu); return;
+	case-1:
+	case 3: staffMode(); DealocatedArrString(menu); return;
 	}
 }
-
 void gradeMenu() {
-	int so;
 	system("cls");
 	std::cout << "------------ Grade --------------";
-	char** menu = new char* [4];
+	char** menu = new char* [3];
 	menu[0] = new char[] {"Add Grade"}; 
 	menu[1] = new char[] {"View Grade"};  
-	menu[2] = new char[] {"Remove Grade"};
-	menu[3] = new char[] {"Back"};
-	so = Menu(menu, 5, 2);
-	DealocatedArrString(menu);
-	switch (so)
+	menu[2] = new char[] {"Back"};
+	switch (Menu(menu, 5, 2))
 	{
-	case 0: addGrade(); return;
-	case 1: ViewGrade(); return;
-	case 2: return;
-	case 3: staffStudentMenu(); return;
+	case 0: addGrade(); DealocatedArrString(menu); return;
+	case 1: ViewGrade(); DealocatedArrString(menu); return;
+	case-1:
+	case 2: staffStudentMenu(); DealocatedArrString(menu); return;
 	}
 }
+// now work here
 void classMenu() {
-	int so;
 	system("cls");
 	std::cout << "------------ Class --------------";
-	char** menu = new char* [4];
+	char** menu = new char* [3];
 	menu[0] = new char[] {"Add Class"}; 
 	menu[1] = new char[] {"View Class"};  
-	menu[2] = new char[] {"Remove Class"}; 
-	menu[3] = new char[] {"Back"};
-	so = Menu(menu, 5, 2);
-	DealocatedArrString(menu);
-	switch (so)
+	menu[2] = new char[] {"Back"};
+	switch (Menu(menu, 5, 2))
 	{
-	case 0: return;
-	case 1: return;
-	case 2: return;
-	case 3: staffStudentMenu(); return;
+	case 0: DealocatedArrString(menu); return;
+	case 1: DealocatedArrString(menu); return;
+	case-1:
+	case 2: staffStudentMenu();	DealocatedArrString(menu); return;
 	}
 }
 void studentMenu() {
-	int so;
 	system("cls");
 	std::cout << "------------ Student --------------";
-	char** menu = new char* [4];
+	char** menu = new char* [3];
 	menu[0] = new char[] {"Add Student"};
 	menu[1] = new char[] {"View Student"}; 
-	menu[2] = new char[] {"Remove Student"}; 
-	menu[3] = new char[] {"Back"};
-	so = Menu(menu, 5, 2);
-	DealocatedArrString(menu);
-	switch (so)
+	menu[2] = new char[] {"Back"};
+	switch (Menu(menu, 5, 2))
 	{
-	case 0: return;
-	case 1: return;
-	case 2: return;
-	case 3: staffStudentMenu(); return;
+	case 0: DealocatedArrString(menu); return;
+	case 1: DealocatedArrString(menu); return;
+	case-1:
+	case 2: staffStudentMenu();	DealocatedArrString(menu); return;
 	}
 }
 
 void addGrade() {
 	system("cls");
-	std::cout << "Grande: ";
+	std::cout << "---------- Add Grande ----------";
+	std::cout << "\nGrade: ";
 	int grade;
 	std::cin >> grade;
 	SchoolYear* a = AddSchoolYear(grade);
 	SaveSchoolYear(a);
+	//delete schoolyear here
+	gradeMenu();
 }
 
 void ViewGrade() {
 	Filelist* list = TakeFileInFolder("Data\\Grade");
+	int size = CountFile(list);
+	int index = 0;
+	while(true){
+		system("cls");
+		std::cout << "-------------- View Grade ---------------";
+		for (int i = 0; i < size; i++) {
+			GotoXY(5, 2 + i);
+			std::cout << ToString(list->filename);
+			list = list->pNext;
+		}
+		
+		GotoXY(5, 2 + index);
+		std::cout <<"> "<<ToString(list->filename)<<" <";
+
+
+		Filelist *listclass = TakeFileInFolder(L"Data\\Grade\\" + list->filename+L"\\Class");
+		int n = CountFile(listclass);
+		Classes** temp = new Classes*[n];
+		for (int i = 0; i < n; i++) {
+			std::wstring tempfile = L"Data\\Grade\\" + list->filename + L"\\Class\\" + listclass->filename;
+			listclass = listclass->pNext;
+			temp[i] = LoadClass(ToString(tempfile).c_str());
+		}
+		for (int i = 0; i < n; i++) {
+			GotoXY(30, 2 + i);
+			std::cout <<"Class: "<<temp[i]->name << "\t\t" << temp[i]->numberofstudent<<" students";
+		}
+		//should delete temp and listclass here
+		char check = 0;
+		while (true)
+		{
+			check = toupper(_getwch());
+			if (check == 'W' || check == KEY_UP) {
+				index == 0 ? index = size - 1 : index -= 1;
+				list = list->pPrev;
+				break;
+			}
+			else if (check == 'S' || check == KEY_DOWN) {
+				index == size - 1 ? index = 0 : index += 1;
+				list = list->pNext;
+				break;
+			}
+			else if (check == KEY_ESC) {
+				//list delete here
+				gradeMenu();
+				return;
+			}
+		}
+	}
+
 }

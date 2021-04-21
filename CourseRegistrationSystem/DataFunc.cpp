@@ -334,7 +334,6 @@ Classes MakeClass(_Student *&all) {
 	std::string temp;
 	std::cin >> temp;
 	result.name = StrToChar(temp);
-
 	char** chooselist = new char* [3];
 	std::cout << "--------Add Student-------";
 	chooselist[0] = new char[] {"From CSV"};
@@ -347,10 +346,10 @@ Classes MakeClass(_Student *&all) {
 		std::cout << "File in Student(.csv): ";
 		std::cin >> temp;
 		_Student* thisclass = FileInStudent(temp);
-		int numberofstu = CountStudent(thisclass);
-		if (numberofstu != 0) {
-			result.ID = new unsigned __int64[numberofstu];
-			for (int i = 0; i < numberofstu; i++) {
+		result.numberofstudent = CountStudent(thisclass);
+		if (result.numberofstudent != 0) {
+			result.ID = new unsigned __int64[result.numberofstudent];
+			for (int i = 0; i < result.numberofstudent; i++) {
 				result.ID[i] = thisclass->student.ID;
 				thisclass = thisclass->pNext;
 			}
@@ -360,10 +359,10 @@ Classes MakeClass(_Student *&all) {
 	}
 	if (take == 1) {
 		_Student* thisclass = TypeInStudent();
-		int numberofstu = CountStudent(thisclass);
-		if (numberofstu != 0) {
-			result.ID = new unsigned __int64[numberofstu];
-			for (int i = 0; i < numberofstu; i++) {
+		result.numberofstudent = CountStudent(thisclass);
+		if (result.numberofstudent != 0) {
+			result.ID = new unsigned __int64[result.numberofstudent];
+			for (int i = 0; i < result.numberofstudent; i++) {
 				result.ID[i] = thisclass->student.ID;
 				thisclass = thisclass->pNext;
 			}
@@ -417,16 +416,33 @@ _Student* TypeInStudent() {
 	return result;
 }
 
-void SaveClass(Classes cl, char* fileout) {
+void SaveClass(Classes cl,const char* fileout) {
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
-	int k;
+	int k = strlen(cl.name) + 1;
+	fo.write((char*)&k, sizeof(int));
+	fo.write(cl.name, k);
 	if (cl.ID == nullptr) k = 0;
-	else k = _msize(cl.ID) / sizeof(__int64*);
+	else k = cl.numberofstudent;
 	fo.write((char*)&k, sizeof(int));
 	for (int i = 0; i < k; i++) {
-		fo.write((char*)&cl.ID[i], sizeof(__int64));
+		fo.write((char*)&cl.ID[i], sizeof(unsigned __int64));
 	}
 	fo.close();
+}
+
+Classes* LoadClass(const char* filein) {
+	Classes* result = new Classes;
+	std::fstream fi(filein, std::fstream::in | std::fstream::binary);
+	int k;
+	fi.read((char*)&k, sizeof(int));
+	result->name = new char[k];
+	fi.read(result->name, k);
+	fi.read((char*)&result->numberofstudent, sizeof(int));
+	result->ID = new unsigned __int64[result->numberofstudent];
+	for (int i = 0; i < result->numberofstudent; i++) {
+		fi.read((char*)&result->ID[i], sizeof(__int64));
+	}
+	return result;
 }
 
 void SaveClass(_Class* cls, char* direction) {
@@ -508,8 +524,12 @@ void SaveSchoolYear(SchoolYear*sch) {
 }
 
 void MakeCurentTime(__int64 year) {
-	wchar_t* curent = new wchar_t[] {L"Data\\SchoolYear"};
+	wchar_t*curent = new wchar_t[] {L"Data"};
 	_wmkdir(curent);
+	delete[] curent;
+	curent = new wchar_t[] {L"Data\\SchoolYear"};
+	_wmkdir(curent);
+	delete[] curent;
 	wchar_t* temp = StrCat(curent, L"\\");
 	StrCat(temp, std::to_string(year).length(), std::to_wstring(year));
 	_wmkdir(temp);
@@ -534,6 +554,7 @@ void MakeCurentTime(__int64 year) {
 		a = StringToDate(k);
 		fo.write((char*)&a, sizeof(Date));
 	}
+	delete[] temp, SemesterTime;
 	fo.close();
 }
 

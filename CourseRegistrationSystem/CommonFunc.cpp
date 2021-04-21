@@ -358,7 +358,7 @@ char* StrToChar(std::string source) {
 wchar_t* StrToChar(std::wstring source) {
 	int n = source.length();
 	wchar_t* result = new wchar_t[n + 1];
-	result[n] = '\0';
+	result[n] = L'\0';
 	for (int i = 0; i < n; i++) {
 		result[i] = source[i];
 	}
@@ -620,6 +620,56 @@ short Choose(char** list, short X, short Y) {
 		else if (book == KEY_ESC) {
 			GotoXY(0, Y + 1);
 			return index;
+		}
+	}
+}
+
+int countFile(Filelist* list) {
+	Filelist* temp = list;
+	int i = 0;
+	do {
+		i += 1;
+		temp = temp->pNext;
+	} while (temp != list);
+	return i;
+}
+
+std::wstring ChoseFolder(Filelist* list, short x, short y) {
+	Filelist* temp = list;
+	int i = 0;
+	_LText();
+	do {
+		GotoXY(x, y + i); std::wcout <<temp->filename;
+		i += 1;
+		temp = temp->pNext;
+	} while (list != temp);
+	i = 0;
+	int n = countFile(list) - 1;
+	GotoXY(x, y); std::wcout << L"> " << temp->filename << L" <";
+	char get = 0;
+	while (true)
+	{
+		get = _getwch();
+		get = toupper(get);
+		if (get == 'W' || get == KEY_UP) {
+			GotoXY(x, y + i); std::wcout << temp->filename << "    ";
+			temp == list ? i = n : i -= 1;
+			temp = temp->pPrev;
+			GotoXY(x, y + i); std::wcout << L"> " << temp->filename << L" <";
+		}
+		else if (get == 'S' || get == KEY_DOWN) {
+			GotoXY(x, y + i); std::wcout << temp->filename << "    ";
+			temp == list->pPrev ? i = 0 : i += 1;
+			temp = temp->pNext;
+			GotoXY(x, y + i); std::wcout << L"> " << temp->filename << L" <";
+		}
+		else if (get == KEY_ENTER || get == ' ') {
+			_SText();
+			return temp->filename;
+		}
+		else if (get == KEY_ESC) {
+			_SText();
+			return L"";
 		}
 	}
 }
