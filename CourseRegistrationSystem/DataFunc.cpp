@@ -683,5 +683,6 @@ Course BinToCourse(std::string filename) {
 	}
 	course.score = new Score[course.numberofstudent];
 	LoadScore(course.score, filename + "Score");
+	delete course.score;
 	return course;
 }
