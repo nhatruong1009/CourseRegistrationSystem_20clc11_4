@@ -1,5 +1,29 @@
 #include"CommonFunc.h"
 #include"Data.h"
+
+
+std::string InputPass() {
+	char temp;
+	std::string pass;
+	while (true)
+	{
+		temp = _getwch();
+		if (temp == KEY_ENTER) break;
+		else if (temp == KEY_ESC) return "";
+		if (temp == KEY_BACKSPACE) {
+			if (pass.size() != 0) {
+				pass.pop_back();
+				std::cout << temp << ' ' << temp;
+			}
+		}
+		if (temp>=' ' && temp<='~'){
+			std::cout << "*";
+			pass.push_back(temp);
+		}
+	}
+	return pass;
+}
+
 void ChangeInfo(Student CurrentUser);
 void SaveLogoutHistory(char* AccountUsername)
 {
@@ -38,13 +62,16 @@ void LoginStu(Student*& CurrentUser)
 {
 	system("cls");	//clear the screen
 	std::string U, P;
+	if (std::cin.tellg() != 0) { std::cin.ignore(1i64, '\n'); }
 	do
 	{
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
 		std::getline(std::cin, U);
 		std::cout << "Password: ";
-		std::getline(std::cin, P);
+		//std::getline(std::cin, P);
+		P = InputPass();
+		if (P == "") { CurrentUser = 0; break; }// don't input password;
 		std::string foldername = "K20";
 		foldername = foldername + U[0] + U[1];
 		Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
@@ -77,7 +104,6 @@ void LoginStu(Student*& CurrentUser)
 		}
 		else { system("cls"); std::cout << "Password is invalid, please try again. " << std::endl; }
 	} while (1);
-	std::cout << "Successful";
 	// Go to Student menu
 }
 
@@ -94,23 +120,20 @@ void ChangePassword(Student CurrentUser)
 	std::string pass1, pass2;
 	do
 	{
-		std::cout << "New password: ";
-		std::cin >> pass1;
-		std::cout << "Confirm password: ";
-		std::cin >> pass2;
-		if (pass1 != pass2) std::cout << "Your password and confirmation password do not match, try again." << std::endl << std::endl;
+		std::cout << "\nNew password: \t\t\t";
+		pass1 = InputPass();
+		std::cout << "\nConfirm password: \t\t";
+		pass2 = InputPass();
+		if (pass1 != pass2) std::cout << "\nYour password and confirmation password do not match, try again." << std::endl << std::endl;
 	} while (pass1 != pass2);
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
 	foldername = foldername + CurrentUser.account.username[0] + CurrentUser.account.username[1];
 	CurrentUser.account.password = StrToChar(pass1);
 	StuToBin(&CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser.account.username));
 	short n;
-	std::cout << "Change successfully " << std::endl;
-	do
-	{
-		std::cout << "Enter 0 to go back ";
-		std::cin >> n;
-	} while (n != 0);
+	std::cout << "\nChange successfully " << std::endl;
+	std::cout << "> Go back <";
+	_getwch();
 	ChangeInfo(CurrentUser);
 }
 
@@ -211,25 +234,27 @@ void ChangeInfo(Student CurrentUser)
 {
 	system("cls");
 	int num;
-	std::cout << "Change information" << std::endl;
-	std::cout << "Choose " << std::endl;
-	std::cout << "1. Password " << std::endl;
-	std::cout << "2. Social ID " << std::endl;
-	std::cout << "3. Date of Birth " << std::endl;
-	std::cout << "0. Go back " << std::endl;
-	std::cin >> num;
-	switch (num)
+	char** menu = new char* [4];
+	menu[0] = new char[] {"Password"};
+	menu[1] = new char[] {"Date Of Birth"};
+	menu[2] = new char[] {"Social ID"};
+	menu[3] = new char[] {"Back"};
+	switch (Menu(menu, 5, 2))
 	{
-	case 0: break; // Go to Student menu
-	case 1:
+	case 0:
 		ChangePassword(CurrentUser);
+		break;
+	case 1:
+		ChangeDOB(CurrentUser);
 		break;
 	case 2:
 		ChangeSocialID(CurrentUser);
 		break;
 	case 3:
-		ChangeDOB(CurrentUser);
-		break;
+	case -1:
+
+		return;
+		// return to student mode
 	}
 }
 

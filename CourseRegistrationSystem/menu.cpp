@@ -79,6 +79,7 @@ void studentMode(Student* stu )
 	if (stu == nullptr)
 	{
 		LoginStu(stu);
+		if (stu == 0) { userTypeMode(); return; }
 	}
 	system("cls");
 	std::cout << "-------------STUDENT---------------";

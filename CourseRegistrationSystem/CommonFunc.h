@@ -8,12 +8,13 @@
 #include<ctime>
 #include<locale>
 
-#define KEY_UP 72 //phím di chuyển lên
-#define KEY_DOWN 80 //phím di chuyển xuống
-#define KEY_LEFT 75 //phím di chuyển trái
-#define KEY_RIGHT 77 //phím di chuyển phải
-#define KEY_ENTER 13//phim enter
-#define KEY_ESC 27// phim esc
+#define KEY_UP 72 
+#define KEY_DOWN 80
+#define KEY_LEFT 75 
+#define KEY_RIGHT 77
+#define KEY_ENTER 13
+#define KEY_ESC 27
+#define KEY_BACKSPACE 8//
 
 void _LText();
 void _SText();
