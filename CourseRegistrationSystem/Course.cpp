@@ -5,95 +5,98 @@ Course MakeCourse();
 void FileOutCourse(_Course*, std::string);
 void AddCourse(_Course*&, Course);
 
-_Course* searchCourse(_Course*);
+_Course* searchCourse(_Course*, std::wstring&);
 _Course* searchID(_Course*, std::wstring);
 _Course* searchName(_Course*, std::wstring);
+_Course* searchTeacher(_Course*, std::wstring);
+
 void printCourseDay(short);
 void displayCourse(_Course*);
-_Course* searchTeacher(_Course*, std::wstring);
 void editCourse(_Course*&);
 
-		
+void displayScore(Score*);
+void searchScore(_Course*);
 
 
 
-//---17/04/2021
-// //fix latter
-//Course StringToCourse(std::wstring str) {
-//	//ID, Course name, Teacher, Credits, Dates, Sessions
-//	Course cou;
-//	wchar_t* temp = nullptr;
-//	int beg = str.find(L',', 0) + 1;
-//	int end = str.find(L',', beg);
-//
-//	temp = new wchar_t[end - beg + 1];
-//	temp[end - beg] = L'\0';
-//	str.copy(temp, end - beg, beg);
-//	_LText();
-//
-//	cou.ID = new char[end - beg + 1];
-//	cou.ID[end - beg] = L'\0';
-//	LStrToStr(cou.ID, end - beg, temp);
-//	delete[] temp;
-//
-//	beg = end + 1;
-//	end = str.find(L',', beg);
-//	cou.name = new wchar_t[end - beg + 1];
-//	cou.name[end - beg] = L'\0';
-//	str.copy(cou.name, end - beg, beg);
-//
-//	beg = end + 1;
-//	end = str.find(L',', beg);
-//	cou.teacher = new wchar_t[end - beg + 1];
-//	cou.teacher[end - beg] = L'\0';
-//	str.copy(cou.teacher, end - beg, beg);
-//
-//	beg = end + 1;
-//	end = str.find(L',', beg);
-//	temp = new wchar_t[end - beg + 1];
-//	temp[end - beg] = L'\0';
-//	str.copy(temp, end - beg, beg);
-//	cou.credit = StringToInt(temp);
-//	delete[] temp;
-//
-//	beg = end + 1;
-//	end = str.find(L',', beg);
-//	temp = new wchar_t[end - beg + 1];
-//	temp[end - beg] = L'\0';
-//	str.copy(temp, end - beg, beg);
-//	cou.performed[0].day[3] = L'\0';
-//	LStrToStr(cou.ID, end - beg, temp);
-//	delete[] temp;
-//
-//	beg = end + 1;
-//	end = str.find(L',', beg);
-//	temp = new wchar_t[end - beg + 1];
-//	temp[end - beg] = L'\0';
-//	str.copy(temp, end - beg, beg);
-//	cou.performed[0].session[2] = L'\0';
-//	LStrToStr(cou.ID, end - beg, temp);
-//	delete[] temp;
-//
-//	beg = end + 1;
-//	end = str.find(L',', beg);
-//	temp = new wchar_t[end - beg + 1];
-//	temp[end - beg] = L'\0';
-//	str.copy(temp, end - beg, beg);
-//	cou.performed[1].day[3] = L'\0';
-//	LStrToStr(cou.ID, end - beg, temp);
-//	delete[] temp;
-//
-//	beg = end + 1;
-//	end = str.find(L',', beg);
-//	temp = new wchar_t[end - beg + 1];
-//	temp[end - beg] = L'\0';
-//	str.copy(temp, end - beg, beg);
-//	cou.performed[1].session[2] = L'\0';
-//	LStrToStr(cou.ID, end - beg, temp);
-//	delete[] temp;
-//
-//	return cou;
-//}
+
+	//---17/04/2021
+	// //fix latter
+	//Course StringToCourse(std::wstring str) {
+	//	//ID, Course name, Teacher, Credits, Dates, Sessions
+	//	Course cou;
+	//	wchar_t* temp = nullptr;
+	//	int beg = str.find(L',', 0) + 1;
+	//	int end = str.find(L',', beg);
+	//
+	//	temp = new wchar_t[end - beg + 1];
+	//	temp[end - beg] = L'\0';
+	//	str.copy(temp, end - beg, beg);
+	//	_LText();
+	//
+	//	cou.ID = new char[end - beg + 1];
+	//	cou.ID[end - beg] = L'\0';
+	//	LStrToStr(cou.ID, end - beg, temp);
+	//	delete[] temp;
+	//
+	//	beg = end + 1;
+	//	end = str.find(L',', beg);
+	//	cou.name = new wchar_t[end - beg + 1];
+	//	cou.name[end - beg] = L'\0';
+	//	str.copy(cou.name, end - beg, beg);
+	//
+	//	beg = end + 1;
+	//	end = str.find(L',', beg);
+	//	cou.teacher = new wchar_t[end - beg + 1];
+	//	cou.teacher[end - beg] = L'\0';
+	//	str.copy(cou.teacher, end - beg, beg);
+	//
+	//	beg = end + 1;
+	//	end = str.find(L',', beg);
+	//	temp = new wchar_t[end - beg + 1];
+	//	temp[end - beg] = L'\0';
+	//	str.copy(temp, end - beg, beg);
+	//	cou.credit = StringToInt(temp);
+	//	delete[] temp;
+	//
+	//	beg = end + 1;
+	//	end = str.find(L',', beg);
+	//	temp = new wchar_t[end - beg + 1];
+	//	temp[end - beg] = L'\0';
+	//	str.copy(temp, end - beg, beg);
+	//	cou.performed[0].day[3] = L'\0';
+	//	LStrToStr(cou.ID, end - beg, temp);
+	//	delete[] temp;
+	//
+	//	beg = end + 1;
+	//	end = str.find(L',', beg);
+	//	temp = new wchar_t[end - beg + 1];
+	//	temp[end - beg] = L'\0';
+	//	str.copy(temp, end - beg, beg);
+	//	cou.performed[0].session[2] = L'\0';
+	//	LStrToStr(cou.ID, end - beg, temp);
+	//	delete[] temp;
+	//
+	//	beg = end + 1;
+	//	end = str.find(L',', beg);
+	//	temp = new wchar_t[end - beg + 1];
+	//	temp[end - beg] = L'\0';
+	//	str.copy(temp, end - beg, beg);
+	//	cou.performed[1].day[3] = L'\0';
+	//	LStrToStr(cou.ID, end - beg, temp);
+	//	delete[] temp;
+	//
+	//	beg = end + 1;
+	//	end = str.find(L',', beg);
+	//	temp = new wchar_t[end - beg + 1];
+	//	temp[end - beg] = L'\0';
+	//	str.copy(temp, end - beg, beg);
+	//	cou.performed[1].session[2] = L'\0';
+	//	LStrToStr(cou.ID, end - beg, temp);
+	//	delete[] temp;
+	//
+	//	return cou;
+	//}
 
 void AddCourse(_Course*& courselist, Course course) {
 	if (courselist == nullptr) { courselist = new _Course{ course }; courselist->pNext = courselist, courselist->pPrev = courselist; return; }
@@ -101,21 +104,21 @@ void AddCourse(_Course*& courselist, Course course) {
 	courselist->pPrev->pPrev->pNext = courselist->pPrev;
 }
 
-//_Course* FileInCourse(std::string filename) {
-//	_LText();
-//	std::wfstream fi(filename, std::wfstream::in);
-//	if (!fi) { return nullptr; }
-//	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
-//	_Course* allCourse = nullptr;
-//	std::wstring temp;
-//	while (fi)
-//	{
-//		std::getline(fi, temp);
-//		if (temp.length() != 0) AddCourse(allCourse, StringToCourse(temp));
-//	}
-//	_SText();
-//	return allCourse;
-//}
+	//_Course* FileInCourse(std::string filename) {
+	//	_LText();
+	//	std::wfstream fi(filename, std::wfstream::in);
+	//	if (!fi) { return nullptr; }
+	//	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
+	//	_Course* allCourse = nullptr;
+	//	std::wstring temp;
+	//	while (fi)
+	//	{
+	//		std::getline(fi, temp);
+	//		if (temp.length() != 0) AddCourse(allCourse, StringToCourse(temp));
+	//	}
+	//	_SText();
+	//	return allCourse;
+	//}
 
 void FileOutCourse(_Course* cou, std::string fileout) {
 	_LText();
@@ -132,7 +135,7 @@ void FileOutCourse(_Course* cou, std::string fileout) {
 	fo.close();
 	_SText();
 }
-//--------
+	//--------
 
 Course MakeCourse() {
 	Course result;
@@ -166,7 +169,7 @@ Course MakeCourse() {
 	std::wcout << "Schedule (ex. MON,S1) \n";// hmm not workking
 
 	wchar_t** day = new wchar_t* [7];
-	wchar_t**ses = new wchar_t* [4];
+	wchar_t** ses = new wchar_t* [4];
 	day[0] = new wchar_t[4]{ L"MON" };
 	day[1] = new wchar_t[4]{ L"TUE" };
 	day[2] = new wchar_t[4]{ L"WED" };
@@ -195,13 +198,25 @@ Course MakeCourse() {
 }
 
 _Course* searchID(_Course* courselist, std::wstring search) {
+	int size = strlen(courselist->course.ID);
+	wchar_t* t = new wchar_t[size];
+	StrToLStr(t, size, courselist->course.ID);
+	if (wcscmp(t, StrToChar(search)) == 0) {
+		delete[]t;
+		return courselist;
+	}
+	delete[]t;
+
 	_Course* first = courselist;
 	courselist = courselist->pNext;
 	while (courselist != first) {
-		int size = strlen(courselist->course.ID);
-		wchar_t* t = new wchar_t[size];
+		size = strlen(courselist->course.ID);
+		t = new wchar_t[size];
 		StrToLStr(t, size, courselist->course.ID);
-		if (wcscmp(t, StrToChar(search)) == 0) return courselist;
+		if (wcscmp(t, StrToChar(search)) == 0) {
+			delete[]t;
+			return courselist;
+		}
 		delete[]t;
 		courselist = courselist->pNext;
 	}
@@ -209,6 +224,7 @@ _Course* searchID(_Course* courselist, std::wstring search) {
 }
 
 _Course* searchName(_Course* courselist, std::wstring search) {
+	if (wcscmp(courselist->course.name, StrToChar(search)) == 0) return courselist;
 	_Course* first = courselist;
 	courselist = courselist->pNext;
 	while (courselist != first) {
@@ -219,6 +235,7 @@ _Course* searchName(_Course* courselist, std::wstring search) {
 }
 
 _Course* searchTeacher(_Course* courselist, std::wstring search) {
+	if (wcscmp(courselist->course.teacher, StrToChar(search)) == 0) return courselist;
 	_Course* first = courselist;
 	courselist = courselist->pNext;
 	while (courselist != first) {
@@ -228,20 +245,20 @@ _Course* searchTeacher(_Course* courselist, std::wstring search) {
 	return nullptr;
 }
 
-_Course* searchCourse(_Course* courselist) {
+_Course* searchCourse(_Course* courselist, std::wstring& search) {
 	_Course* result = nullptr;
-	std::wstring search;
 	char book;
 	_LText();
 	std::wcout << "Search options:\n";
-	std::wcout << "1. Search by ID\n2. Search by Name\n3. Search by Teacher\n0. Cancel\n";
+	std::wcout << "1. Search by ID\n2. Search by Name\n3. Search by Teacher\n0. Cancel\n\n";
 	book = _getwch();
 	while (book < '0' || book > '3') book = _getwch();
 	if (book == '0') {
 		_SText();
 		return nullptr;
 	}
-	std::wcout << "Search: "; std::wcin >> search;
+	std::wcout << "Search: ";
+	std::getline(std::wcin, search);
 	switch (book) {
 	case '1':
 		result = searchID(courselist, search);
@@ -262,7 +279,7 @@ void printCourseDay(short a) {
 	switch (a) {
 	case 0:
 		std::wcout << std::setw(10) << std::left << "Monday";
-			break;
+		break;
 	case 1:
 		std::wcout << std::setw(10) << std::left << "Tuesday";
 		break;
@@ -416,3 +433,49 @@ void editCourse(Course& course) {
 	}
 	_SText();
 }
+
+void displayScore(Score* a) {
+	_LText();
+	std::wcout << "Name: " << a->name;
+	std::wcout << "\nID: " << a->ID;
+	std::wcout << "\nScore: ";
+	std::wcout << "\nMid term: " << a->mids;
+	std::wcout << "   Final: " << a->finals;
+	std::wcout << "   Others: " << a->others;
+	std::wcout << "\nTotal: " << a->totals;
+	_SText();
+}
+
+void searchScore(_Course* allcourse) {
+	_LText();
+	unsigned int id;
+	std::wstring search;
+	_Course* cou = searchCourse(allcourse, search);
+	system("cls");
+	std::wcout << "Course: " << search << "\n";
+	std::wcout << "Student ID: ";
+	std::wcin >> id;
+	std::wcin.ignore(1000, L'\n');
+
+	if (cou->course.score = nullptr) {
+		std::wcout << "No score available\n";
+	}
+	else if (id == cou->course.score->ID) {
+		std::wcout << "\n";
+		displayScore(cou->course.score);
+	}
+	else {
+		Score* first = cou->course.score;
+		Score* cur = first->pNext;
+		while (cur != first) {
+			if (id == cur->ID) break;
+			cur = cur->pNext;
+		}
+		if (cur != first) displayScore(cur);
+		else std::wcout << "Unable to find student\n";
+	}
+	char c = _getwch();
+	_SText();
+}
+	
+
