@@ -301,28 +301,28 @@ void printCourseDay(short a) {
 	}
 }
 
-void displayCourse(Course course) {
+void displayCourse(_Course* cou) {
 	_LText();
-	std::wcout << "1. Name: " << course.name << "\n";
-	std::wcout << "2. ID: " << course.ID << "\n";
-	std::wcout << "3. Teacher: " << course.teacher << "\n";
-	std::wcout << "4. Credits: " << course.credit << "\n";
-	std::wcout << "5. Number of students: " << course.numberofstudent << "/" << course.maxstudent << "\n";
+	std::wcout << "1. Name: " << cou->course.name << "\n";
+	std::wcout << "2. ID: " << cou->course.ID << "\n";
+	std::wcout << "3. Teacher: " << cou->course.teacher << "\n";
+	std::wcout << "4. Credits: " << cou->course.credit << "\n";
+	std::wcout << "5. Number of students: " << cou->course.numberofstudent << "/" << cou->course.maxstudent << "\n";
 	std::wcout << "6. Schedule:\n";
 	for (int i = 0; i < 2; i++) {
-		std::wcout << "   Day: "; printCourseDay(course.performed[i].day);
-		std::wcout << "   Session: S" << course.performed[i].session + 1 << "\n";
+		std::wcout << "   Day: "; printCourseDay(cou->course.performed[i].day);
+		std::wcout << "   Session: S" << cou->course.performed[i].session + 1 << "\n";
 	}
 	_SText();
 }
 
-void editCourse(Course& course) {
+void editCourse(_Course*& cou) {
 	char book;
 	int size;
 	std::wstring temp;
 	_LText();
 	std::wcout << "Edit Course\n\n\n";
-	displayCourse(course);
+	displayCourse(cou);
 	std::wcout << "\n" << std::setw(12) << "0. Done.\n";
 	while (1) {
 		book = _getwch();
@@ -341,10 +341,10 @@ void editCourse(Course& course) {
 			std::wcout << "Course name: ";
 			std::getline(std::wcin, temp);
 			int size = temp.length();
-			delete[]course.name;
-			course.name = new wchar_t[size + 1];
-			course.name[size] = L'\0';
-			temp.copy(course.name, size);
+			delete[]cou->course.name;
+			cou->course.name = new wchar_t[size + 1];
+			cou->course.name[size] = L'\0';
+			temp.copy(cou->course.name, size);
 			break;
 
 		case '2':
@@ -356,10 +356,10 @@ void editCourse(Course& course) {
 			std::wcout << "Course ID: ";
 			std::getline(std::wcin, temp);
 			size = temp.length();
-			delete[]course.ID;
-			course.ID = new char[size + 1];
-			course.ID[size] = '\0';
-			LStrToStr(course.ID, size, temp);
+			delete[]cou->course.ID;
+			cou->course.ID = new char[size + 1];
+			cou->course.ID[size] = '\0';
+			LStrToStr(cou->course.ID, size, temp);
 			break;
 
 		case'3':
@@ -371,10 +371,10 @@ void editCourse(Course& course) {
 			std::wcout << "Teacher name: ";
 			std::getline(std::wcin, temp);
 			size = temp.length();
-			delete[]course.teacher;
-			course.teacher = new wchar_t[size + 1];
-			course.teacher[size] = L'\0';
-			temp.copy(course.teacher, size);
+			delete[]cou->course.teacher;
+			cou->course.teacher = new wchar_t[size + 1];
+			cou->course.teacher[size] = L'\0';
+			temp.copy(cou->course.teacher, size);
 			break;
 
 		case '4':
@@ -384,7 +384,7 @@ void editCourse(Course& course) {
 			}
 			GotoXY(10, 10);
 			std::wcout << "Number of credits: ";
-			std::wcin >> course.credit;
+			std::wcin >> cou->course.credit;
 			std::wcin.ignore(1000, L'\n');
 			break;
 
@@ -419,17 +419,17 @@ void editCourse(Course& course) {
 			for (int i = 0; i < 2; i++) {
 				GotoXY(10, 10 + i);
 				std::wcout << "Day: ";
-				course.performed[i].day = Choose(day, 15, 10 + i);
+				cou->course.performed[i].day = Choose(day, 15, 10 + i);
 				GotoXY(20, 10 + i);
 				std::wcout << "Ses: ";
-				course.performed[i].session = Choose(ses, 25, 10 + i);
+				cou->course.performed[i].session = Choose(ses, 25, 10 + i);
 			}
 			DealocatedArrString(ses);
 			DealocatedArrString(day);
 			break;
 		}
 		system("cls");
-		displayCourse(course);
+		displayCourse(cou);
 	}
 	_SText();
 }
@@ -474,7 +474,6 @@ void searchScore(_Course* allcourse) {
 		if (cur != first) displayScore(cur);
 		else std::wcout << "Unable to find student\n";
 	}
-	char c = _getwch();
 	_SText();
 }
 	
