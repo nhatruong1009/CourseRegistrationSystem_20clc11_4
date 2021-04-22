@@ -36,7 +36,7 @@ struct Course
 	Performed* performed = new Performed[2];
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
-	//unsigned __int64* stuID;
+	unsigned __int64* stuID;
 	Score* score=nullptr;
 };
 struct Student

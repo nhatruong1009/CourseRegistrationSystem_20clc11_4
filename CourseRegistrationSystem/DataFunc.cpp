@@ -643,7 +643,7 @@ void CourseToBIn(Course* course, std::string filename,std::wstring current) {
 	fo.write((char*)&course->numberofstudent, sizeof(short));
 	
 	for (int i = 0; i < course->numberofstudent; i++) {
-		fo.write((char*)&course->ID[i], sizeof(__int64));
+		fo.write((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}
 	SaveScore(course->score, ToString(current) + filename + "Score");
 	fo.close();
@@ -676,9 +676,9 @@ Course* BinToCourse(std::string filename) {
 	fi.read((char*)&course->numberofstudent, sizeof(short));
 
 	for (int i = 0; i < course->numberofstudent; i++) {
-		fi.read((char*)&course->ID[i], sizeof(__int64));
+		fi.read((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}
 	course->score = new Score[course->numberofstudent];
-	LoadScore(course->score, filename + "Score");
+	LoadScore(course->score, filename + "Scores");
 	return course;
 }

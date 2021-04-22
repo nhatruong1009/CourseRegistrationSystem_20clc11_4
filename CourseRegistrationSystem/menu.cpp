@@ -196,6 +196,8 @@ void addGrade() {
 	SchoolYear* a = AddSchoolYear(grade);
 	std::cout << "Saving.....";
 	SaveSchoolYear(a);
+	std::cout << " done";
+	_getwch();
 	//delete schoolyear here
 	gradeMenu();
 }
@@ -337,6 +339,7 @@ void RegisterCouse(Student* stu) {
 void ViewCouse(Student* stu) {
 	system("cls");
 	std::cout << "------------- All Course ---------------";
-	if (stu->allcourse == nullptr) { std::cout << "Empty\n> Return <"; _getwch(); return; }
-
+	if (stu->allcourse == nullptr) { std::cout << "\nEmpty\n> Return <"; _getwch(); return; }
+	int n = _msize(stu->allcourse) / sizeof(char*);
+	//Course*
 }
