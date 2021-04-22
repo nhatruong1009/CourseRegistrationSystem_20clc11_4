@@ -327,8 +327,8 @@ void AddClass(_Class*& cls, Classes sourse) {
 }
 
 
-Classes MakeClass(_Student *&all) {
-	system("cls");
+Classes MakeClass(_Student *&all,bool cls,int x, int y ) {
+	if(cls) system("cls");
 	Classes result;
 	std::cout << "ClassName: ";
 	std::string temp;
@@ -340,7 +340,7 @@ Classes MakeClass(_Student *&all) {
 	chooselist[1] = new char[] {"TypeIn"};
 	chooselist[2] = new char[] {"Add Later"};
 	
-	int take = Menu(chooselist, 5, 2);
+	int take = Menu(chooselist, x, y);
 	DealocatedArrString(chooselist);
 	if (take == 0) {
 		std::cout << "File in Student(.csv): ";
@@ -467,6 +467,8 @@ void PrintClass(Classes a) {
 		}
 	}
 }
+
+
 SchoolYear* AddSchoolYear(int year) {
 	wchar_t* data = new wchar_t[] {L"Data"};
 	_wmkdir(data);
@@ -479,13 +481,6 @@ SchoolYear* AddSchoolYear(int year) {
 	wchar_t* yy = NumToLStr(a->year);
 	wchar_t* file = new wchar_t[]{ L"Data\\Grade\\K" };
 	StrCat(file, wcslen(yy), yy);
-	if (_wmkdir(file)==-1) {
-		std::cout << "School year had made!";
-		delete a;
-		delete[]yy, file;
-		return nullptr;
-	}
-	else {
 		wchar_t* temp = StrCat(file, L"\\Student");
 		_wmkdir(temp);
 		delete[] temp;
@@ -511,7 +506,7 @@ SchoolYear* AddSchoolYear(int year) {
 		DealocatedArrString(choselist);
 		delete[]yy, file;
 		return a;
-	}
+
 }
 void SaveSchoolYear(SchoolYear*sch) {
 	if (sch == nullptr) return;

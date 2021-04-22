@@ -113,7 +113,11 @@ void MakeCurentTime(__int64 year);
 std::wstring ViewSemesterTime();
 int CountFile(Filelist* a);
 Course MakeCourse();
-Classes MakeClass(_Student*& all);
+Classes MakeClass(_Student*& all, bool cls = true, int x = 5, int y = 2);
 void SaveClass(Classes cl,const char* fileout);
+
+
+void LoginStu(Student*& CurrentUser);
+void ChangeInfo(Student CurrentUser);
 #endif // _Structs
 

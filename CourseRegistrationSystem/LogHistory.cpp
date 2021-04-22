@@ -34,21 +34,23 @@ void SaveCourseCancelHis(char* AccountUsername, Course course)
 	file.close();
 }
 
-void LoginStu(Student& CurrentUser)
+void LoginStu(Student*& CurrentUser)
 {
 	system("cls");	//clear the screen
 	std::string U, P;
 	do
 	{
+		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
-		std::cin >> U;
+		std::getline(std::cin, U);
 		std::cout << "Password: ";
-		std::cin >> P;
+		std::getline(std::cin, P);
 		std::string foldername = "K20";
 		foldername = foldername + U[0] + U[1];
 		Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
 		if (list == nullptr)
 		{
+			system("cls");
 			std::cout << "Username is invalid, please try again." << std::endl;
 			continue;
 		}
@@ -62,17 +64,18 @@ void LoginStu(Student& CurrentUser)
 		} while (cur != list);
 		if (U != ToString(cur->filename))
 		{
+			system("cls");
 			std::cout << "Username is invalid, please try again." << std::endl;
 			continue;
 		}
 		Student a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + ToString(cur->filename));
-		if (P == ToString(a.account.password))
+		if (P.compare(ToString(a.account.password))==0)
 		{
-			CurrentUser = a;
+			CurrentUser = new Student{ a };
 			SaveLoginHistory(a.account.username);
 			break;
 		}
-		else std::cout << "Password is invalid, please try again. " << std::endl;
+		else { system("cls"); std::cout << "Password is invalid, please try again. " << std::endl; }
 	} while (1);
 	std::cout << "Successful";
 	// Go to Student menu
@@ -178,6 +181,8 @@ void ChangeInfo(Student CurrentUser)
 {
 	system("cls");
 	int num;
+
+
 	std::cout << "Change information" << std::endl;
 	std::cout << "Choose " << std::endl;
 	std::cout << "0. Go back " << std::endl;

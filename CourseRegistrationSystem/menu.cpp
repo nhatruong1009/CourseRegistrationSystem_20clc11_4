@@ -74,22 +74,26 @@ void userTypeMode()
 	case 2: return;
 	}
 }
-void studentMode()
+void studentMode(Student* stu )
 {
+	if (stu == nullptr)
+	{
+		LoginStu(stu);
+	}
 	system("cls");
 	std::cout << "-------------STUDENT---------------";
 	char** menu = new char* [3];
-	menu[0] = new char[] {"Log In"};
-	menu[1] = new char[] {"Register"};
+	menu[0] = new char[] {"Infomation"};
+	menu[1] = new char[] {"Course"};
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
 	case 0:
-		std::cout << "   Ban da chon 1";
+		StuInformation(stu);
 		DealocatedArrString(menu);
 		return;
 	case 1:
-		std::cout << "   Ban da chon 2";
+		CourseInformaion(stu);
 		DealocatedArrString(menu);
 		return;
 	case -1:
@@ -161,8 +165,8 @@ void classMenu() {
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: DealocatedArrString(menu); return;
-	case 1: DealocatedArrString(menu); return;
+	case 0: AddClass(); DealocatedArrString(menu); return;
+	case 1: ViewClass();  DealocatedArrString(menu); return;
 	case-1:
 	case 2: staffStudentMenu();	DealocatedArrString(menu); return;
 	}
@@ -182,7 +186,6 @@ void studentMenu() {
 	case 2: staffStudentMenu();	DealocatedArrString(menu); return;
 	}
 }
-
 void addGrade() {
 	system("cls");
 	std::cout << "---------- Add Grande ----------";
@@ -194,7 +197,6 @@ void addGrade() {
 	//delete schoolyear here
 	gradeMenu();
 }
-
 void ViewGrade() {
 	Filelist* list = TakeFileInFolder("Data\\Grade");
 	int size = CountFile(list);
@@ -246,5 +248,71 @@ void ViewGrade() {
 			}
 		}
 	}
+}
+void AddClass() {
+	system("cls");
+	std::cout << "----------- Add Class (chose grade) ------------\n";
+	Filelist* list = TakeFileInFolder("Data\\Grade");
+	std::wstring grade = ChoseFolder(list, 5, 2);
+	if(grade !=L""){
+		int year = StringToInt(&grade[1]);
+		SchoolYear* newscholl = AddSchoolYear(year);
+		SaveSchoolYear(newscholl);
+	}
+
+	//dealocated list here
+	classMenu();
+}
+
+void DoSomeThingInClass(Classes* cls) {
+	Student* stu = new Student[cls->numberofstudent];
+}
+void ViewClass() {
+	system("cls");
+	std::cout<<"---------- View Class ----------";
+	Filelist* grade = TakeFileInFolder("Data\\Grade");
+	std::wstring chosegrade = ChoseFolder(grade, 5, 2);
+	if (chosegrade != L"") {
+		Filelist* classlist = TakeFileInFolder("Data\\Grade\\" + ToString(chosegrade) + "\\Class");
+		std::wstring choseclass = ChoseFolder(classlist, 20, 2);
+		std::string classfile = "Data\\Grade\\" + ToString(chosegrade) + "\\Class" + ToString(choseclass);
+		Classes* classnow = LoadClass(classfile.c_str());
+
+
+		DoSomeThingInClass(classnow);
+		//delete classnow here
+		//do somthing with file class here
+	}
+	classMenu();
+}
+
+
+
+void StuInformation(Student* stu){
+	system("cls");
+	std::cout << "Student ID: " << stu->ID<<'\n';
+	_LText();
+	std::wcout <<"Name: " <<stu->firstname << "\t" << stu->lastname << "\n";
+	_SText();
+	std::cout << "Birth: " << stu->birth << "\t\t" << "Social ID: " << stu->SocialID<<'\n';
+	std::cout << "Gender: "; stu->gender == 'M' ? std::cout << "Men\n" : std::cout << "Women\n";
+	std::cout << "GPA: " << stu->GPA << '\n';
+
+	char** menu = new char* [2];
+	menu[0] = new char[] {"Change Infomation"};
+	menu[1] = new char[] {"Return"};
+	switch (Menu(menu,5,7))
+	{
+	case 0: ChangeInfo(*stu);
+	case-1:
+	case 1:
+		break;
+	}
+
+	DealocatedArrString(menu);
+	studentMode(stu);
+}
+
+void CourseInformaion(Student* stu){
 
 }
