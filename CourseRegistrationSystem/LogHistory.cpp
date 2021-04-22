@@ -40,7 +40,7 @@ void LoginStu(Student*& CurrentUser)
 {
 	system("cls");	//clear the screen
 	std::string U, P;
-	std::cin.clear();
+	if (std::cin.tellg() != 0) std::cin.clear();
 	do
 	{
 		std::cout << "----------- Login -----------\n";

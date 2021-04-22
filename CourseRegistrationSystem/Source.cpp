@@ -8,7 +8,7 @@
 #include <filesystem>
 void main()
 {
-	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127370");
+	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
 	userTypeMode();
 }
 

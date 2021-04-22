@@ -316,123 +316,123 @@ void displayCourse(_Course* cou) {
 	_SText();
 }
 
-void editCourse(_Course*& cou) {
-	char book;
-	int size;
-	std::wstring temp;
-	_LText();
-	std::wcout << "Edit Course\n\n\n";
-	displayCourse(cou);
-	std::wcout << "\n" << std::setw(12) << "0. Done.\n";
-	while (1) {
-		book = _getwch();
-		while (book < '0' || book > '6') book = _getwch();
-		if (book == '0') {
-			_SText();
-			return;
-		}
-		switch (book) {
-		case '1':
-			for (int i = 0; i < 3; i++) {
-				GotoXY(7, 9 + i);
-				for (int j = 0; j < 35; j++) std::wcout << L" ";
-			}
-			GotoXY(10, 10);
-			std::wcout << "Course name: ";
-			std::getline(std::wcin, temp);
-			int size = temp.length();
-			delete[]cou->course.name;
-			cou->course.name = new wchar_t[size + 1];
-			cou->course.name[size] = L'\0';
-			temp.copy(cou->course.name, size);
-			break;
-
-		case '2':
-			for (int i = 0; i < 3; i++) {
-				GotoXY(7, 9 + i);
-				for (int j = 0; j < 35; j++) std::wcout << L" ";
-			}
-			GotoXY(10, 10);
-			std::wcout << "Course ID: ";
-			std::getline(std::wcin, temp);
-			size = temp.length();
-			delete[]cou->course.ID;
-			cou->course.ID = new char[size + 1];
-			cou->course.ID[size] = '\0';
-			LStrToStr(cou->course.ID, size, temp);
-			break;
-
-		case'3':
-			for (int i = 0; i < 3; i++) {
-				GotoXY(7, 9 + i);
-				for (int j = 0; j < 20; j++) std::wcout << L" ";
-			}
-			GotoXY(10, 10);
-			std::wcout << "Teacher name: ";
-			std::getline(std::wcin, temp);
-			size = temp.length();
-			delete[]cou->course.teacher;
-			cou->course.teacher = new wchar_t[size + 1];
-			cou->course.teacher[size] = L'\0';
-			temp.copy(cou->course.teacher, size);
-			break;
-
-		case '4':
-			for (int i = 0; i < 3; i++) {
-				GotoXY(7, 9 + i);
-				for (int j = 0; j < 15; j++) std::wcout << L" ";
-			}
-			GotoXY(10, 10);
-			std::wcout << "Number of credits: ";
-			std::wcin >> cou->course.credit;
-			std::wcin.ignore(1000, L'\n');
-			break;
-
-		case '5':
-			for (int i = 0; i < 3; i++) {
-				GotoXY(7, 9 + i);
-				for (int j = 0; j < 15; j++) std::wcout << L" ";
-			}
-			GotoXY(10, 10);
-			std::wcout << "Unchangable";
-			break;
-
-		case '6':
-			wchar_t** day = new wchar_t* [7];
-			wchar_t** ses = new wchar_t* [4];
-			day[0] = new wchar_t[4]{ L"MON" };
-			day[1] = new wchar_t[4]{ L"TUE" };
-			day[2] = new wchar_t[4]{ L"WED" };
-			day[3] = new wchar_t[4]{ L"THU" };
-			day[4] = new wchar_t[4]{ L"FRI" };
-			day[5] = new wchar_t[4]{ L"SAT" };
-			day[6] = new wchar_t[4]{ L"SUN" };
-
-			ses[0] = new wchar_t[3]{ L"S1" };
-			ses[1] = new wchar_t[3]{ L"S2" };
-			ses[2] = new wchar_t[3]{ L"S3" };
-			ses[3] = new wchar_t[3]{ L"S4" };
-			for (int i = 0; i < 4; i++) {
-				GotoXY(7, 9 + i);
-				for (int j = 0; j < 35; j++) std::wcout << L" ";
-			}
-			for (int i = 0; i < 2; i++) {
-				GotoXY(10, 10 + i);
-				std::wcout << "Day: ";
-				cou->course.performed[i].day = Choose(day, 15, 10 + i);
-				GotoXY(20, 10 + i);
-				std::wcout << "Ses: ";
-				cou->course.performed[i].session = Choose(ses, 25, 10 + i);
-			}
-			DealocatedArrString(ses);
-			DealocatedArrString(day);
-			break;
-		}
-		system("cls");
-		displayCourse(cou);
-	}
-	_SText();
-}
+//void editCourse(_Course*& cou) {
+//	char book;
+//	int size;
+//	std::wstring temp;
+//	_LText();
+//	std::wcout << "Edit Course\n\n\n";
+//	displayCourse(cou);
+//	std::wcout << "\n" << std::setw(12) << "0. Done.\n";
+//	while (1) {
+//		book = _getwch();
+//		while (book < '0' || book > '6') book = _getwch();
+//		if (book == '0') {
+//			_SText();
+//			return;
+//		}
+//		switch (book) {
+//		case '1':
+//			for (int i = 0; i < 3; i++) {
+//				GotoXY(7, 9 + i);
+//				for (int j = 0; j < 35; j++) std::wcout << L" ";
+//			}
+//			GotoXY(10, 10);
+//			std::wcout << "Course name: ";
+//			std::getline(std::wcin, temp);
+//			int size = temp.length();
+//			delete[]cou->course.name;
+//			cou->course.name = new wchar_t[size + 1];
+//			cou->course.name[size] = L'\0';
+//			temp.copy(cou->course.name, size);
+//			break;
+//
+//		case '2':
+//			for (int i = 0; i < 3; i++) {
+//				GotoXY(7, 9 + i);
+//				for (int j = 0; j < 35; j++) std::wcout << L" ";
+//			}
+//			GotoXY(10, 10);
+//			std::wcout << "Course ID: ";
+//			std::getline(std::wcin, temp);
+//			size = temp.length();
+//			delete[]cou->course.ID;
+//			cou->course.ID = new char[size + 1];
+//			cou->course.ID[size] = '\0';
+//			LStrToStr(cou->course.ID, size, temp);
+//			break;
+//
+//		case'3':
+//			for (int i = 0; i < 3; i++) {
+//				GotoXY(7, 9 + i);
+//				for (int j = 0; j < 20; j++) std::wcout << L" ";
+//			}
+//			GotoXY(10, 10);
+//			std::wcout << "Teacher name: ";
+//			std::getline(std::wcin, temp);
+//			size = temp.length();
+//			delete[]cou->course.teacher;
+//			cou->course.teacher = new wchar_t[size + 1];
+//			cou->course.teacher[size] = L'\0';
+//			temp.copy(cou->course.teacher, size);
+//			break;
+//
+//		case '4':
+//			for (int i = 0; i < 3; i++) {
+//				GotoXY(7, 9 + i);
+//				for (int j = 0; j < 15; j++) std::wcout << L" ";
+//			}
+//			GotoXY(10, 10);
+//			std::wcout << "Number of credits: ";
+//			std::wcin >> cou->course.credit;
+//			std::wcin.ignore(1000, L'\n');
+//			break;
+//
+//		case '5':
+//			for (int i = 0; i < 3; i++) {
+//				GotoXY(7, 9 + i);
+//				for (int j = 0; j < 15; j++) std::wcout << L" ";
+//			}
+//			GotoXY(10, 10);
+//			std::wcout << "Unchangable";
+//			break;
+//
+//		case '6':
+//			wchar_t** day = new wchar_t* [7];
+//			wchar_t** ses = new wchar_t* [4];
+//			day[0] = new wchar_t[4]{ L"MON" };
+//			day[1] = new wchar_t[4]{ L"TUE" };
+//			day[2] = new wchar_t[4]{ L"WED" };
+//			day[3] = new wchar_t[4]{ L"THU" };
+//			day[4] = new wchar_t[4]{ L"FRI" };
+//			day[5] = new wchar_t[4]{ L"SAT" };
+//			day[6] = new wchar_t[4]{ L"SUN" };
+//
+//			ses[0] = new wchar_t[3]{ L"S1" };
+//			ses[1] = new wchar_t[3]{ L"S2" };
+//			ses[2] = new wchar_t[3]{ L"S3" };
+//			ses[3] = new wchar_t[3]{ L"S4" };
+//			for (int i = 0; i < 4; i++) {
+//				GotoXY(7, 9 + i);
+//				for (int j = 0; j < 35; j++) std::wcout << L" ";
+//			}
+//			for (int i = 0; i < 2; i++) {
+//				GotoXY(10, 10 + i);
+//				std::wcout << "Day: ";
+//				cou->course.performed[i].day = Choose(day, 15, 10 + i);
+//				GotoXY(20, 10 + i);
+//				std::wcout << "Ses: ";
+//				cou->course.performed[i].session = Choose(ses, 25, 10 + i);
+//			}
+//			DealocatedArrString(ses);
+//			DealocatedArrString(day);
+//			break;
+//		}
+//		system("cls");
+//		displayCourse(cou);
+//	}
+//	_SText();
+//}
 
 void displayScore(Score* a) {
 	_LText();

@@ -121,7 +121,6 @@ void FileOutStudent(_Student* stu, std::string fileout) {
 	_SText();
 }
 void StuToBin(Student* stu, std::string fileout) {
-	remove(fileout.c_str());
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
 	int k = 0;
 	k = strlen(stu->account.password) + 1;
@@ -184,11 +183,9 @@ Student* BinToStu(std::string filein) {
 
 	fi.read((char*)&k, sizeof(int));
 	stu->firstname = new wchar_t[k];
-	std::cout << k;
 	fi.read((char*)&*stu->firstname, (sizeof(wchar_t) / sizeof(char)) * k);
 
 	fi.read((char*)&k, sizeof(int));
-	std::cout<<'\t'<< k;
 	stu->lastname = new wchar_t[k];
 	fi.read((char*)&*stu->lastname, (sizeof(wchar_t) / sizeof(char)) * k);
 
@@ -652,36 +649,36 @@ void CourseToBIn(Course* course, std::string filename,std::wstring current) {
 	fo.close();
 }
 
-Course BinToCourse(std::string filename) {
-	Course course;
+Course* BinToCourse(std::string filename) {
+	Course* course=new Course;
 	std::fstream fi(filename, std::fstream::in | std::fstream::binary);
 	int k;
 
 	fi.read((char*)&k, sizeof(int));
-	course.ID = new char[k];
-	fi.read(course.ID, k);
+	course->ID = new char[k];
+	fi.read(course->ID, k);
 
 	fi.read((char*)&k, sizeof(int));
-	course.name = new wchar_t[k];
-	fi.read((char*)&course.name, 2 * k);
+	course->name = new wchar_t[k];
+	fi.read((char*)&course->name, 2 * k);
 
 	fi.read((char*)&k, sizeof(int));
-	course.teacher = new wchar_t[k];
-	fi.read((char*)&course.teacher, 2 * k);
+	course->teacher = new wchar_t[k];
+	fi.read((char*)&course->teacher, 2 * k);
 
-	fi.read((char*)&course.performed[0].day, sizeof(short));
-	fi.read((char*)&course.performed[0].session, sizeof(short));
-	fi.read((char*)&course.performed[1].day, sizeof(short));
-	fi.read((char*)&course.performed[1].session, sizeof(short));
+	fi.read((char*)&course->performed[0].day, sizeof(short));
+	fi.read((char*)&course->performed[0].session, sizeof(short));
+	fi.read((char*)&course->performed[1].day, sizeof(short));
+	fi.read((char*)&course->performed[1].session, sizeof(short));
 
-	fi.read((char*)&course.credit, sizeof(short));
-	fi.read((char*)&course.maxstudent, sizeof(short));
-	fi.read((char*)&course.numberofstudent, sizeof(short));
+	fi.read((char*)&course->credit, sizeof(short));
+	fi.read((char*)&course->maxstudent, sizeof(short));
+	fi.read((char*)&course->numberofstudent, sizeof(short));
 
-	for (int i = 0; i < course.numberofstudent; i++) {
-		fi.read((char*)&course.ID[i], sizeof(__int64));
+	for (int i = 0; i < course->numberofstudent; i++) {
+		fi.read((char*)&course->ID[i], sizeof(__int64));
 	}
-	course.score = new Score[course.numberofstudent];
-	LoadScore(course.score, filename + "Score");
+	course->score = new Score[course->numberofstudent];
+	LoadScore(course->score, filename + "Score");
 	return course;
 }

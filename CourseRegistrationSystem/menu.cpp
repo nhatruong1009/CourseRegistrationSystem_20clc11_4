@@ -194,6 +194,7 @@ void addGrade() {
 	int grade;
 	std::cin >> grade;
 	SchoolYear* a = AddSchoolYear(grade);
+	std::cout << "Saving.....";
 	SaveSchoolYear(a);
 	//delete schoolyear here
 	gradeMenu();
@@ -302,18 +303,40 @@ void StuInformation(Student* stu){
 	char** menu = new char* [2];
 	menu[0] = new char[] {"Change Infomation"};
 	menu[1] = new char[] {"Return"};
-	switch (Menu(menu,5,7))
+	switch (Menu(menu, 5, 7))
 	{
 	case 0: ChangeInfo(stu);
 	case-1:
 	case 1:
 		break;
 	}
-
 	DealocatedArrString(menu);
 	studentMode(stu);
 }
 
 void CourseInformaion(Student* stu){
+	system("cls");
+	std::cout << "------------- Course ---------------";
+	char** menu = new char* [3];
+	menu[0] = new char[] {"Register Course"};
+	menu[1] = new char[] {"Completed Courses"};
+	menu[2] = new char[] {"Back"};
+	switch (Menu(menu, 5, 2)) {
+	case 0: RegisterCouse(stu); break;
+	case 1: ViewCouse(stu); break;
+	case 2:
+	case -1:
+		break;
+	}
+	studentMode(stu);
+}
+
+void RegisterCouse(Student* stu) {
+
+}
+void ViewCouse(Student* stu) {
+	system("cls");
+	std::cout << "------------- All Course ---------------";
+	if (stu->allcourse == nullptr) { std::cout << "Empty\n> Return <"; _getwch(); return; }
 
 }

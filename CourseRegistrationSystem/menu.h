@@ -18,4 +18,6 @@ void AddClass();
 void ViewClass();
 void StuInformation(Student* stu);
 void CourseInformaion(Student* stu);
+void RegisterCouse(Student* stu);
+void ViewCouse(Student* stu);
 #endif // !_Menu
