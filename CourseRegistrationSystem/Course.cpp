@@ -5,6 +5,8 @@ Course MakeCourse();
 void FileOutCourse(_Course*, std::string);
 void AddCourse(_Course*&, Course);
 
+
+Course* searchCourseFile();
 _Course* searchCourse(_Course*, std::wstring&);
 _Course* searchID(_Course*, std::wstring);
 _Course* searchName(_Course*, std::wstring);
@@ -457,7 +459,7 @@ void searchScore(_Course* allcourse) {
 	std::wcin >> id;
 	std::wcin.ignore(1000, L'\n');
 
-	if (cou->course.score = nullptr) {
+	if (cou->course.score == nullptr) {
 		std::wcout << "No score available\n";
 	}
 	else if (id == cou->course.score->ID) {
@@ -478,3 +480,21 @@ void searchScore(_Course* allcourse) {
 }
 	
 
+Course* searchCourseFile() {
+	std::string search;
+	std::cout << "Search: ";
+	std::cin >> search;
+	char year[5];
+	year[4] = '\0';
+	int size = search.length();
+	int n = size - 5;
+	for (int i = 0; i < 4; i++) {
+		year[i] = search[n + i];
+	}
+	char* local = new char[] {"Data\\Grade\\K"};
+	char* temp = StrCat(year, "\\Semester" + search[size - 1]);
+	char* direction = StrCat(local, temp);
+	Course* cou = BinToCourse(direction);
+	if (cou == nullptr) std::cout << "Unable to find " << search << "\n";
+	return cou;
+}
