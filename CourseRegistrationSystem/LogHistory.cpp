@@ -230,20 +230,49 @@ void ChangeInfo(Student*& CurrentUser)
 	}
 }
 
-_Student* Search(unsigned __int64 ID[])
+_Student* Search(unsigned __int64* ID)
 {
 	_Student* head = nullptr, * cur;
 	head = new _Student;	// dummy node;
 	cur = head;
 	head->pNext = head->pPrev = nullptr;
-	int n = sizeof(ID) / 8;
+	int n = _msize(ID)/8;
 	for (int i = 0; i < n; i++)
 	{
 		std::string id = ToString(NumToStr(ID[i]));
+		std::string foldername = "K20"; 
+		foldername = foldername + id[0] + id[1];
+		Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
+		if (list == nullptr)
+		{
+			std::cout << id << " does not exist "<<std::endl;
+		}
+		Filelist* curlist = list;
+		do
+		{
+			if (id == ToString(curlist->filename))
+				break;
+			curlist = curlist->pNext;
+		} while (curlist != list);
+		if (id != ToString(curlist->filename))
+			std::cout << id << " does not exist " << std::endl;
+		else
+		{
+			cur->pNext = new _Student;
+			cur->pNext->pPrev = cur;
+			cur = cur->pNext;
+			cur->student = *BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + ToString(curlist->filename));
+			cur->pNext = head;
+			head->pPrev = cur;
+		}
 	}
-	cur = nullptr;
 	_Student* temp = head;
 	head = head->pNext;
+	cur->pNext = head;
+	if (head)
+		head->pPrev = cur;
 	delete temp;	//delete dummy node
 	return head;
+
+	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
