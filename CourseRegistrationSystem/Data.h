@@ -1,6 +1,7 @@
  #ifndef _Structs
 #define _Structs
 #include<iostream>
+#include <iomanip>
 #include<locale>
 #include<codecvt>
 #include<string>

@@ -1,6 +1,22 @@
 #include"CommonFunc.h"
 #include"Data.h"
 
+Course MakeCourse();
+void FileOutCourse(_Course*, std::string);
+void AddCourse(_Course*&, Course);
+
+_Course* searchCourse(_Course*);
+_Course* searchID(_Course*, std::wstring);
+_Course* searchName(_Course*, std::wstring);
+void printCourseDay(short);
+void displayCourse(_Course*);
+_Course* searchTeacher(_Course*, std::wstring);
+void editCourse(_Course*&);
+
+		
+
+
+
 //---17/04/2021
 // //fix latter
 //Course StringToCourse(std::wstring str) {
@@ -177,3 +193,112 @@ Course MakeCourse() {
 	_SText();
 	return result;
 }
+
+_Course* searchID(_Course* courselist, std::wstring search) {
+	_Course* first = courselist;
+	courselist = courselist->pNext;
+	while (courselist != first) {
+		int size = strlen(courselist->course.ID);
+		wchar_t* t = new wchar_t[size];
+		StrToLStr(t, size, courselist->course.ID);
+		if (wcscmp(t, StrToChar(search)) == 0) return courselist;
+		delete[]t;
+		courselist = courselist->pNext;
+	}
+	return nullptr;
+}
+
+_Course* searchName(_Course* courselist, std::wstring search) {
+	_Course* first = courselist;
+	courselist = courselist->pNext;
+	while (courselist != first) {
+		if (wcscmp(courselist->course.name, StrToChar(search)) == 0) return courselist;
+		courselist = courselist->pNext;
+	}
+	return nullptr;
+}
+
+_Course* searchTeacher(_Course* courselist, std::wstring search) {
+	_Course* first = courselist;
+	courselist = courselist->pNext;
+	while (courselist != first) {
+		if (wcscmp(courselist->course.teacher, StrToChar(search)) == 0) return courselist;
+		courselist = courselist->pNext;
+	}
+	return nullptr;
+}
+
+_Course* searchCourse(_Course* courselist) {
+	_Course* result = nullptr;
+	std::wstring search;
+	wchar_t book = L'1';
+	_LText();
+	std::wcout << "Search options:\n";
+	std::wcout << "1. Search by ID\n2. Search by Name\n3. Search by Teacher\n0. Cancel\n";
+	book = _getwch();
+	while (book < L'0' || book>L'3') book = _getwch();
+	if (book == L'0') {
+		_SText();
+		return nullptr;
+	}
+	std::wcout << "Search: "; std::wcin >> search;
+	switch (book) {
+	case L'1':
+		result = searchID(courselist, search);
+		break;
+	case L'2':
+		result = searchName(courselist, search);
+		break;
+	case L'3':
+		result = searchTeacher(courselist, search);
+		break;
+	}
+	_SText();
+	return result;
+}
+
+void printCourseDay(short a) {
+	_LText();
+	switch (a) {
+	case 0:
+		std::wcout << std::setw(10) << std::left << "Monday";
+			break;
+	case 1:
+		std::wcout << std::setw(10) << std::left << "Tuesday";
+		break;
+	case 2:
+		std::wcout << std::setw(10) << std::left << "Wednesday";
+		break;
+	case 3:
+		std::wcout << std::setw(10) << std::left << "Thursday";
+		break;
+	case 4:
+		std::wcout << std::setw(10) << std::left << "Friday";
+		break;
+	case 5:
+		std::wcout << std::setw(10) << std::left << "Saturday";
+		break;
+	case 6:
+		std::wcout << std::setw(10) << std::left << "Sunday";
+		break;
+	}
+}
+
+void displayCourse(_Course* course) {
+	_LText();
+	std::wcout << "ID: " << course->course.ID << "\n";
+	std::wcout << "Name: " << course->course.name << "\n";
+	std::wcout << "Teacher: " << course->course.teacher << "\n";
+	std::wcout << "Credits: " << course->course.credit << "\n";
+	std::wcout << "Number of students: " << course->course.numberofstudent << "/" << course->course.maxstudent << "\n";
+	std::wcout << "Schedule:\n";
+	for (int i = 0; i < 2; i++) {
+		std::wcout << "Day: "; printCourseDay(course->course.performed[i].day);
+		std::wcout << "    Session: S" << course->course.performed[i].session << "\n";
+	}
+}
+
+void editCourse(_Course* course) {
+
+}
+
