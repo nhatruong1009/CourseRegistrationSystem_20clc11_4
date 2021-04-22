@@ -650,10 +650,10 @@ void CourseToBIn(Course* course, std::string filename,std::wstring current) {
 }
 
 Course* BinToCourse(std::string filename) {
-	Course* course=new Course;
 	std::fstream fi(filename, std::fstream::in | std::fstream::binary);
+	if (!fi) return nullptr;
 	int k;
-
+	Course* course = new Course;
 	fi.read((char*)&k, sizeof(int));
 	course->ID = new char[k];
 	fi.read(course->ID, k);
