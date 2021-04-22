@@ -24,7 +24,7 @@ std::string InputPass() {
 	return pass;
 }
 
-void ChangeInfo(Student CurrentUser);
+void ChangeInfo(Student* CurrentUser);
 void SaveLogoutHistory(char* AccountUsername)
 {
 	__time32_t now = time(0);
@@ -114,8 +114,9 @@ void Logout(Student CurrentUser)
 	// Go to menu
 }
 
-void ChangePassword(Student CurrentUser)
+void ChangePassword(Student* CurrentUser)
 {
+
 	system("cls");
 	std::string pass1, pass2;
 	do
@@ -127,9 +128,9 @@ void ChangePassword(Student CurrentUser)
 		if (pass1 != pass2) std::cout << "\nYour password and confirmation password do not match, try again." << std::endl << std::endl;
 	} while (pass1 != pass2);
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
-	foldername = foldername + CurrentUser.account.username[0] + CurrentUser.account.username[1];
-	CurrentUser.account.password = StrToChar(pass1);
-	StuToBin(&CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser.account.username));
+	foldername = foldername + CurrentUser->account.username[0] + CurrentUser->account.username[1];
+	CurrentUser->account.password = StrToChar(pass1);
+	StuToBin(CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser->account.username));
 	short n;
 	std::cout << "\nChange successfully " << std::endl;
 	std::cout << "> Go back <";
@@ -137,7 +138,7 @@ void ChangePassword(Student CurrentUser)
 	ChangeInfo(CurrentUser);
 }
 
-void ChangeSocialID(Student CurrentUser)
+void ChangeSocialID(Student* CurrentUser)
 {
 	system("cls");
 	unsigned __int64 newSocialID1, newSocialID2;
@@ -151,10 +152,10 @@ void ChangeSocialID(Student CurrentUser)
 			std::cout << "New Social ID and Confirm Social ID do not match, try again " << std::endl << std::endl;
 	} while (newSocialID1 != newSocialID2);
 	std::cout << "Change succesfully " << std::endl;
-	CurrentUser.SocialID = newSocialID1;
+	CurrentUser->SocialID = newSocialID1;
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
-	foldername = foldername + CurrentUser.account.username[0] + CurrentUser.account.username[1];
-	StuToBin(&CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser.account.username));
+	foldername = foldername + CurrentUser->account.username[0] + CurrentUser->account.username[1];
+	StuToBin(CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser->account.username));
 	short n;
 	do
 	{
@@ -194,7 +195,7 @@ bool CheckDate(int d, int m, int y)
 	return 1;
 }
 
-void ChangeDOB(Student CurrentUser)
+void ChangeDOB(Student* CurrentUser)
 {
 	system("cls");
 	unsigned int d, m, y;
@@ -215,12 +216,12 @@ void ChangeDOB(Student CurrentUser)
 		}
 	}
 	std::cout << "Change successfully " << std::endl;
-	CurrentUser.birth.dd = d;
-	CurrentUser.birth.mm = m;
-	CurrentUser.birth.yy = y;
+	CurrentUser->birth.dd = d;
+	CurrentUser->birth.mm = m;
+	CurrentUser->birth.yy = y;
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
-	foldername = foldername + CurrentUser.account.username[0] + CurrentUser.account.username[1];
-	StuToBin(&CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser.account.username));
+	foldername = foldername + CurrentUser->account.username[0] + CurrentUser->account.username[1];
+	StuToBin(CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser->account.username));
 	short n;
 	do
 	{
@@ -230,7 +231,7 @@ void ChangeDOB(Student CurrentUser)
 	ChangeInfo(CurrentUser);
 }
 
-void ChangeInfo(Student CurrentUser)
+void ChangeInfo(Student* CurrentUser)
 {
 	system("cls");
 	int num;
