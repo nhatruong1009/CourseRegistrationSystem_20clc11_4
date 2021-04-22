@@ -129,7 +129,7 @@ char* StrCat(char* source1, std::string source2) {
 	}
 	return result;
 }
-__int64 StringToInt(wchar_t* ch) {
+unsigned __int64 StringToInt(wchar_t* ch) {
 	unsigned __int64 a = 0;
 	while (*ch != L'\0')
 	{
@@ -138,7 +138,7 @@ __int64 StringToInt(wchar_t* ch) {
 	}
 	return a;
 }
-__int64 StringToInt(char* ch) {
+unsigned __int64 StringToInt(char* ch) {
 	unsigned __int64 a = 0;
 	while (*ch != L'\0')
 	{
@@ -147,14 +147,14 @@ __int64 StringToInt(char* ch) {
 	}
 	return a;
 }
-__int64 StringToInt(std::wstring str) {
+unsigned __int64 StringToInt(std::wstring str) {
 	unsigned __int64 a = 0;
 	for (int i = 0; i < str.length(); i++) {
 		a = a * 10 + str[i] - L'0';
 	}
 	return a;
-}
-__int64 StringToInt(std::string str) {
+} 
+unsigned __int64 StringToInt(std::string str) {
 	unsigned __int64 a = 0;
 	for (int i = 0; i < str.length(); i++) {
 		a = a * 10 + str[i] - '0';
@@ -690,4 +690,51 @@ void DealocatedArrString(wchar_t**& stringarr) {
 	}
 	delete[] stringarr;
 	stringarr = nullptr;
+}
+
+
+std::string InputHidden() {
+	char temp;
+	std::string pass;
+	while (true)
+	{
+		temp = _getwch();
+		if (temp == KEY_ENTER) break;
+		else if (temp == KEY_ESC) return "";
+		if (temp == KEY_BACKSPACE) {
+			if (pass.size() != 0) {
+				pass.pop_back();
+				std::cout << temp << ' ' << temp;
+			}
+		}
+		if (temp >= ' ' && temp <= '~') {
+			std::cout << "*";
+			pass.push_back(temp);
+		}
+	}
+	std::cout << '\n';
+	return pass;
+}
+
+unsigned __int64 InputNumber() {
+	char temp;
+	std::string pass;
+	while (true)
+	{
+		temp = _getwch();
+		if (temp == KEY_ENTER) break;
+		else if (temp == KEY_ESC) return 0;
+		if (temp == KEY_BACKSPACE) {
+			if (pass.size() != 0) {
+				pass.pop_back();
+				std::cout << temp << ' ' << temp;
+			}
+		}
+		if (temp >= '0' && temp <= '9') {
+			std::cout << temp;
+			pass.push_back(temp);
+		}
+	}
+	std::cout << '\n';
+	return StringToInt(pass);
 }

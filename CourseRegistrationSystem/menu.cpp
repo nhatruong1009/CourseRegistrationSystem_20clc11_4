@@ -304,7 +304,7 @@ void StuInformation(Student* stu){
 	menu[1] = new char[] {"Return"};
 	switch (Menu(menu,5,7))
 	{
-	case 0: ChangeInfo(*stu);
+	case 0: ChangeInfo(stu);
 	case-1:
 	case 1:
 		break;

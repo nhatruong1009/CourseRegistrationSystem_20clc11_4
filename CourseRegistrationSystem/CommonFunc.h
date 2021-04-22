@@ -43,10 +43,10 @@ std::wstring ToWstring(std::string source);
 std::wstring ToWstring(char* source);
 std::wstring ToWstring(wchar_t* source);
 
-__int64 StringToInt(wchar_t* ch);
-__int64 StringToInt(char* ch);
-__int64 StringToInt(std::wstring str);
-__int64 StringToInt(std::string str);
+unsigned __int64 StringToInt(wchar_t* ch);
+unsigned __int64 StringToInt(char* ch);
+unsigned __int64 StringToInt(std::wstring str);
+unsigned __int64 StringToInt(std::string str);
 
 char* NumToStr(unsigned __int64 num);
 wchar_t* NumToLStr(unsigned __int64 num);
@@ -77,4 +77,6 @@ short Choose(wchar_t** list, short X, short Y);
 short Menu(char** list, short Xposition, short Yposition);
 short Choose(char** list, short X, short Y);
 std::wstring ChoseFolder(Filelist* list, short x, short y);
+std::string InputHidden();
+unsigned __int64 InputNumber();
 #endif

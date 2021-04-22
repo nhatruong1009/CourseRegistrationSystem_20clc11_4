@@ -121,23 +121,24 @@ void FileOutStudent(_Student* stu, std::string fileout) {
 	_SText();
 }
 void StuToBin(Student* stu, std::string fileout) {
+	remove(fileout.c_str());
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
 	int k = 0;
-	k = _msize(stu->account.password) / sizeof(char) + 1;
+	k = strlen(stu->account.password) + 1;
 	fo.write((char*)&k, sizeof(int));
 	fo.write(stu->account.password, k);
 
-	k = _msize(stu->account.username) / sizeof(char) + 1;
+	k = strlen(stu->account.username) + 1;
 	fo.write((char*)&k, sizeof(int));
 	fo.write(stu->account.username, k);
 
-	k = _msize(stu->firstname) / sizeof(char) + 1;
+	k = wcslen(stu->firstname) + 1;
 	fo.write((char*)&k, sizeof(int));
-	fo.write((char*)&*stu->firstname, 2 * k);
+	fo.write((char*)&*stu->firstname, (sizeof(wchar_t) / sizeof(char)) * k);
 
-	k = _msize(stu->lastname) / sizeof(char) + 1;
+	k = wcslen(stu->lastname) + 1;
 	fo.write((char*)&k, sizeof(int));
-	fo.write((char*)&*stu->lastname, 2 * k);
+	fo.write((char*)&*stu->lastname, (sizeof(wchar_t) / sizeof(char)) * k);
 
 	fo.write(&stu->gender, 1);
 
@@ -166,53 +167,57 @@ void StuToBin(Student* stu, std::string fileout) {
 
 	fo.close();
 }
-Student BinToStu(std::string filein) {
-	Student stu;
+Student* BinToStu(std::string filein) {
 	std::fstream fi(filein, std::fstream::in | std::fstream::binary);
-	if (!fi) { return stu; }
+	if (!fi) { return nullptr; }
+	Student* stu = new Student;
 	int k = 0;
 	fi.read((char*)&k, sizeof(int));
-	stu.account.password = new char[k];
-	fi.read(stu.account.password, k);
+	stu->account.password = new char[k];
+	fi.read(stu->account.password, k);
 
 	fi.read((char*)&k, sizeof(int));
-	stu.account.username = new char[k];
-	fi.read(stu.account.username, k);
+	stu->account.username = new char[k];
+	fi.read(stu->account.username, k);
 
-	stu.ID = StringToInt(stu.account.username);
-
-	fi.read((char*)&k, sizeof(int));
-	stu.firstname = new wchar_t[k];
-	fi.read((char*)&*stu.firstname, 2 * k);
+	stu->ID = StringToInt(stu->account.username);
 
 	fi.read((char*)&k, sizeof(int));
-	stu.lastname = new wchar_t[k];
-	fi.read((char*)&*stu.lastname, 2 * k);
-
-	fi.read(&stu.gender, 1);
-
-	fi.read((char*)&stu.birth, sizeof(Date));
+	stu->firstname = new wchar_t[k];
+	std::cout << k;
+	fi.read((char*)&*stu->firstname, (sizeof(wchar_t) / sizeof(char)) * k);
 
 	fi.read((char*)&k, sizeof(int));
-	if (k > 0) stu.coursenow = new char* [k];
+	std::cout<<'\t'<< k;
+	stu->lastname = new wchar_t[k];
+	fi.read((char*)&*stu->lastname, (sizeof(wchar_t) / sizeof(char)) * k);
+
+	fi.read(&stu->gender, 1);
+
+	fi.read((char*)&stu->birth, sizeof(Date));
+
+	fi.read((char*)&k, sizeof(int));
+	if (k > 0) stu->coursenow = new char* [k];
+	else { stu->coursenow = nullptr; }
 	for (int i = 0; i < k; i++) {
 		int e = 0;
 		fi.read((char*)&e, sizeof(int));
-		stu.coursenow[i] = new char[e];
-		fi.read(stu.coursenow[i], e);
+		stu->coursenow[i] = new char[e];
+		fi.read(stu->coursenow[i], e);
 	}
 
 	fi.read((char*)&k, sizeof(int));
-	if (k > 0) stu.allcourse = new char* [k];
+	if (k > 0) stu->allcourse = new char* [k];
+	else {stu->coursenow = nullptr;}
 	for (int i = 0; i < k; i++) {
 		int e = 0;
 		fi.read((char*)&e, sizeof(int));
-		stu.allcourse[i] = new char[e];
-		fi.read(stu.allcourse[i], e);
+		stu->allcourse[i] = new char[e];
+		fi.read(stu->allcourse[i], e);
 	}
 
-	fi.read((char*)&stu.SocialID, sizeof(__int64));
-	fi.read((char*)&stu.GPA, sizeof(float));
+	fi.read((char*)&stu->SocialID, sizeof(__int64));
+	fi.read((char*)&stu->GPA, sizeof(float));
 
 	fi.close();
 	return stu;
@@ -388,7 +393,7 @@ _Student* TypeInStudent() {
 	int choose;
 	do {
 		std::cout << "ID: "; std::cin >> stu.ID;
-		std::cin.ignore(1i64, '\n');
+		std::cin.clear();
 		_LText();
 		std::wcout << "Fistname: "; std::getline(std::wcin, temp); stu.firstname = StrToChar(temp);
 		std::wcout << "Lastname: "; std::getline(std::wcin, temp); stu.lastname = StrToChar(temp);
@@ -481,32 +486,32 @@ SchoolYear* AddSchoolYear(int year) {
 	wchar_t* yy = NumToLStr(a->year);
 	wchar_t* file = new wchar_t[]{ L"Data\\Grade\\K" };
 	StrCat(file, wcslen(yy), yy);
-		wchar_t* temp = StrCat(file, L"\\Student");
-		_wmkdir(temp);
-		delete[] temp;
-		temp = StrCat(file, L"\\Class");
-		_wmkdir(temp);
-		delete[] temp;
-		a->classes = nullptr;
-		a->student = nullptr;
-		int chose;
-		char** choselist = new char* [2];
-		choselist[0] = new char[] {"AddClass"};
-		choselist[1] = new char[] {"Done"};
+	_wmkdir(file);
+	wchar_t* temp = StrCat(file, L"\\Student");
+	_wmkdir(temp);
+	delete[] temp;
+	temp = StrCat(file, L"\\Class");
+	_wmkdir(temp);
+	delete[] temp;
+	a->classes = nullptr;
+	a->student = nullptr;
+	int chose;
+	char** choselist = new char* [2];
+	choselist[0] = new char[] {"AddClass"};
+	choselist[1] = new char[] {"Done"};
+	system("cls");
+	chose = Menu(choselist, 5, 0);
+	while (chose==0)
+	{
+		Classes tt = MakeClass(a->student);
+		AddClass(a->classes,tt);
 		system("cls");
-		chose = Menu(choselist, 5, 0);
-		while (chose==0)
-		{
-			Classes tt = MakeClass(a->student);
-			AddClass(a->classes,tt);
-			system("cls");
-			std::cout << "------- Add Class -------";
-			chose = Menu(choselist, 5, 1);
-		}
-		DealocatedArrString(choselist);
-		delete[]yy, file;
-		return a;
-
+		std::cout << "------- Add Class -------";
+		chose = Menu(choselist, 5, 1);
+	}
+	DealocatedArrString(choselist);
+	delete[]yy, file;
+	return a;
 }
 void SaveSchoolYear(SchoolYear*sch) {
 	if (sch == nullptr) return;
@@ -536,7 +541,7 @@ void MakeCurentTime(__int64 year) {
 	}
 	wchar_t* SemesterTime = StrCat(temp, L"time");
 	std::fstream fo(SemesterTime,std::fstream::out|std::fstream::binary);
-	std::cin.ignore(1i64, '\n');
+	std::cin.clear();
 	for (int i = 0; i < 3; i++) {
 		Date a;
 		std::cout << "Date start semester " << i + 1 << ": ";

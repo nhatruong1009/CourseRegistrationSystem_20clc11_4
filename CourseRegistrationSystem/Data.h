@@ -100,7 +100,7 @@ void AddStudent(_Student*& studentlist, Student student);
 Student StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
 void StuToBin(Student* stu, std::string fileout);
-Student BinToStu(std::string filein);
+Student* BinToStu(std::string filein);
 void SaveNewStu(_Student* stu, char* directon);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
@@ -120,6 +120,6 @@ void SaveClass(Classes cl,const char* fileout);
 
 
 void LoginStu(Student*& CurrentUser);
-void ChangeInfo(Student CurrentUser);
+void ChangeInfo(Student*& CurrentUser);
 #endif // _Structs
 
