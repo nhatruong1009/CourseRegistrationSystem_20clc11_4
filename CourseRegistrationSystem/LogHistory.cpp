@@ -241,3 +241,29 @@ _Student* Search(unsigned __int64* ID)
 
 	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
+
+Student Search(unsigned __int64 ID)
+{
+	Student a;
+	std::string id = ToString(NumToStr(ID));
+	std::string foldername = "K20";
+	foldername = foldername + id[0] + id[1];
+	Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
+	if (list == nullptr)
+	{
+		std::cout << id << " does not exist " << std::endl;
+	}
+	Filelist* curlist = list;
+	do
+	{
+		if (id == ToString(curlist->filename))
+			break;
+		curlist = curlist->pNext;
+	} while (curlist != list);
+	if (id != ToString(curlist->filename))
+		std::cout << id << " does not exist " << std::endl;
+	else
+		a = *BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + ToString(curlist->filename));
+	return a;
+	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
+}
