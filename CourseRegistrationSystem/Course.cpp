@@ -480,10 +480,7 @@ void searchScore(_Course* allcourse) {
 }
 	
 
-Course* searchCourseFile() {
-	std::string search;
-	std::cout << "Search: ";
-	std::cin >> search;
+Course* searchCourseFile(std::string search ) {
 	char year[5];
 	year[4] = '\0';
 	int size = search.length();
@@ -493,8 +490,12 @@ Course* searchCourseFile() {
 	}
 	char* local = new char[] {"Data\\Grade\\K"};
 	char* temp = StrCat(year, "\\Semester" + search[size - 1]);
-	char* direction = StrCat(local, temp);
+	char* temp1 = StrCat(temp, "\\");
+	delete[]temp;
+	StrCat(temp1, size - 5, search);
+	char* direction = StrCat(local, temp1);
 	Course* cou = BinToCourse(direction);
 	if (cou == nullptr) std::cout << "Unable to find " << search << "\n";
+	delete[]temp, temp1, direction, local;
 	return cou;
 }
