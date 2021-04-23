@@ -172,24 +172,24 @@ Course MakeCourse() {
 
 	wchar_t** day = new wchar_t* [7];
 	wchar_t** ses = new wchar_t* [4];
-	day[0] = new wchar_t[4]{ L"MON" };
-	day[1] = new wchar_t[4]{ L"TUE" };
-	day[2] = new wchar_t[4]{ L"WED" };
-	day[3] = new wchar_t[4]{ L"THU" };
-	day[4] = new wchar_t[4]{ L"FRI" };
-	day[5] = new wchar_t[4]{ L"SAT" };
-	day[6] = new wchar_t[4]{ L"SUN" };
+	day[0] = new wchar_t[]{ L"MONDAY" };
+	day[1] = new wchar_t[]{ L"TUESDAY" };
+	day[2] = new wchar_t[]{ L"WEDNESDAY" };
+	day[3] = new wchar_t[]{ L"THURSDAY" };
+	day[4] = new wchar_t[]{ L"FRIDAY" };
+	day[5] = new wchar_t[]{ L"SATURDAY" };
+	day[6] = new wchar_t[]{ L"SUNDAY" };
 
-	ses[0] = new wchar_t[3]{ L"S1" };
-	ses[1] = new wchar_t[3]{ L"S2" };
-	ses[2] = new wchar_t[3]{ L"S3" };
-	ses[3] = new wchar_t[3]{ L"S4" };
+	ses[0] = new wchar_t[]{ L"S1 (07:30)" };
+	ses[1] = new wchar_t[]{ L"S2 (07:30)" };
+	ses[2] = new wchar_t[]{ L"S3 (07:30)" };
+	ses[3] = new wchar_t[]{ L"S4 (07:30)" };
 
 	for (int i = 0; i < 2; i++) {
 		GotoXY(10, 10 + i);
 		std::wcout << "Day: ";
 		result.performed[i].day = Choose(day, 15, 10 + i);
-		GotoXY(20, 10 + i);
+		GotoXY(21, 10 + i);
 		std::wcout << "Ses: ";
 		result.performed[i].session = Choose(ses, 25, 10 + i);
 	}
