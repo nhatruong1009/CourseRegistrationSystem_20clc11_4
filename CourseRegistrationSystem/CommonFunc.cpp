@@ -1,5 +1,6 @@
 #include"CommonFunc.h"
 #include <windows.h>
+#include<string>
 void _LText()
 {
 	_setmode(_fileno(stdin), _O_U16TEXT); 
@@ -500,6 +501,7 @@ short Menu(wchar_t** list, short Xposition, short Yposition) {
 
 short Menu(char** list, short Xposition, short Yposition) {
 	char book;
+	if (list == 0) { GotoXY(Xposition, Yposition); std::cout << ">Empty<"; _getwch(); return -1; }
 	int size = _msize(list) / sizeof(char*);
 	for (short i = 0; i < size; i++)
 	{
@@ -737,4 +739,83 @@ unsigned __int64 InputNumber() {
 	}
 	std::cout << '\n';
 	return StringToInt(pass);
+}
+
+Date InputDate() {
+	char temp;
+	std::string result = "";
+	while (true)
+	{
+		temp = _getwch();
+		if (temp == KEY_ESC) { return Date{ 00,00,0000 }; }
+		if (result.size()==10 && temp == KEY_ENTER) {
+			std::cout << "\n";
+			break;
+		}
+		if (temp <= '9' && temp >= '0' && result.size()<10) {
+			if (result.size() == 2 || result.size() == 5) {
+				std::cout << "/" << temp;
+				result.push_back(' ');
+				result.push_back(temp);
+			}
+			else {
+				std::cout << temp;
+				result.push_back(temp);
+			}
+		}
+		if (temp == KEY_BACKSPACE && result.size()>0) {
+			if (result.size() == 3 || result.size() == 6)
+			{
+				result.pop_back();
+				result.pop_back();
+				std::cout << temp << temp << "  " << temp << temp;
+			}
+			else {
+				result.pop_back();
+				std::cout << temp << ' ' << temp;
+			}
+		}
+		if ((temp=='/' || temp == ' ' || temp == '-') && (result.size()==1 || result.size()==4 )) {
+			char a = result[result.size() - 1];
+			result.pop_back();
+			result.push_back(' ');
+			result.push_back(a);
+			result.push_back('/');
+			std::cout << char(8) << '0' << a << '/';
+		}
+	}
+	return StringToDate(result);
+}
+
+bool LeapYear(int y)
+{
+	if (y % 400 == 0)
+		return 1;
+	else if (y % 4 == 0 && y % 25 != 0)
+		return 1;
+	return 0;
+}
+
+bool CheckDate(Date dat)
+{
+	int d = dat.dd;
+	int m = dat.mm;
+	int y = dat.yy;
+	if (d < 1 || m < 1 || y < 0 || m > 12)
+		return 0;
+	if (LeapYear(y))
+	{
+		if (m == 2 && d > 29)
+			return 0;
+	}
+	else
+	{
+		if (m == 2 && d > 28)
+			return 0;
+	}
+	if (d > 31) return 0;
+	if (d > 30)
+		if (m == 4 || m == 6 || m == 9 || m == 11)
+			return 0;
+	return 1;
 }

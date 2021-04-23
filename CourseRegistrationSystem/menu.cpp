@@ -108,21 +108,20 @@ void staffMode()
 {
 	system("cls");
 	std::cout << "-------------STAFF---------------";
-	char** menu = new char* [5];
+	char** menu = new char* [4];
 	menu[0] = new char[] {"Student"}; // in side this, creative class / grande
 	menu[1] = new char[] {"Course"}; // in side this, edit course 
-	menu[2] = new char[] {"School year"}; // make school plan
-	menu[3] = new char[] {"View semester time"}; //change to another semester of any year(but can't changed if time out)
-	menu[4] = new char[] {"Back"};
+	menu[2] = new char[] {"School Plan"};
+	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: staffStudentMenu(); DealocatedArrString(menu); return;
-	case 1: DealocatedArrString(menu); return;
-	case 2: DealocatedArrString(menu); return;
-	case 3: DealocatedArrString(menu); return;
+	case 0: staffStudentMenu(); break;
+	case 1: courseStaff(); break;
+	case 2: schoolPlan(); break;
 	case -1:
-	case 4: userTypeMode(); DealocatedArrString(menu); return;
+	case 4: userTypeMode(); break;
 	}
+	DealocatedArrString(menu);
 }
 void staffStudentMenu() {
 	system("cls");
@@ -134,12 +133,13 @@ void staffStudentMenu() {
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: gradeMenu(); DealocatedArrString(menu); return;
-	case 1: classMenu(); DealocatedArrString(menu); return;
-	case 2: studentMenu(); DealocatedArrString(menu); return;
+	case 0: gradeMenu(); break;
+	case 1: classMenu(); break;
+	case 2: studentMenu(); break;
 	case-1:
-	case 3: staffMode(); DealocatedArrString(menu); return;
+	case 3: staffMode(); break;
 	}
+	DealocatedArrString(menu);
 }
 void gradeMenu() {
 	system("cls");
@@ -150,11 +150,12 @@ void gradeMenu() {
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: addGrade(); DealocatedArrString(menu); return;
-	case 1: ViewGrade(); DealocatedArrString(menu); return;
+	case 0: addGrade(); break;
+	case 1: ViewGrade(); break;
 	case-1:
-	case 2: staffStudentMenu(); DealocatedArrString(menu); return;
+	case 2: staffStudentMenu(); break;
 	}
+	DealocatedArrString(menu);
 }
 // now work here
 void classMenu() {
@@ -166,11 +167,12 @@ void classMenu() {
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: AddClass(); DealocatedArrString(menu); return;
-	case 1: ViewClass();  DealocatedArrString(menu); return;
+	case 0: AddClass(); break;
+	case 1: ViewClass();  break;
 	case-1:
-	case 2: staffStudentMenu();	DealocatedArrString(menu); return;
+	case 2: staffStudentMenu();	break;
 	}
+	DealocatedArrString(menu);
 }
 void studentMenu() {
 	system("cls");
@@ -181,11 +183,12 @@ void studentMenu() {
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: DealocatedArrString(menu); return;
-	case 1: DealocatedArrString(menu); return;
+	case 0: break;
+	case 1: break;
 	case-1:
-	case 2: staffStudentMenu();	DealocatedArrString(menu); return;
+	case 2: staffStudentMenu();	break;
 	}
+	DealocatedArrString(menu); 
 }
 void addGrade() {
 	system("cls");
@@ -330,6 +333,7 @@ void CourseInformaion(Student* stu){
 	case -1:
 		break;
 	}
+	DealocatedArrString(menu);
 	studentMode(stu);
 }
 
@@ -339,7 +343,22 @@ void RegisterCouse(Student* stu) {
 void ViewCouse(Student* stu) {
 	system("cls");
 	std::cout << "------------- All Course ---------------";
-	if (stu->allcourse == nullptr) { std::cout << "\nEmpty\n> Return <"; _getwch(); return; }
+	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); return; }
 	int n = _msize(stu->allcourse) / sizeof(char*);
 	//Course*
+}
+
+void courseStaff() {
+
+}
+
+void schoolPlan() {
+	int time;
+	system("cls");
+	std::cout << "--------- School Plan ---------";
+	std::cout << "\nInput Year (Pass if take current year) :";
+	time = InputNumber();
+	if (time == 0); {time = GetTime().tm_year; std::cout << time << '\n'; }
+	MakeCurentTime(time);
+
 }

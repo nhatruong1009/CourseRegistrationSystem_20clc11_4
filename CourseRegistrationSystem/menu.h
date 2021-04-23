@@ -20,4 +20,6 @@ void StuInformation(Student* stu);
 void CourseInformaion(Student* stu);
 void RegisterCouse(Student* stu);
 void ViewCouse(Student* stu);
+void courseStaff();
+void schoolPlan();
 #endif // !_Menu

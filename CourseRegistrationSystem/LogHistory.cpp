@@ -140,49 +140,16 @@ void ChangeSocialID(Student* CurrentUser)
 	ChangeInfo(CurrentUser);
 }
 
-bool LeapYear(int y)
-{
-	if (y % 400 == 0)
-		return 1;
-	else if (y % 4 == 0 && y % 25 != 0)
-		return 1;
-	return 0;
-}
-
-bool CheckDate(int d, int m, int y)
-{
-	if (d < 1 || m < 1 || y < 0)
-		return 0;
-	if (LeapYear(y))
-	{
-		if (m == 2 && d > 29)
-			return 0;
-	}
-	else
-	{
-		if (m == 2 && d > 28)
-			return 0;
-	}
-	if (d > 31) return 0;
-	if (d > 30)
-		if (m == 4 || m == 6 || m == 9 || m == 11)
-			return 0;
-	return 1;
-}
-
 void ChangeDOB(Student* CurrentUser)
 {
 	system("cls");
-	unsigned int d, m, y;
+	Date dat;
 	while (1)
 	{
-		std::cout << "Day: ";
-		d=InputNumber();
-		std::cout << "Month: ";
-		m=InputNumber();
-		std::cout << "Year: ";
-		y=InputNumber();
-		if (CheckDate(d, m, y))
+		std::cout << "Birth: ";
+		dat = InputDate();
+		if (dat.dd == 0) { dat = { 1,1,2000 }; }
+		if (CheckDate(dat))
 			break;
 		else
 		{
@@ -191,9 +158,7 @@ void ChangeDOB(Student* CurrentUser)
 		}
 	}
 	std::cout << "Change successfully " << std::endl;
-	CurrentUser->birth.dd = d;
-	CurrentUser->birth.mm = m;
-	CurrentUser->birth.yy = y;
+	CurrentUser->birth = dat;
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
 	foldername = foldername + CurrentUser->account.username[0] + CurrentUser->account.username[1];
 	StuToBin(CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser->account.username));

@@ -520,14 +520,14 @@ void SaveSchoolYear(SchoolYear*sch) {
 	delete[]local, year, direction;
 }
 
-void MakeCurentTime(__int64 year) {
+void MakeCurentTime(int year) {
 	wchar_t*curent = new wchar_t[] {L"Data"};
 	_wmkdir(curent);
 	delete[] curent;
 	curent = new wchar_t[] {L"Data\\SchoolYear"};
 	_wmkdir(curent);
-	delete[] curent;
 	wchar_t* temp = StrCat(curent, L"\\");
+	delete[] curent;
 	StrCat(temp, std::to_string(year).length(), std::to_wstring(year));
 	_wmkdir(temp);
 	StrCat(temp, 2, L"\\");
@@ -542,13 +542,25 @@ void MakeCurentTime(__int64 year) {
 	for (int i = 0; i < 3; i++) {
 		Date a;
 		std::cout << "Date start semester " << i + 1 << ": ";
-		std::string k;;
-		std::getline(std::cin, k);
-		a = StringToDate(k);
+		while (true)
+		{
+			a = InputDate();
+			if (CheckDate(a) == false) {
+				std::cout << "     Date not invalid! ";
+			}
+			else break;
+		}
 		fo.write((char*)&a, sizeof(Date));
 		std::cout << "Date end semester " << i + 1 << ": ";
-		std::getline(std::cin, k);
-		a = StringToDate(k);
+		Date b;
+		while (true)
+		{
+			b = InputDate();
+			if (CheckDate(b) == false || b < a ) {
+				std::cout << "     Date not invalid! ";
+			}
+			else break;
+		}
 		fo.write((char*)&a, sizeof(Date));
 	}
 	delete[] temp, SemesterTime;

@@ -79,4 +79,7 @@ short Choose(char** list, short X, short Y);
 std::wstring ChoseFolder(Filelist* list, short x, short y);
 std::string InputHidden();
 unsigned __int64 InputNumber();
+Date InputDate();
+bool LeapYear(int y);
+bool CheckDate(Date dat);
 #endif
