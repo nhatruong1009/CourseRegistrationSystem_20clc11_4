@@ -121,5 +121,6 @@ void SaveClass(Classes cl,const char* fileout);
 
 void LoginStu(Student*& CurrentUser);
 void ChangeInfo(Student*& CurrentUser);
+_Student* Search(unsigned __int64 ID[]);
 #endif // _Structs
 
