@@ -20,6 +20,34 @@ std::wostream& operator<<(std::wostream& os, const tm& t) {
 	return os;
 }
 
+bool operator==(Date a, Date b) {
+	return a.dd == b.dd && a.mm == b.mm && a.yy == b.yy;
+}
+bool operator<(Date a, Date b) {
+	if (a.yy < b.yy) return true;
+	if (a.yy > b.yy) return false;
+	if (a.mm < b.mm) return true;
+	if (a.mm > b.mm) return false;
+	if (a.dd < b.dd) return true;
+	return false;
+
+}
+bool operator<=(Date a, Date b) {
+	return a == b || a < b;
+}
+bool operator>(Date a, Date b) {
+	if (a.yy > b.yy) return true;
+	if (a.yy < b.yy) return false;
+	if (a.mm > b.mm) return true;
+	if (a.mm < b.mm) return false;
+	if (a.dd > b.dd) return true;
+	return false;
+}
+bool operator>=(Date a, Date b) {
+	return a == b || a > b;
+}
+
+
 Student StringToStudent(std::wstring str) {
 	//No, Student ID, First name, Last name, Gender, Date of Birth, Social ID
 	Student stu;
