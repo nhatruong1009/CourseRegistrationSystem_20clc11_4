@@ -745,7 +745,7 @@ Course* BinToCourse(std::string filename) {
 	LoadScore(course->score, filename + "Scores");
 	return course;
 }
-std::string SearchCurrent() {
+std::string TakeCurrent() {
 	Filelist* Plan = TakeFileInFolder("Data\\SchoolYear");
 	int n = CountFile(Plan);
 	tm now = GetTime();

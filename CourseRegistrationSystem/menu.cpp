@@ -349,7 +349,24 @@ void ViewCouse(Student* stu) {
 }
 
 void courseStaff() {
+	system("cls");
+	std::cout << "---------- Course ----------";
+	char** menu = new char* [4];
+	menu[0] = new char[] {"Add Course"};
+	menu[1] = new char[] {"View/Edit Course"};
+	menu[2] = new char[] {"Remove Course"};
+	menu[3] = new char[] {"Back"};
+	switch (Menu(menu,5,2))
+	{
+	case 0: addCourse(); break;
+	case 1: editCourse(); break;
+	case 2: removeCourse(); break;
+	case -1:
+	case 3: break;
+	}
 
+	DealocatedArrString(menu);
+	staffMode();
 }
 
 void schoolPlan() {
@@ -366,3 +383,20 @@ void schoolPlan() {
 	staffMode();
 }
 
+std::string chooseTime() {
+
+}
+
+void addCourse(){
+	char** menu = new char* [2];
+	menu[0] = new char[] {"Take by current time"};
+	menu[1] = new char[] {"Choose time"};
+	std::string current;
+	switch (Menu(menu,5,3))
+	{
+	case 0:current = TakeCurrent(); break;
+	case 1: current = chooseTime();
+	}
+}
+void editCourse(){}
+void removeCourse(){}

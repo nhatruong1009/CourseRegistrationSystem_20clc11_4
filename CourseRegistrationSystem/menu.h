@@ -22,4 +22,7 @@ void RegisterCouse(Student* stu);
 void ViewCouse(Student* stu);
 void courseStaff();
 void schoolPlan();
+void addCourse();
+void editCourse();
+void removeCourse();
 #endif // !_Menu
