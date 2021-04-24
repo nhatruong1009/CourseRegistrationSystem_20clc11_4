@@ -128,7 +128,8 @@ void SaveClass(Classes cl,const char* fileout);
 void LoginStu(Student*& CurrentUser);
 void ChangeInfo(Student*& CurrentUser);
 _Student* SearchStu(unsigned __int64* ID);
-Student SearchStu(unsigned __int64 ID);
+Student* SearchStu(unsigned __int64 ID);
+Student** SearchStu(unsigned __int64* ID, int Grade);
 std::string SearchCurrent();
 #endif // _Structs
 

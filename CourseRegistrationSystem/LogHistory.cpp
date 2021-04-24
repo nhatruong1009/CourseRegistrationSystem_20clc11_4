@@ -194,7 +194,7 @@ void ChangeInfo(Student*& CurrentUser)
 	}
 }
 
-_Student* SearchStu(unsigned __int64* ID)
+_Student* SearchStu(unsigned __int64* ID) // Return LL _Student		// Use dynamic array of ID when using
 {
 	_Student* head = nullptr, * cur;
 	head = new _Student;	// dummy node;
@@ -203,6 +203,8 @@ _Student* SearchStu(unsigned __int64* ID)
 	int n = _msize(ID)/8;
 	for (int i = 0; i < n; i++)
 	{
+		if (ID[i] < 10)
+			continue;
 		std::string id = ToString(NumToStr(ID[i]));
 		std::string foldername = "K20"; 
 		foldername = foldername + id[0] + id[1];
@@ -241,28 +243,38 @@ _Student* SearchStu(unsigned __int64* ID)
 	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
 
-Student SearchStu(unsigned __int64 ID)
+Student* SearchStu(unsigned __int64 ID) 
 {
-	Student a;
+	if (ID < 10)
+	{
+		std::cout << ID << " does not exist " << std::endl;
+		return nullptr;
+	}
 	std::string id = ToString(NumToStr(ID));
 	std::string foldername = "K20";
 	foldername = foldername + id[0] + id[1];
-	Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
-	if (list == nullptr)
-	{
-		std::cout << id << " does not exist " << std::endl;
-	}
-	Filelist* curlist = list;
-	do
-	{
-		if (id == ToString(curlist->filename))
-			break;
-		curlist = curlist->pNext;
-	} while (curlist != list);
-	if (id != ToString(curlist->filename))
-		std::cout << id << " does not exist " << std::endl;
-	else
-		a = *BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + ToString(curlist->filename));
+	Student* a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id);
+	if (!a)
+		std::cout << ID << " does not exist " << std::endl;
 	return a;
+}
+
+Student** SearchStu(unsigned __int64* ID, int Grade)	// Use dynamic array of ID when using
+{
+	Student** a=nullptr;
+	int n = _msize(ID) / 8;
+	a = new Student * [n] {};
+	std::string foldername = "K";
+	foldername = foldername + NumToStr(Grade);
+	for (int i = 0; i < n; i++)
+	{
+		a[i] = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + NumToStr(ID[i]));
+		if (a[i] == nullptr)
+		{
+			std::cout << ID[i] << " does not exist " << std::endl;
+		}
+	}
+	return a;
+
 	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
