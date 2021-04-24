@@ -115,7 +115,7 @@ Classes* LoadClass(const char* filein);
 SchoolYear* AddSchoolYear(int year);
 _Student* TypeInStudent();
 void SaveSchoolYear(SchoolYear* sch);
-void CourseToBIn(Course* course, std::string filename, std::wstring current);
+void CourseToBIn(Course* course, std::string filename, std::string current);
 Course* BinToCourse(std::string filename);
 void MakeCurentTime(int year);
 std::wstring ViewSemesterTime();
@@ -127,7 +127,8 @@ void SaveClass(Classes cl,const char* fileout);
 
 void LoginStu(Student*& CurrentUser);
 void ChangeInfo(Student*& CurrentUser);
-_Student* Search(unsigned __int64* ID);
-Student Search(unsigned __int64 ID);
+_Student* SearchStu(unsigned __int64* ID);
+Student SearchStu(unsigned __int64 ID);
+std::string SearchCurrent();
 #endif // _Structs
 

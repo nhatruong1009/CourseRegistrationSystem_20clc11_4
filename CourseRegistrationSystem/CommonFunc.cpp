@@ -236,6 +236,7 @@ Date StringToDate(std::string ch) {
 }
 
  char* NumToStr(unsigned __int64 num) {
+	if (num == 0) return new char[]{ "0\0" };
 	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
 	char* result = new char[n + 1];
@@ -247,6 +248,7 @@ Date StringToDate(std::string ch) {
 	return result;
 }
 wchar_t* NumToLStr(unsigned __int64 num) {
+	if (num == 0) return new wchar_t[] { L"0\0" };
 	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
 	wchar_t* result = new wchar_t[n + 1];
@@ -725,7 +727,7 @@ unsigned __int64 InputNumber() {
 	{
 		temp = _getwch();
 		if (temp == KEY_ENTER) break;
-		else if (temp == KEY_ESC) return 0;
+		else if (temp == KEY_ESC) return -1;
 		if (temp == KEY_BACKSPACE) {
 			if (pass.size() != 0) {
 				pass.pop_back();
@@ -778,7 +780,7 @@ Date InputDate() {
 		if ((temp=='/' || temp == ' ' || temp == '-') && (result.size()==1 || result.size()==4 )) {
 			char a = result[result.size() - 1];
 			result.pop_back();
-			result.push_back(' ');
+			result.push_back('0');
 			result.push_back(a);
 			result.push_back('/');
 			std::cout << char(8) << '0' << a << '/';

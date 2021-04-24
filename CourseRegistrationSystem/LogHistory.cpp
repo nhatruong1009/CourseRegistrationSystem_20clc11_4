@@ -47,7 +47,6 @@ void LoginStu(Student*& CurrentUser)
 		std::cout << "Username: ";
 		std::getline(std::cin, U);
 		std::cout << "Password: ";
-		//std::getline(std::cin, P);
 		P = InputHidden();
 		if (P == "") { CurrentUser = 0; break; }// don't input password;
 		std::string foldername = "K20";
@@ -195,7 +194,7 @@ void ChangeInfo(Student*& CurrentUser)
 	}
 }
 
-_Student* Search(unsigned __int64* ID)
+_Student* SearchStu(unsigned __int64* ID)
 {
 	_Student* head = nullptr, * cur;
 	head = new _Student;	// dummy node;
@@ -242,7 +241,7 @@ _Student* Search(unsigned __int64* ID)
 	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
 
-Student Search(unsigned __int64 ID)
+Student SearchStu(unsigned __int64 ID)
 {
 	Student a;
 	std::string id = ToString(NumToStr(ID));

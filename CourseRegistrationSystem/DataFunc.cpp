@@ -383,7 +383,17 @@ Classes MakeClass(_Student *&all,bool cls,int x, int y ) {
 				result.ID[i] = thisclass->student.ID;
 				thisclass = thisclass->pNext;
 			}
+			for (int i = 0; i < result.numberofstudent; i++) {
+				for (int j = i + 1; j < result.numberofstudent; j++) {
+					if (result.ID[i] > result.ID[j]) {
+						unsigned __int64 temp = result.ID[i];
+						result.ID[i] = result.ID[j];
+						result.ID[j] = temp;
+					}
+				}
+			}
 		}
+
 		ConnectStudent(all, thisclass);
 		return result;
 	}
@@ -557,7 +567,7 @@ void MakeCurentTime(int year) {
 	wchar_t* temp = StrCat(curent, L"\\");
 	delete[] curent;
 	StrCat(temp, std::to_string(year).length(), std::to_wstring(year));
-	_wmkdir(temp);
+	if (_wmkdir(temp) == -1) { std::cout << "--Warning! override time--\n"; };
 	StrCat(temp, 2, L"\\");
 	for (int i = 0; i < 3; i++) {
 		wchar_t* semester = StrCat(temp, L"Semester" + std::to_wstring(i + 1));
@@ -567,30 +577,43 @@ void MakeCurentTime(int year) {
 	wchar_t* SemesterTime = StrCat(temp, L"time");
 	std::fstream fo(SemesterTime,std::fstream::out|std::fstream::binary);
 	std::cin.clear();
+	Date start[3], end[3];
+	char** menu = new char* [2];
+	menu[0] = new char[] {"Confirm"};
+	menu[1] = new char[] {"Again"};
+	do
+	{
+		for (int i = 0; i < 3; i++) {
+			std::cout << "Date start semester " << i + 1 << ": ";
+			while (true)
+			{
+				start[i] = InputDate();
+				if (CheckDate(start[i]) == false || (i == 0 ? false : !(start[i] >= start[i - 1]))) {
+					std::cout << "     Date not invalid! ";
+				}
+				else break;
+			}
+			std::cout << "Date end semester " << i + 1 << ": ";
+			while (true)
+			{
+				end[i] = InputDate();
+				if (CheckDate(end[i]) == false || end[i] < start[i] || (i == 0 ? false : !(end[i] >= end[i - 1]))) {
+					std::cout << "     Date not invalid! ";
+				}
+				else break;
+			}
+		}
+		system("cls");
+		std::cout << "--------------------------------------------\n";
+		for (int i = 0; i < 3; i++) {
+			std::cout << "Semester " << i + 1 << "\t start: " << start[i] << "\tend:" << end[i] << '\n';
+		}
+	} while (Menu(menu, 6, 5) != 0);
 	for (int i = 0; i < 3; i++) {
-		Date a;
-		std::cout << "Date start semester " << i + 1 << ": ";
-		while (true)
-		{
-			a = InputDate();
-			if (CheckDate(a) == false) {
-				std::cout << "     Date not invalid! ";
-			}
-			else break;
-		}
-		fo.write((char*)&a, sizeof(Date));
-		std::cout << "Date end semester " << i + 1 << ": ";
-		Date b;
-		while (true)
-		{
-			b = InputDate();
-			if (CheckDate(b) == false || b < a ) {
-				std::cout << "     Date not invalid! ";
-			}
-			else break;
-		}
-		fo.write((char*)&a, sizeof(Date));
+		fo.write((char*)&start[i], sizeof(Date));
+		fo.write((char*)&end[i], sizeof(Date));
 	}
+	DealocatedArrString(menu);
 	delete[] temp, SemesterTime;
 	fo.close();
 }
@@ -657,8 +680,8 @@ void LoadScore(Score*score, std::string filename) {
 	fi.close();
 }
 
-void CourseToBIn(Course* course, std::string filename,std::wstring current) {
-	std::fstream fo(ToString(current)+filename, std::fstream::out | std::fstream::binary);
+void CourseToBIn(Course* course, std::string filename,std::string current) {
+	std::fstream fo(current+"\\"+filename, std::fstream::out | std::fstream::binary);
 	int k;
 
 	k = strlen(course->ID) + 1;
@@ -685,7 +708,7 @@ void CourseToBIn(Course* course, std::string filename,std::wstring current) {
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fo.write((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}
-	SaveScore(course->score, ToString(current) + filename + "Score");
+	SaveScore(course->score, current+ "\\" + filename + "Score");
 	fo.close();
 }
 
@@ -721,4 +744,28 @@ Course* BinToCourse(std::string filename) {
 	course->score = new Score[course->numberofstudent];
 	LoadScore(course->score, filename + "Scores");
 	return course;
+}
+std::string SearchCurrent() {
+	Filelist* Plan = TakeFileInFolder("Data\\SchoolYear");
+	int n = CountFile(Plan);
+	tm now = GetTime();
+	std::string year = "";
+	char semester;
+	Date temp = { now.tm_mday,now.tm_mon,now.tm_year };
+	Date start, end;
+	std::fstream fi;
+	for (int i = 0; i < n; i++) {
+		fi.open("Data\\SchoolYear\\" + ToString(Plan->filename) + "\\time", std::fstream::in | std::fstream::binary);
+		for (int k = 0; k < 3; k++)
+		{
+			fi.read((char*)&start, sizeof(Date));
+			fi.read((char*)&end, sizeof(Date));
+			if (start <= temp && end >= temp) { year = ToString(Plan->filename); semester = k + 1 + '0'; }
+		}
+		Plan = Plan->pNext;
+	}
+
+	//deallocated plan here;
+	if (year == "") return "";
+	return "Data\\SchoolYear\\" + year + "\\Semester" + semester;
 }

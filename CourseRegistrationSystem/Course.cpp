@@ -496,6 +496,6 @@ Course* searchCourseFile(std::string search ) {
 	char* direction = StrCat(local, temp1);
 	Course* cou = BinToCourse(direction);
 	if (cou == nullptr) std::cout << "Unable to find " << search << "\n";
-	delete[]temp, temp1, direction, local;
+	delete[]temp1, direction, local;
 	return cou;
 }

@@ -358,7 +358,11 @@ void schoolPlan() {
 	std::cout << "--------- School Plan ---------";
 	std::cout << "\nInput Year (Pass if take current year) :";
 	time = InputNumber();
-	if (time == 0); {time = GetTime().tm_year; std::cout << time << '\n'; }
+	if (time == -1) { staffMode(); return; }
+	if (time == 0) {time = GetTime().tm_year; std::cout << time << '\n'; }
 	MakeCurentTime(time);
-
+	std::cout << "\n__________ Sucess _________";
+	_getwch();
+	staffMode();
 }
+
