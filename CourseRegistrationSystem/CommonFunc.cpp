@@ -587,6 +587,7 @@ short Choose(wchar_t** list,short X,short Y) {
 			return index;
 		}
 	}
+	delete[] size;//
 }
 
 short Choose(char** list, short X, short Y) {

@@ -453,6 +453,7 @@ _Student* TypeInStudent() {
 		choose = Menu(chooselist, 5, 1);
 	} while (choose==0);
 	DealocatedArrString(chooselist);
+	delete[] chooselist;//
 	return result;
 }
 
@@ -614,7 +615,7 @@ void MakeCurentTime(int year) {
 		fo.write((char*)&end[i], sizeof(Date));
 	}
 	DealocatedArrString(menu);
-	delete[] temp, SemesterTime;
+	delete[] temp, SemesterTime,menu;//
 	fo.close();
 }
 
