@@ -434,7 +434,9 @@ _Student* TypeInStudent() {
 		std::wcout << "Lastname: "; std::getline(std::wcin, temp); stu->lastname = StrToChar(temp);
 		_SText();
 		std::cout << "Gender: "; std::cin >> stu->gender; stu->gender = toupper(stu->gender);
-		std::cout << "Birth(dd/mm/yy): "; std::cin.ignore(1000, '\n'); std::getline(std::cin, temp1); stu->birth = StringToDate(temp1);
+		do {
+			std::cout << "Birth(dd/mm/yy): "; stu->birth = InputDate();
+		} while (CheckDate(stu->birth));
 		std::cout << "Social ID: "; std::cin >> stu->SocialID;
 
 		stu->account.username = NumToStr(stu->ID);

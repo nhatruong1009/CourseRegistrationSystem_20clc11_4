@@ -71,7 +71,7 @@ struct _Class
 };
 struct _Course
 {
-	Course course;
+	Course* course;
 	_Course* pNext;
 	_Course* pPrev;
 };
@@ -120,7 +120,7 @@ Course* BinToCourse(std::string filename);
 void MakeCurentTime(int year);
 std::string ViewSemesterTime();
 int CountFile(Filelist* a);
-Course MakeCourse();
+Course* MakeCourse();
 Classes MakeClass(_Student*& all, bool cls = true, int x = 5, int y = 2);
 void SaveClass(Classes cl,const char* fileout);
 

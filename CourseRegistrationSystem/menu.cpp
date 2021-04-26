@@ -197,7 +197,7 @@ void addGrade() {
 	int grade;
 	std::cin >> grade;
 	SchoolYear* a = AddSchoolYear(grade);
-	std::cout << "Saving.....";
+	std::cout << "Saving..... ";
 	SaveSchoolYear(a);
 	std::cout << " done";
 	_getwch();
@@ -386,7 +386,7 @@ void schoolPlan() {
 
 std::string chooseTime() {
 	system("cls");
-	Filelist* list = TakeFileInFolder("Data\\Schoolyear");
+	Filelist* list = TakeFileInFolder("Data\\SchoolYear");
 	if (list != nullptr) {
 		int n = CountFile(list);
 		Date date;
@@ -404,25 +404,67 @@ std::string chooseTime() {
 			}
 			fi.close();
 		}
-		std::string year =ChoseFolder(list, 5, 2);
-
-
+		std::string semester = "";
+		while (semester=="")
+		{
+			system("cls");
+			std::string year = ChoseFolder(list, 5, 2);
+			if (year == "") break;
+			Filelist* sem = TakeFileInFolder("Data\\SchoolYear\\" + year);
+			std::fstream fi("Data\\SchoolYear\\" + year + "\\time");
+			for (int i = 0; i < 3; i++) {
+				fi.read((char*)&date, sizeof(Date));
+				fi.read((char*)&date, sizeof(Date));
+				if (date < GetTime()) { DeleteCurFileList(sem); }
+				else { sem = sem->pNext; }
+			}
+			DeleteCurFileList(sem);
+			semester = ChoseFolder(sem, 20, 2);
+			if (semester != "") { 
+				return "Data\\SchoolYear\\" + year + "\\" + semester; 
+			}
+		}
 	}
-	_getwch();
 	return "";
+}
+
+void addCourseInSemmester(std::string current){
+	system("cls");
+	std::cout << "--------- Add Course ---------";
+	char** menu = new char*[3];
+	menu[0] = new char[] { "From CSV" };
+	menu[1] = new char[] {"Type in"};
+	menu[2] = new char[] {"back"};
+	switch (Menu(menu,5,2))
+	{
+	case 0: break;// csv in
+	case 1: MakeCourse(); break; // type in
+	case-1:
+	case 2:
+		break;
+	}
+
 }
 
 void addCourse(){
 	system("cls");
-	char** menu = new char* [2];
+	char** menu = new char* [3];
 	menu[0] = new char[] {"Take by current time"};
 	menu[1] = new char[] {"Choose time"};
-	std::string current;
+	menu[2] = new char[] {"Back"};
+	std::string current="";
 	switch (Menu(menu,5,3))
 	{
 	case 0:current = TakeCurrent(); break;
-	case 1: current = chooseTime();
+	case 1: current = chooseTime(); break;
+	case 2:
+	case -1: break;
 	}
+	if (current != "") {
+		addCourseInSemmester(current);
+	}
+	DealocatedArrString(menu);
+	courseStaff();
 }
 void editCourse(){}
 void removeCourse(){}
