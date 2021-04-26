@@ -115,12 +115,16 @@ Classes* LoadClass(const char* filein);
 SchoolYear* AddSchoolYear(int year);
 _Student* TypeInStudent();
 void SaveSchoolYear(SchoolYear* sch);
-void CourseToBIn(Course* course, std::string filename, std::string current);
+void CourseToBin(Course* course, std::string filename, std::string current);
 Course* BinToCourse(std::string filename);
 void MakeCurentTime(int year);
 std::string ViewSemesterTime();
 int CountFile(Filelist* a);
+
 Course* MakeCourse();
+void MakeCourse(std::string current);
+void CourseToBin(_Course* course, std::string current);
+
 Classes MakeClass(_Student*& all, bool cls = true, int x = 5, int y = 2);
 void SaveClass(Classes cl,const char* fileout);
 

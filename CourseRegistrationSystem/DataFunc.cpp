@@ -683,7 +683,7 @@ void LoadScore(Score*score, std::string filename) {
 	fi.close();
 }
 
-void CourseToBIn(Course* course, std::string filename,std::string current) {
+void CourseToBin(Course* course, std::string filename,std::string current) {
 	std::fstream fo(current+"\\"+filename, std::fstream::out | std::fstream::binary);
 	int k;
 
@@ -713,6 +713,15 @@ void CourseToBIn(Course* course, std::string filename,std::string current) {
 	}
 	SaveScore(course->score, current+ "\\" + filename + "Score");
 	fo.close();
+}
+
+void CourseToBin(_Course* course, std::string current) {
+	if (course == nullptr) return;
+	_Course* temp = course;
+	do {
+		CourseToBin(course->course, ToString(course->course->ID), current);
+		course = course->pNext;
+	} while (temp != course);
 }
 
 Course* BinToCourse(std::string filename) {

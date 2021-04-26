@@ -39,6 +39,7 @@ void FileOutCourse(_Course* cou, std::string fileout) {
 	fo.close();
 	_SText();
 }
+
 Course* MakeCourse() {
 	Course* result = new Course;
 	_LText();
@@ -81,24 +82,43 @@ Course* MakeCourse() {
 	day[6] = new wchar_t[]{ L"SUNDAY" };
 
 	ses[0] = new wchar_t[]{ L"S1 (07:30)" };
-	ses[1] = new wchar_t[]{ L"S2 (07:30)" };
-	ses[2] = new wchar_t[]{ L"S3 (07:30)" };
-	ses[3] = new wchar_t[]{ L"S4 (07:30)" };
+	ses[1] = new wchar_t[]{ L"S2 (09:30)" };
+	ses[2] = new wchar_t[]{ L"S3 (13:30)" };
+	ses[3] = new wchar_t[]{ L"S4 (15:30)" };
 
 	for (int i = 0; i < 2; i++) {
-		GotoXY(10, 10 + i);
-		std::wcout << "Day: ";
-		result->performed[i].day = Choose(day, 15, 10 + i);
-		GotoXY(21, 10 + i);
-		std::wcout << "Ses: ";
-		result->performed[i].session = Choose(ses, 25, 10 + i);
+		GotoXY(10, 3 + i);
+		std::wcout << L"Day: ";
+		result->performed[i].day = Choose(day, 15, 6 + i);
+		GotoXY(26, 3 + i);
+		std::wcout << L"Ses: ";
+		result->performed[i].session = Choose(ses, 30, 6 + i);
 	}
 	DealocatedArrString(ses);
 	DealocatedArrString(day);
 	_SText();
 	return result;
 }
-
+void MakeCourse(std::string current) {
+	system("cls");
+	char** menu=new char*[2];
+	_Course* cou = nullptr;
+	menu[0] = new char[] {"Add Course"};
+	menu[1] = new char[] {"Done"};
+	int check = Menu(menu, 5, 2);
+	while (check==0)
+	{
+		system("cls");
+		AddCourse(cou, MakeCourse());
+		system("cls");
+		check = Menu(menu, 5, 2);
+	}
+	std::cout << "Saving.... ";
+	CourseToBin(cou, current);
+	std::cout << "\n> done <";
+	_getwch();
+	//delete cou here;
+}
 _Course* searchID(_Course* courselist, std::wstring search) {
 	int size = strlen(courselist->course->ID);
 	wchar_t* t = new wchar_t[size];

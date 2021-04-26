@@ -438,12 +438,13 @@ void addCourseInSemmester(std::string current){
 	switch (Menu(menu,5,2))
 	{
 	case 0: break;// csv in
-	case 1: MakeCourse(); break; // type in
+	case 1: MakeCourse(current); break; // type in
 	case-1:
 	case 2:
 		break;
 	}
-
+	DealocatedArrString(menu);
+	courseStaff();
 }
 
 void addCourse(){
