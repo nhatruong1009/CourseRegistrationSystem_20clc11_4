@@ -19,6 +19,9 @@
     <ClCompile Include="Course.cpp">
       <Filter>BaoBao</Filter>
     </ClCompile>
+    <ClCompile Include="DeleteStructPointer.cpp">
+      <Filter>PNguyen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunc.h">

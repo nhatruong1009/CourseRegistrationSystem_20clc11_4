@@ -142,6 +142,7 @@
     <ClCompile Include="Course.cpp" />
     <ClCompile Include="DataFunc.cpp" />
     <ClCompile Include="CommonFunc.cpp" />
+    <ClCompile Include="DeleteStructPointer.cpp" />
     <ClCompile Include="LogHistory.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Source.cpp" />
