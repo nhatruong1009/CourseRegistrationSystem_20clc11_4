@@ -62,17 +62,17 @@ void LoginStu(Student*& CurrentUser)
 		// Read Account File
 		do
 		{
-			if (U == ToString(cur->filename))
+			if (U == cur->filename)
 				break;
 			cur = cur->pNext;
 		} while (cur != list);
-		if (U != ToString(cur->filename))
+		if (U != cur->filename)
 		{
 			system("cls");
 			std::cout << "Username is invalid, please try again." << std::endl;
 			continue;
 		}
-		Student *a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + ToString(cur->filename));
+		Student* a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + cur->filename);
 		if (P.compare(ToString(a->account.password)) == 0)
 		{
 			CurrentUser = a;
@@ -216,18 +216,18 @@ _Student* SearchStu(unsigned __int64* ID) // Return LL _Student		// Use dynamic 
 		Filelist* curlist = list;
 		do
 		{
-			if (id == ToString(curlist->filename))
+			if (id == curlist->filename)
 				break;
 			curlist = curlist->pNext;
 		} while (curlist != list);
-		if (id != ToString(curlist->filename))
+		if (id != curlist->filename)
 			std::cout << id << " does not exist " << std::endl;
 		else
 		{
 			cur->pNext = new _Student;
 			cur->pNext->pPrev = cur;
 			cur = cur->pNext;
-			cur->student = *BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + ToString(curlist->filename));
+			cur->student = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + curlist->filename);
 			cur->pNext = head;
 			head->pPrev = cur;
 		}

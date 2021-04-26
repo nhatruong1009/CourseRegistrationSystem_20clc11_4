@@ -54,7 +54,7 @@ Date StringToDate(const wchar_t* ch);
 Date StringToDate(const char* ch);
 Date StringToDate(std::wstring ch);
 Date StringToDate(std::string ch);
-tm GetTime();
+Date GetTime();
 bool operator>(tm& t1, tm& t2);
 bool operator<(tm& t1, tm& t2);
 void SaveLoginHistory(char* AccountUsername);
@@ -67,6 +67,7 @@ char* StrToChar(std::string source);
 
 Filelist* TakeFileInFolder(const std::wstring& name);
 Filelist* TakeFileInFolder(const std::string& name);
+void DeleteCurFileList(Filelist*& filelist);
 
 void DealocatedArrString(char**& stringarr);
 void DealocatedArrString(wchar_t**& stringarr);
@@ -76,7 +77,7 @@ short Menu(wchar_t** list, short Xposition, short Yposition);
 short Choose(wchar_t** list, short X, short Y);
 short Menu(char** list, short Xposition, short Yposition);
 short Choose(char** list, short X, short Y);
-std::wstring ChoseFolder(Filelist* list, short x, short y);
+std::string ChoseFolder(Filelist* list, short x, short y);
 std::string InputHidden();
 unsigned __int64 InputNumber();
 Date InputDate();

@@ -259,14 +259,18 @@ wchar_t* NumToLStr(unsigned __int64 num) {
 	}
 	return result;
 }
-tm GetTime()
+Date GetTime()
 {
 	__time32_t now = time(0);
 	tm t;
 	_localtime32_s(&t, &now);
 	t.tm_year += 1900;
 	t.tm_mon += 1;
-	return t;
+	Date temp;
+	temp.dd = t.tm_mday;
+	temp.mm = t.tm_mon;
+	temp.yy = t.tm_year;
+	return temp;
 }
 bool operator>(tm& t1, tm& t2)
 {
@@ -436,7 +440,7 @@ Filelist* TakeFileInFolder(const std::wstring& name)
 			FindNextFile(hFind, &data);
 		}
 		do {
-			AddInListFile(result, ToWstring(data.cFileName));
+			AddInListFile(result, ToString(data.cFileName));
 		} while (FindNextFile(hFind, &data) != 0);
 		FindClose(hFind);
 	}
@@ -444,6 +448,20 @@ Filelist* TakeFileInFolder(const std::wstring& name)
 }
 Filelist* TakeFileInFolder(const std::string& name) {
 	return TakeFileInFolder(ToWstring(name));
+}
+
+void DeleteCurFileList(Filelist*& filelist) {
+	if (filelist->pNext == filelist) {
+		delete filelist;
+		filelist = nullptr;
+	}
+	else {
+		Filelist* filedel = filelist;
+		filelist = filelist->pNext;
+		filedel->pPrev->pNext = filedel->pNext;
+		filedel->pNext->pPrev = filedel->pPrev;
+		delete filedel;
+	}
 }
 
 void GotoXY(short x, short y) {
@@ -639,42 +657,39 @@ int countFile(Filelist* list) {
 	return i;
 }
 
-std::wstring ChoseFolder(Filelist* list, short x, short y) {
+std::string ChoseFolder(Filelist* list, short x, short y) {
 	Filelist* temp = list;
 	int i = 0;
-	_LText();
 	do {
-		GotoXY(x, y + i); std::wcout <<temp->filename;
+		GotoXY(x, y + i); std::cout <<temp->filename;
 		i += 1;
 		temp = temp->pNext;
 	} while (list != temp);
 	i = 0;
 	int n = countFile(list) - 1;
-	GotoXY(x, y); std::wcout << L"> " << temp->filename << L" <";
+	GotoXY(x, y); std::cout << "> " << temp->filename << " <";
 	char get = 0;
 	while (true)
 	{
 		get = _getwch();
 		get = toupper(get);
 		if (get == 'W' || get == KEY_UP) {
-			GotoXY(x, y + i); std::wcout << temp->filename << "    ";
+			GotoXY(x, y + i); std::cout << temp->filename << "    ";
 			temp == list ? i = n : i -= 1;
 			temp = temp->pPrev;
-			GotoXY(x, y + i); std::wcout << L"> " << temp->filename << L" <";
+			GotoXY(x, y + i); std::cout << "> " << temp->filename << " <";
 		}
 		else if (get == 'S' || get == KEY_DOWN) {
-			GotoXY(x, y + i); std::wcout << temp->filename << "    ";
+			GotoXY(x, y + i); std::cout << temp->filename << "    ";
 			temp == list->pPrev ? i = 0 : i += 1;
 			temp = temp->pNext;
-			GotoXY(x, y + i); std::wcout << L"> " << temp->filename << L" <";
+			GotoXY(x, y + i); std::cout << "> " << temp->filename << " <";
 		}
 		else if (get == KEY_ENTER || get == ' ') {
-			_SText();
 			return temp->filename;
 		}
 		else if (get == KEY_ESC) {
-			_SText();
-			return L"";
+			return "";
 		}
 	}
 }

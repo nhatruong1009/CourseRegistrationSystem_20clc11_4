@@ -48,9 +48,9 @@ bool operator>=(Date a, Date b) {
 }
 
 
-Student StringToStudent(std::wstring str) {
+Student* StringToStudent(std::wstring str) {
 	//No, Student ID, First name, Last name, Gender, Date of Birth, Social ID
-	Student stu;
+	Student* stu = new Student;
 	wchar_t* temp = nullptr;
 	int beg = str.find(L',', 0) + 1;
 	int end = str.find(L',', beg);
@@ -59,31 +59,31 @@ Student StringToStudent(std::wstring str) {
 	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
 	_LText();
-	stu.ID = StringToInt(temp);
-	stu.account.username = new char[end - beg + 1];
-	stu.account.username[end - beg] = L'\0';
-	LStrToStr(stu.account.username, end - beg, temp);
+	stu->ID = StringToInt(temp);
+	stu->account.username = new char[end - beg + 1];
+	stu->account.username[end - beg] = L'\0';
+	LStrToStr(stu->account.username, end - beg, temp);
 	delete[] temp;
 
 	beg = end + 1;
 	end = str.find(L',', beg);
-	stu.firstname = new wchar_t[end - beg + 1];
-	stu.firstname[end - beg] = L'\0';
-	str.copy(stu.firstname, end - beg, beg);
+	stu->firstname = new wchar_t[end - beg + 1];
+	stu->firstname[end - beg] = L'\0';
+	str.copy(stu->firstname, end - beg, beg);
 
 	beg = end + 1;
 	end = str.find(L',', beg);
-	stu.lastname = new wchar_t[end - beg + 1];
-	stu.lastname[end - beg] = L'\0';
-	str.copy(stu.lastname, end - beg, beg);
+	stu->lastname = new wchar_t[end - beg + 1];
+	stu->lastname[end - beg] = L'\0';
+	str.copy(stu->lastname, end - beg, beg);
 
 	beg = end + 1;
 	end = str.find(L',', beg);
 	temp = new wchar_t[end - beg + 1];
 	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
-	if (wcscmp(temp, L"Nam") == 0)stu.gender = 'M';
-	else stu.gender = 'W';
+	if (wcscmp(temp, L"Nam") == 0)stu->gender = 'M';
+	else stu->gender = 'W';
 	delete[] temp;
 
 	beg = end + 1;
@@ -91,7 +91,7 @@ Student StringToStudent(std::wstring str) {
 	temp = new wchar_t[end - beg + 1];
 	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
-	stu.birth = StringToDate(temp);
+	stu->birth = StringToDate(temp);
 	delete[] temp;
 
 
@@ -100,20 +100,20 @@ Student StringToStudent(std::wstring str) {
 	temp = new wchar_t[end - beg + 1];
 	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
-	stu.SocialID = StringToInt(temp);
+	stu->SocialID = StringToInt(temp);
 	delete[] temp;
 	std::string pass;
-	stu.birth.dd < 10 ? pass += "0" + std::to_string(stu.birth.dd) : pass += std::to_string(stu.birth.dd);
-	stu.birth.mm < 10 ? pass += "0" + std::to_string(stu.birth.mm) : pass += std::to_string(stu.birth.mm);
-	pass += std::to_string(stu.birth.yy);
-	stu.account.password = new char[pass.length() + 1];
+	stu->birth.dd < 10 ? pass += "0" + std::to_string(stu->birth.dd) : pass += std::to_string(stu->birth.dd);
+	stu->birth.mm < 10 ? pass += "0" + std::to_string(stu->birth.mm) : pass += std::to_string(stu->birth.mm);
+	pass += std::to_string(stu->birth.yy);
+	stu->account.password = new char[pass.length() + 1];
 	for (int i = 0; i < pass.length(); i++) {
-		stu.account.password[i] = pass[i];
+		stu->account.password[i] = pass[i];
 	}
-	stu.account.password[pass.length()] = '\0';
+	stu->account.password[pass.length()] = '\0';
 	return stu;
 }
-void AddStudent(_Student*& studentlist, Student student) {
+void AddStudent(_Student*& studentlist, Student* student) {
 	if (studentlist == nullptr) { studentlist = new _Student{ student }; studentlist->pNext = studentlist, studentlist->pPrev = studentlist; return; }
 	studentlist->pPrev = new _Student{ student,studentlist,studentlist->pPrev };
 	studentlist->pPrev->pPrev->pNext = studentlist->pPrev;
@@ -142,7 +142,7 @@ void FileOutStudent(_Student* stu, std::string fileout) {
 	fo << wchar_t(0xfeff);
 	do
 	{
-		fo << stu->student.ID << L',' << stu->student.firstname << L',' << stu->student.lastname << L',' << stu->student.gender << L',' << stu->student.birth << L',' << stu->student.SocialID << L'\n';
+		fo << stu->student->ID << L',' << stu->student->firstname << L',' << stu->student->lastname << L',' << stu->student->gender << L',' << stu->student->birth << L',' << stu->student->SocialID << L'\n';
 		stu = stu->pNext;
 	} while (stu != temp);
 	fo.close();
@@ -252,9 +252,9 @@ void SaveNewStu(_Student* stu, char* direction) {
 	char* direc = StrCat(direction, "\\Student\\");
 	_Student* temp = stu;
 	do {
-		char* filename = NumToStr(stu->student.ID);
+		char* filename = NumToStr(stu->student->ID);
 		char* fileout = AddTwoStr(direc, filename);
-		StuToBin(&stu->student, fileout);
+		StuToBin(stu->student, fileout);
 		delete[] filename;
 		delete[] fileout;
 		stu = stu->pNext;
@@ -289,19 +289,19 @@ void PrintStu(_Student* stu) {
 	_Student* temp = stu;
 	do
 	{
-		PrintStu(&stu->student);
+		PrintStu(stu->student);
 		stu = stu->pNext;
 	} while (stu != temp);
 }
 Student* FindStudent(_Student* studentlist, unsigned __int64 ID) {
 	if (studentlist == nullptr) return nullptr;
 	_Student* temp = studentlist;
-	while (studentlist->student.ID != ID && studentlist->pNext != temp)
+	while (studentlist->student->ID != ID && studentlist->pNext != temp)
 	{
 		studentlist = studentlist->pNext;
 	}
-	if (studentlist->student.ID != ID) { return nullptr; }
-	return &studentlist->student;
+	if (studentlist->student->ID != ID) { return nullptr; }
+	return studentlist->student;
 }
 void DealloStu(_Student*& stu) {
 	if (stu == nullptr) return;
@@ -316,11 +316,11 @@ void RemoveStudent(_Student*& studentlist, unsigned __int64 ID) {
 	if (studentlist == nullptr) return;
 	_Student* temp = studentlist;
 	_Student* pcur = studentlist;
-	while (pcur->student.ID != ID && pcur->pNext != temp)
+	while (pcur->student->ID != ID && pcur->pNext != temp)
 	{
 		pcur = pcur->pNext;
 	}
-	if (studentlist->student.ID != ID) return;
+	if (studentlist->student->ID != ID) return;
 	if (pcur->pNext = pcur) studentlist = nullptr;
 	pcur->pPrev->pNext = pcur->pNext;
 	pcur->pNext->pPrev = pcur->pPrev;
@@ -380,7 +380,7 @@ Classes MakeClass(_Student *&all,bool cls,int x, int y ) {
 		if (result.numberofstudent != 0) {
 			result.ID = new unsigned __int64[result.numberofstudent];
 			for (int i = 0; i < result.numberofstudent; i++) {
-				result.ID[i] = thisclass->student.ID;
+				result.ID[i] = thisclass->student->ID;
 				thisclass = thisclass->pNext;
 			}
 			for (int i = 0; i < result.numberofstudent; i++) {
@@ -403,7 +403,7 @@ Classes MakeClass(_Student *&all,bool cls,int x, int y ) {
 		if (result.numberofstudent != 0) {
 			result.ID = new unsigned __int64[result.numberofstudent];
 			for (int i = 0; i < result.numberofstudent; i++) {
-				result.ID[i] = thisclass->student.ID;
+				result.ID[i] = thisclass->student->ID;
 				thisclass = thisclass->pNext;
 			}
 		}
@@ -422,31 +422,31 @@ _Student* TypeInStudent() {
 	char** chooselist = new char* [2];
 	chooselist[0] = new char[] {"Add"};
 	chooselist[1] = new char[] {"Done"};
-	Student stu;
+	Student *stu=new Student;
 	std::wstring temp;
 	std::string temp1;
 	int choose;
 	do {
-		std::cout << "ID: "; std::cin >> stu.ID;
+		std::cout << "ID: "; std::cin >> stu->ID;
 		std::cin.clear();
 		_LText();
-		std::wcout << "Fistname: "; std::getline(std::wcin, temp); stu.firstname = StrToChar(temp);
-		std::wcout << "Lastname: "; std::getline(std::wcin, temp); stu.lastname = StrToChar(temp);
+		std::wcout << "Fistname: "; std::getline(std::wcin, temp); stu->firstname = StrToChar(temp);
+		std::wcout << "Lastname: "; std::getline(std::wcin, temp); stu->lastname = StrToChar(temp);
 		_SText();
-		std::cout << "Gender: "; std::cin >> stu.gender; stu.gender = toupper(stu.gender);
-		std::cout << "Birth(dd/mm/yy): "; std::cin.ignore(1000, '\n'); std::getline(std::cin, temp1); stu.birth = StringToDate(temp1);
-		std::cout << "Social ID: "; std::cin >> stu.SocialID;
+		std::cout << "Gender: "; std::cin >> stu->gender; stu->gender = toupper(stu->gender);
+		std::cout << "Birth(dd/mm/yy): "; std::cin.ignore(1000, '\n'); std::getline(std::cin, temp1); stu->birth = StringToDate(temp1);
+		std::cout << "Social ID: "; std::cin >> stu->SocialID;
 
-		stu.account.username = NumToStr(stu.ID);
+		stu->account.username = NumToStr(stu->ID);
 		temp1 = "";
-		stu.birth.dd < 10 ? temp1 += "0" + std::to_string(stu.birth.dd) : temp1 += std::to_string(stu.birth.dd);
-		stu.birth.mm < 10 ? temp1 += "0" + std::to_string(stu.birth.mm) : temp1 += std::to_string(stu.birth.mm);
-		temp1 += std::to_string(stu.birth.yy);
-		stu.account.password = new char[temp1.length() + 1];
+		stu->birth.dd < 10 ? temp1 += "0" + std::to_string(stu->birth.dd) : temp1 += std::to_string(stu->birth.dd);
+		stu->birth.mm < 10 ? temp1 += "0" + std::to_string(stu->birth.mm) : temp1 += std::to_string(stu->birth.mm);
+		temp1 += std::to_string(stu->birth.yy);
+		stu->account.password = new char[temp1.length() + 1];
 		for (int i = 0; i < temp1.length(); i++) {
-			stu.account.password[i] = temp1[i];
+			stu->account.password[i] = temp1[i];
 		}
-		stu.account.password[temp1.length()] = '\0';
+		stu->account.password[temp1.length()] = '\0';
 		AddStudent(result, stu);
 		system("cls");
 		std::cout << "------- Add Student -------";
@@ -615,7 +615,7 @@ void MakeCurentTime(int year) {
 		fo.write((char*)&end[i], sizeof(Date));
 	}
 	DealocatedArrString(menu);
-	delete[] temp, SemesterTime,menu;//
+	delete[] temp, SemesterTime;//
 	fo.close();
 }
 
@@ -630,24 +630,24 @@ int CountFile(Filelist* a) {
 	return num;
 }
 
-std::wstring ViewSemesterTime() {
+std::string ViewSemesterTime() {
 	Filelist* a = TakeFileInFolder("Data\\SchoolYear");
 	int size = CountFile(a);
-	wchar_t** list = new wchar_t* [size];
+	char** list = new char* [size];
 	for (int i = 0; i < size; i++) {
 		list[i] = StrToChar(a->filename);
 		a = a->pNext;
 	}
-	std::wstring current = L"Data\\SchoolYear\\"+ToWstring(list[Menu(list, 10, 10)]);
+	std::string current = "Data\\SchoolYear\\" + ToString(list[Menu(list, 10, 10)]);
 	wchar_t** k = new wchar_t* [3];
 	for (int i = 0; i < 3; i++) {
 		k[i] = new wchar_t[10] {L"Semester"};
 		k[i][8] = i + 1 + L'0';
 		k[i][9] = L'\0';
 	}
-	current += L"\\Semester" + std::to_wstring(Menu(k, 20, 20) + 1) + L"\\";
+	current += "\\Semester" + std::to_string(Menu(k, 20, 20) + 1) + "\\";
 	delete[] list, k;
-	std::wfstream fo("beggin", std::wfstream::out);
+	std::fstream fo("beggin", std::fstream::out);
 	fo << current;
 	fo.close();
 	return current;
@@ -655,7 +655,7 @@ std::wstring ViewSemesterTime() {
 
 
 
-void AddInListFile(Filelist*& direc, std::wstring add) {
+void AddInListFile(Filelist*& direc, std::string add) {
 	if (direc == nullptr) { direc = new Filelist{ add }; direc->pNext = direc, direc->pPrev = direc; return; }
 	direc->pPrev = new Filelist{ add,direc,direc->pPrev };
 	direc->pPrev->pPrev->pNext = direc->pPrev;
@@ -749,19 +749,18 @@ Course* BinToCourse(std::string filename) {
 std::string TakeCurrent() {
 	Filelist* Plan = TakeFileInFolder("Data\\SchoolYear");
 	int n = CountFile(Plan);
-	tm now = GetTime();
 	std::string year = "";
 	char semester;
-	Date temp = { now.tm_mday,now.tm_mon,now.tm_year };
+	Date temp = GetTime();
 	Date start, end;
 	std::fstream fi;
 	for (int i = 0; i < n; i++) {
-		fi.open("Data\\SchoolYear\\" + ToString(Plan->filename) + "\\time", std::fstream::in | std::fstream::binary);
+		fi.open("Data\\SchoolYear\\" + Plan->filename + "\\time", std::fstream::in | std::fstream::binary);
 		for (int k = 0; k < 3; k++)
 		{
 			fi.read((char*)&start, sizeof(Date));
 			fi.read((char*)&end, sizeof(Date));
-			if (start <= temp && end >= temp) { year = ToString(Plan->filename); semester = k + 1 + '0'; }
+			if (start <= temp && end >= temp) { year = Plan->filename; semester = k + 1 + '0'; }
 		}
 		Plan = Plan->pNext;
 	}

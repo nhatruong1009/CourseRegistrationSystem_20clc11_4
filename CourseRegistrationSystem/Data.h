@@ -59,7 +59,7 @@ struct Classes
 };
 struct _Student
 {
-	Student student;
+	Student* student;
 	_Student* pNext;
 	_Student* pPrev;
 };
@@ -88,7 +88,7 @@ struct SchoolYear
 	_Student* student;
 };
 struct Filelist {
-	std::wstring filename;
+	std::string filename;
 	Filelist* pNext = nullptr;
 	Filelist* pPrev = nullptr;
 };
@@ -101,9 +101,9 @@ bool operator>(Date a, Date b);
 bool operator>=(Date a, Date b);
 
 
-void AddInListFile(Filelist*& direc, std::wstring add);
-void AddStudent(_Student*& studentlist, Student student);
-Student StringToStudent(std::wstring str);
+void AddInListFile(Filelist*& direc, std::string add);
+void AddStudent(_Student*& studentlist, Student* student);
+Student* StringToStudent(std::wstring str);
 _Student* FileInStudent(std::string filename);
 void StuToBin(Student* stu, std::string fileout);
 Student* BinToStu(std::string filein);
@@ -118,7 +118,7 @@ void SaveSchoolYear(SchoolYear* sch);
 void CourseToBIn(Course* course, std::string filename, std::string current);
 Course* BinToCourse(std::string filename);
 void MakeCurentTime(int year);
-std::wstring ViewSemesterTime();
+std::string ViewSemesterTime();
 int CountFile(Filelist* a);
 Course MakeCourse();
 Classes MakeClass(_Student*& all, bool cls = true, int x = 5, int y = 2);

@@ -213,21 +213,21 @@ void ViewGrade() {
 		std::cout << "-------------- View Grade ---------------";
 		for (int i = 0; i < size; i++) {
 			GotoXY(5, 2 + i);
-			std::cout << ToString(list->filename);
+			std::cout << list->filename;
 			list = list->pNext;
 		}
 		
 		GotoXY(5, 2 + index);
-		std::cout <<"> "<<ToString(list->filename)<<" <";
+		std::cout <<"> "<<list->filename<<" <";
 
 
-		Filelist *listclass = TakeFileInFolder(L"Data\\Grade\\" + list->filename+L"\\Class");
+		Filelist *listclass = TakeFileInFolder("Data\\Grade\\" + list->filename+"\\Class");
 		int n = CountFile(listclass);
 		Classes** temp = new Classes*[n];
 		for (int i = 0; i < n; i++) {
-			std::wstring tempfile = L"Data\\Grade\\" + list->filename + L"\\Class\\" + listclass->filename;
+			std::string tempfile = "Data\\Grade\\" + list->filename + "\\Class\\" + listclass->filename;
 			listclass = listclass->pNext;
-			temp[i] = LoadClass(ToString(tempfile).c_str());
+			temp[i] = LoadClass(tempfile.c_str());
 		}
 		for (int i = 0; i < n; i++) {
 			GotoXY(30, 2 + i);
@@ -260,8 +260,8 @@ void AddClass() {
 	system("cls");
 	std::cout << "----------- Add Class (chose grade) ------------\n";
 	Filelist* list = TakeFileInFolder("Data\\Grade");
-	std::wstring grade = ChoseFolder(list, 5, 2);
-	if(grade !=L""){
+	std::string grade = ChoseFolder(list, 5, 2);
+	if(grade !=""){
 		int year = StringToInt(&grade[1]);
 		SchoolYear* newscholl = AddSchoolYear(year);
 		SaveSchoolYear(newscholl);
@@ -278,11 +278,11 @@ void ViewClass() {
 	system("cls");
 	std::cout<<"---------- View Class ----------";
 	Filelist* grade = TakeFileInFolder("Data\\Grade");
-	std::wstring chosegrade = ChoseFolder(grade, 5, 2);
-	if (chosegrade != L"") {
-		Filelist* classlist = TakeFileInFolder("Data\\Grade\\" + ToString(chosegrade) + "\\Class");
-		std::wstring choseclass = ChoseFolder(classlist, 20, 2);
-		std::string classfile = "Data\\Grade\\" + ToString(chosegrade) + "\\Class" + ToString(choseclass);
+	std::string chosegrade = ChoseFolder(grade, 5, 2);
+	if (chosegrade != "") {
+		Filelist* classlist = TakeFileInFolder("Data\\Grade\\" + chosegrade + "\\Class");
+		std::string choseclass = ChoseFolder(classlist, 20, 2);
+		std::string classfile = "Data\\Grade\\" + chosegrade + "\\Class" + choseclass;
 		Classes* classnow = LoadClass(classfile.c_str());
 
 
@@ -345,6 +345,7 @@ void ViewCouse(Student* stu) {
 	std::cout << "------------- All Course ---------------";
 	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); return; }
 	int n = _msize(stu->allcourse) / sizeof(char*);
+
 	//Course*
 }
 
@@ -376,7 +377,7 @@ void schoolPlan() {
 	std::cout << "\nInput Year (Pass if take current year) :";
 	time = InputNumber();
 	if (time == -1) { staffMode(); return; }
-	if (time == 0) {time = GetTime().tm_year; std::cout << time << '\n'; }
+	if (time == 0) {time = GetTime().yy; std::cout << time << '\n'; }
 	MakeCurentTime(time);
 	std::cout << "\n__________ Sucess _________";
 	_getwch();
@@ -384,10 +385,35 @@ void schoolPlan() {
 }
 
 std::string chooseTime() {
+	system("cls");
+	Filelist* list = TakeFileInFolder("Data\\Schoolyear");
+	if (list != nullptr) {
+		int n = CountFile(list);
+		Date date;
+		for (int i = 0; i < n; i++) {
+			std::fstream fi("Data\\SchoolYear\\" + list->filename + "\\time", std::fstream::in | std::fstream::binary);
+			for (int j = 0; j < 6; j++) {
+				fi.read((char*)&date, sizeof(Date));
+			}
+			if (date < GetTime()) {
+				DeleteCurFileList(list);
+				i -= 1; n -= 1;
+			}
+			else {
+				list = list->pNext;
+			}
+			fi.close();
+		}
+		std::string year =ChoseFolder(list, 5, 2);
 
+
+	}
+	_getwch();
+	return "";
 }
 
 void addCourse(){
+	system("cls");
 	char** menu = new char* [2];
 	menu[0] = new char[] {"Take by current time"};
 	menu[1] = new char[] {"Choose time"};
