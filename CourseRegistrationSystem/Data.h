@@ -55,7 +55,7 @@ struct Classes
 {
 	char* name;
 	int numberofstudent=0;
-	unsigned __int64* ID;
+	unsigned __int64* ID = nullptr;
 };
 struct _Student
 {
@@ -111,6 +111,7 @@ void SaveNewStu(_Student* stu, char* directon);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
+void PrintStu(Student** stu);
 Classes* LoadClass(const char* filein);
 SchoolYear* AddSchoolYear(int year);
 _Student* TypeInStudent();
@@ -130,10 +131,13 @@ void SaveClass(Classes cl,const char* fileout);
 
 
 void LoginStu(Student*& CurrentUser);
+void Logout(Student* CurrentUser);
 void ChangeInfo(Student*& CurrentUser);
-_Student* SearchStu(unsigned __int64* ID);
+_Student* SearchStuList(unsigned __int64* ID);
 Student* SearchStu(unsigned __int64 ID);
-Student** SearchStu(unsigned __int64* ID, int Grade);
+Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
 std::string TakeCurrent();
+void displayScore(Score* a);
+void displayCourse(Course* cou);
 #endif // _Structs
 

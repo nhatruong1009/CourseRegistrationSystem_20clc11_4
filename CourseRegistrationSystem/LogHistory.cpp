@@ -84,10 +84,10 @@ void LoginStu(Student*& CurrentUser)
 	// Go to Student menu
 }
 
-void Logout(Student CurrentUser)
+void Logout(Student* CurrentUser)
 {
 	system("cls");
-	SaveLogoutHistory(CurrentUser.account.username);
+	SaveLogoutHistory(CurrentUser->account.username);
 	// Go to menu
 }
 
@@ -194,7 +194,7 @@ void ChangeInfo(Student*& CurrentUser)
 	}
 }
 
-_Student* SearchStu(unsigned __int64* ID) // Return LL _Student		// Use dynamic array of ID when using
+_Student* SearchStuList(unsigned __int64* ID) // Return LL _Student		// Use dynamic array of ID when using
 {
 	_Student* head = nullptr, * cur;
 	head = new _Student;	// dummy node;
@@ -259,16 +259,14 @@ Student* SearchStu(unsigned __int64 ID)
 	return a;
 }
 
-Student** SearchStu(unsigned __int64* ID, int Grade)	// Use dynamic array of ID when using
+Student** SearchStuArr(unsigned __int64* ID, std::string Grade)	// Use dynamic array of ID when using
 {
 	Student** a=nullptr;
 	int n = _msize(ID) / 8;
 	a = new Student * [n] {};
-	std::string foldername = "K";
-	foldername = foldername + NumToStr(Grade);
 	for (int i = 0; i < n; i++)
 	{
-		a[i] = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + NumToStr(ID[i]));
+		a[i] = BinToStu("Data\\Grade\\" + Grade + "\\Student\\" + NumToStr(ID[i]));
 		if (a[i] == nullptr)
 		{
 			std::cout << ID[i] << " does not exist " << std::endl;

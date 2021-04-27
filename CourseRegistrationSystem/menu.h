@@ -25,4 +25,6 @@ void schoolPlan();
 void addCourse();
 void editCourse();
 void removeCourse();
+void addStuInClass();
+void viewStu();
 #endif // !_Menu

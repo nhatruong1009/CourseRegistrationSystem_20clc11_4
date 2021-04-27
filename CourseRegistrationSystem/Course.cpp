@@ -42,21 +42,23 @@ void FileOutCourse(_Course* cou, std::string fileout) {
 
 Course* MakeCourse() {
 	Course* result = new Course;
+	
+	std::string stemp;
+	std::cout << "Course ID: ";
+	std::getline(std::cin, stemp);
+	int size = stemp.length();
+	result->ID = new char[size + 1];
+	result->ID[size] = '\0';
+	stemp.copy(result->ID, size);
+
 	_LText();
 	std::wcout << "Course name: ";
 	std::wstring temp;
 	std::getline(std::wcin, temp);
-	int size = temp.length();
+	size = temp.length();
 	result->name = new wchar_t[size + 1];
 	result->name[size] = L'\0';
 	temp.copy(result->name, size);
-
-	std::wcout << "Course ID: ";
-	std::getline(std::wcin, temp);
-	size = temp.length();
-	result->ID = new char[size + 1];
-	result->ID[size] = '\0';
-	LStrToStr(result->ID, size, temp);
 
 	std::wcout << "Teacher name: ";
 	std::getline(std::wcin, temp);
@@ -64,39 +66,39 @@ Course* MakeCourse() {
 	result->teacher = new wchar_t[size + 1];
 	result->teacher[size] = L'\0';
 	temp.copy(result->teacher, size);
+	_SText();
 
-	std::wcout << "Number of credits: ";
-	std::wcin >> result->credit;
-	std::wcin.ignore(1000, L'\n');
+	std::cout << "Number of credits: ";
+	std::cin >> result->credit;
+	std::cin.ignore(1000, '\n');
 
-	std::wcout << "Schedule (ex. MON,S1) \n";// hmm not workking
+	std::cout << "Schedule (ex. MON,S1) \n";// hmm not workking
 
-	wchar_t** day = new wchar_t* [7];
-	wchar_t** ses = new wchar_t* [4];
-	day[0] = new wchar_t[]{ L"MONDAY" };
-	day[1] = new wchar_t[]{ L"TUESDAY" };
-	day[2] = new wchar_t[]{ L"WEDNESDAY" };
-	day[3] = new wchar_t[]{ L"THURSDAY" };
-	day[4] = new wchar_t[]{ L"FRIDAY" };
-	day[5] = new wchar_t[]{ L"SATURDAY" };
-	day[6] = new wchar_t[]{ L"SUNDAY" };
+	char** day = new char* [7];
+	char** ses = new char* [4];
+	day[0] = new char[]{ "MONDAY" };
+	day[1] = new char[]{ "TUESDAY" };
+	day[2] = new char[]{ "WEDNESDAY" };
+	day[3] = new char[]{ "THURSDAY" };
+	day[4] = new char[]{ "FRIDAY" };
+	day[5] = new char[]{ "SATURDAY" };
+	day[6] = new char[]{ "SUNDAY" };
 
-	ses[0] = new wchar_t[]{ L"S1 (07:30)" };
-	ses[1] = new wchar_t[]{ L"S2 (09:30)" };
-	ses[2] = new wchar_t[]{ L"S3 (13:30)" };
-	ses[3] = new wchar_t[]{ L"S4 (15:30)" };
+	ses[0] = new char[]{ "S1 (07:30)" };
+	ses[1] = new char[]{ "S2 (09:30)" };
+	ses[2] = new char[]{ "S3 (13:30)" };
+	ses[3] = new char[]{ "S4 (15:30)" };
 
 	for (int i = 0; i < 2; i++) {
-		GotoXY(10, 3 + i);
-		std::wcout << L"Day: ";
+		GotoXY(10, 6 + i);
+		std::cout << "Day: ";
 		result->performed[i].day = Choose(day, 15, 6 + i);
-		GotoXY(26, 3 + i);
-		std::wcout << L"Ses: ";
+		GotoXY(26, 6 + i);
+		std::cout << "Ses: ";
 		result->performed[i].session = Choose(ses, 30, 6 + i);
 	}
 	DealocatedArrString(ses);
 	DealocatedArrString(day);
-	_SText();
 	return result;
 }
 void MakeCourse(std::string current) {
@@ -223,19 +225,8 @@ void printCourseDay(short a) {
 	}
 }
 
-void displayCourse(_Course* cou) {
-	_LText();
-	std::wcout << "1. Name: " << cou->course->name << "\n";
-	std::wcout << "2. ID: " << cou->course->ID << "\n";
-	std::wcout << "3. Teacher: " << cou->course->teacher << "\n";
-	std::wcout << "4. Credits: " << cou->course->credit << "\n";
-	std::wcout << "5. Number of students: " << cou->course->numberofstudent << "/" << cou->course->maxstudent << "\n";
-	std::wcout << "6. Schedule:\n";
-	for (int i = 0; i < 2; i++) {
-		std::wcout << "   Day: "; printCourseDay(cou->course->performed[i].day);
-		std::wcout << "   Session: S" << cou->course->performed[i].session + 1 << "\n";
-	}
-	_SText();
+void displayCourse(Course* cou) {
+
 }
 
 void displayScore(Score* a) {

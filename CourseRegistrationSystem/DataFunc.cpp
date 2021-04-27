@@ -8,9 +8,9 @@ std::ostream& operator<<(std::ostream& os, const Date& dt)
 }
 std::wostream& operator<<(std::wostream& os, const Date& dt)
 {
-	if (dt.dd < 10) os << "0" << dt.dd << '/';
+	if (dt.dd < 10) os << dt.dd << '/';
 	else os << dt.dd << '/';
-	if (dt.mm < 10) os << "0" << dt.mm << '/';
+	if (dt.mm < 10) os << '0' << dt.mm << '/';
 	else os << dt.mm << '/';
 	os << dt.yy;
 	return os;
@@ -274,25 +274,34 @@ int NumberOfStudent(_Student* stu) {
 void PrintStu(Student* a) {
 	if (a == nullptr) return;
 	_LText();
-	std::wcout << a->ID << "  ";
-	std::wcout << a->firstname << "\t";
-	std::wcout << a->lastname << "\t";
-	std::wcout << a->gender << '\t';
-	std::wcout << a->birth << '\t';
-	std::wcout << a->SocialID << '\t';
-	std::wcout << a->account.username << '\t';
-	std::wcout << a->account.password << '\n';
+	std::wcout << a->ID;
+	std::wcout <<std::setw(23) << a->firstname << std::setw(10);
+	std::wcout << a->lastname << std::setw(10);
+	std::wcout << a->gender << std::setw(10);
+	std::wcout << a->birth << std::setw(10);
+	std::wcout << a->SocialID << std::setw(10) << '\n';
 	_SText();
 }
 void PrintStu(_Student* stu) {
 	if (stu == nullptr) return;
 	_Student* temp = stu;
+	std::cout << "ID"<<std::setw(23)<<"Fist Name"<< "Last name\t\tGender\t\tBirth\t\tSocial ID\n";
 	do
 	{
 		PrintStu(stu->student);
 		stu = stu->pNext;
 	} while (stu != temp);
 }
+
+void PrintStu(Student** stu) {
+	if (stu == nullptr) return;
+	int n = _msize(stu) / sizeof(stu);
+	std::cout << "ID\t\tFist Name\t\tLast name\tGender\t\tBirth\tSocial ID\n";
+	for (int i = 0; i < n; i++) {
+		PrintStu(stu[i]);
+	}
+}
+
 Student* FindStudent(_Student* studentlist, unsigned __int64 ID) {
 	if (studentlist == nullptr) return nullptr;
 	_Student* temp = studentlist;
@@ -688,25 +697,26 @@ void CourseToBin(Course* course, std::string filename,std::string current) {
 	int k;
 
 	k = strlen(course->ID) + 1;
+
 	fo.write((char*)&k, sizeof(int));
 	fo.write(course->ID, k);
 
 	k = wcslen(course->name) + 1;
 	fo.write((char*)&k, sizeof(int));
-	fo.write((char*)&course->name, 2 * k);
+	fo.write((char*)&course->name, (sizeof(wchar_t) / sizeof(char))* k);
 
 	k = wcslen(course->teacher) + 1;
 	fo.write((char*)&k, sizeof(int));
-	fo.write((char*)&course->teacher, 2 * k);
+	fo.write((char*)&course->teacher, (sizeof(wchar_t) / sizeof(char))* k);
 
 	fo.write((char*)&course->performed[0].day, sizeof(short));
 	fo.write((char*)&course->performed[0].session, sizeof(short));
 	fo.write((char*)&course->performed[1].day, sizeof(short));
 	fo.write((char*)&course->performed[1].session, sizeof(short));
 
-	fo.write((char*)&course->credit, sizeof(short));
-	fo.write((char*)&course->maxstudent, sizeof(short));
-	fo.write((char*)&course->numberofstudent, sizeof(short));
+	fo.write((char*)&course->credit, sizeof(unsigned short));
+	fo.write((char*)&course->maxstudent, sizeof(unsigned short));
+	fo.write((char*)&course->numberofstudent, sizeof(unsigned short));
 	
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fo.write((char*)&course->stuID[i], sizeof(unsigned __int64));
@@ -733,28 +743,32 @@ Course* BinToCourse(std::string filename) {
 	course->ID = new char[k];
 	fi.read(course->ID, k);
 
+	std::cout << course->ID;
+
 	fi.read((char*)&k, sizeof(int));
 	course->name = new wchar_t[k];
-	fi.read((char*)&course->name, 2 * k);
+	fi.read((char*)&course->name, (sizeof(wchar_t) / sizeof(char))* k);
 
 	fi.read((char*)&k, sizeof(int));
 	course->teacher = new wchar_t[k];
-	fi.read((char*)&course->teacher, 2 * k);
+	fi.read((char*)&course->teacher, (sizeof(wchar_t) / sizeof(char)) * k);
 
 	fi.read((char*)&course->performed[0].day, sizeof(short));
 	fi.read((char*)&course->performed[0].session, sizeof(short));
 	fi.read((char*)&course->performed[1].day, sizeof(short));
 	fi.read((char*)&course->performed[1].session, sizeof(short));
 
-	fi.read((char*)&course->credit, sizeof(short));
-	fi.read((char*)&course->maxstudent, sizeof(short));
-	fi.read((char*)&course->numberofstudent, sizeof(short));
+	fi.read((char*)&course->credit, sizeof(unsigned short));
+	fi.read((char*)&course->maxstudent, sizeof(unsigned short));
+	fi.read((char*)&course->numberofstudent, sizeof(unsigned short));
+
 
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fi.read((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}
 	course->score = new Score[course->numberofstudent];
 	LoadScore(course->score, filename + "Scores");
+	fi.close();
 	return course;
 }
 std::string TakeCurrent() {

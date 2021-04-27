@@ -55,24 +55,21 @@ void updateStudentsInClass(Classes &a) {
 void userTypeMode()
 {
 	system("cls");
-	int so;
 	std::cout << "-------------USER TYPE---------------";
 	char** menu = new char* [3];
 	menu[0] = new char[] {"Student"};
 	menu[1] = new char[] {"Academic Staff"};
 	menu[2] = new char[] {"Exit"};
-	so = Menu(menu, 4, 2);
-	DealocatedArrString(menu);
-	switch (so)
+	switch (Menu(menu, 4, 2))
 	{
 	case 0:
 		studentMode();
-		return;
+		break;
 	case 1:
 		staffMode();
-		return;
-	case 2: return;
+		break;
 	}
+	DealocatedArrString(menu);
 }
 void studentMode(Student* stu )
 {
@@ -91,18 +88,17 @@ void studentMode(Student* stu )
 	{
 	case 0:
 		StuInformation(stu);
-		DealocatedArrString(menu);
-		return;
+		break;
 	case 1:
 		CourseInformaion(stu);
-		DealocatedArrString(menu);
-		return;
+		break;
 	case -1:
 	case 2:
-		userTypeMode();
-		DealocatedArrString(menu);
-		return;
+		break;
 	}
+	Logout(stu);
+	DealocatedArrString(menu);
+	userTypeMode();
 }
 void staffMode()
 {
@@ -271,8 +267,14 @@ void AddClass() {
 	classMenu();
 }
 
-void DoSomeThingInClass(Classes* cls) {
-	Student* stu = new Student[cls->numberofstudent];
+void DoSomeThingInClass(Classes* cls,std::string grade) {
+	Student** teee = SearchStuArr(cls->ID, grade);
+	system("cls");
+	// xuat mot lon thong tin o day
+	// option1 xuat file
+	//option2 out
+	PrintStu(teee);
+	_getwch();
 }
 void ViewClass() {
 	system("cls");
@@ -282,13 +284,12 @@ void ViewClass() {
 	if (chosegrade != "") {
 		Filelist* classlist = TakeFileInFolder("Data\\Grade\\" + chosegrade + "\\Class");
 		std::string choseclass = ChoseFolder(classlist, 20, 2);
-		std::string classfile = "Data\\Grade\\" + chosegrade + "\\Class" + choseclass;
+		std::string classfile = "Data\\Grade\\" + chosegrade + "\\Class\\" + choseclass;
 		Classes* classnow = LoadClass(classfile.c_str());
 
 
-		DoSomeThingInClass(classnow);
+		DoSomeThingInClass(classnow, chosegrade);
 		//delete classnow here
-		//do somthing with file class here
 	}
 	classMenu();
 }
@@ -352,18 +353,20 @@ void ViewCouse(Student* stu) {
 void courseStaff() {
 	system("cls");
 	std::cout << "---------- Course ----------";
-	char** menu = new char* [4];
+	char** menu = new char* [5];
 	menu[0] = new char[] {"Add Course"};
 	menu[1] = new char[] {"View/Edit Course"};
-	menu[2] = new char[] {"Remove Course"};
-	menu[3] = new char[] {"Back"};
+	menu[2] = new char[] {"Delete Course"};
+	menu[3] = new char[] {"Remove Course"};
+	menu[4] = new char[] {"Back"};
 	switch (Menu(menu,5,2))
 	{
 	case 0: addCourse(); break;
 	case 1: editCourse(); break;
 	case 2: removeCourse(); break;
-	case -1:
 	case 3: break;
+	case -1:
+	case 4: break;
 	}
 
 	DealocatedArrString(menu);
@@ -384,7 +387,7 @@ void schoolPlan() {
 	staffMode();
 }
 
-std::string chooseTime() {
+std::string chooseTime(bool timeout=true) {
 	system("cls");
 	Filelist* list = TakeFileInFolder("Data\\SchoolYear");
 	if (list != nullptr) {
@@ -395,7 +398,7 @@ std::string chooseTime() {
 			for (int j = 0; j < 6; j++) {
 				fi.read((char*)&date, sizeof(Date));
 			}
-			if (date < GetTime()) {
+			if (date < GetTime() && timeout) {
 				DeleteCurFileList(list);
 				i -= 1; n -= 1;
 			}
@@ -415,7 +418,7 @@ std::string chooseTime() {
 			for (int i = 0; i < 3; i++) {
 				fi.read((char*)&date, sizeof(Date));
 				fi.read((char*)&date, sizeof(Date));
-				if (date < GetTime()) { DeleteCurFileList(sem); }
+				if (date < GetTime() && timeout) { DeleteCurFileList(sem); }
 				else { sem = sem->pNext; }
 			}
 			DeleteCurFileList(sem);
@@ -467,5 +470,15 @@ void addCourse(){
 	DealocatedArrString(menu);
 	courseStaff();
 }
-void editCourse(){}
+void editCourse(){
+	std::string current = chooseTime(false);
+	Filelist* Cour = TakeFileInFolder(current);
+	for (int i = 0; i < CountFile(Cour); i++) {
+		if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
+		else Cour = Cour->pNext;
+	}
+	Filelist* temp = Cour;
+	system("cls");
+	_getwch();
+}
 void removeCourse(){}
