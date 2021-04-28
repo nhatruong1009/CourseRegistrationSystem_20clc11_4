@@ -67,6 +67,7 @@ char* StrToChar(std::string source);
 
 Filelist* TakeFileInFolder(const std::wstring& name);
 Filelist* TakeFileInFolder(const std::string& name);
+
 void DeleteCurFileList(Filelist*& filelist);
 
 void DealocatedArrString(char**& stringarr);

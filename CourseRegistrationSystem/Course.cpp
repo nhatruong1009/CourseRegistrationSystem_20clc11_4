@@ -72,7 +72,7 @@ Course* MakeCourse() {
 	std::cin >> result->credit;
 	std::cin.ignore(1000, '\n');
 
-	std::cout << "Schedule (ex. MON,S1) \n";// hmm not workking
+	std::cout << "Schedule \n";// hmm not workking
 
 	char** day = new char* [7];
 	char** ses = new char* [4];
@@ -90,12 +90,12 @@ Course* MakeCourse() {
 	ses[3] = new char[]{ "S4 (15:30)" };
 
 	for (int i = 0; i < 2; i++) {
-		GotoXY(10, 6 + i);
+		GotoXY(10, 4 + i);
 		std::cout << "Day: ";
-		result->performed[i].day = Choose(day, 15, 6 + i);
-		GotoXY(26, 6 + i);
+		result->performed[i].day = Choose(day, 15, 4 + i);
+		GotoXY(26, 4 + i);
 		std::cout << "Ses: ";
-		result->performed[i].session = Choose(ses, 30, 6 + i);
+		result->performed[i].session = Choose(ses, 30, 4 + i);
 	}
 	DealocatedArrString(ses);
 	DealocatedArrString(day);
@@ -227,19 +227,31 @@ void printCourseDay(short a) {
 }
 
 void displayCourse(Course* cou) {
-	std::cout << "1. ID: " << cou->ID << "\n";
+	std::cout << "ID: " << cou->ID << "\n";
 	_LText();
-	std::wcout << "2. Name: " << cou->name << "\n";
-	std::wcout << "3. Teacher: " << cou->teacher << "\n";
+	std::wcout << "Name: " << cou->name << "\n";
+	std::wcout << "Teacher: " << cou->teacher << "\n";
 	_SText();
-	std::cout << "4. Credits: " << cou->credit << "\n";
-	std::cout << "5. Number of students: " << cou->numberofstudent << "/" << cou->maxstudent << "\n";
-	std::cout << "6. Schedule:\n";
+	std::cout << "Credits: " << cou->credit << "\n";
+	std::cout << "Number of students: " << cou->numberofstudent << "/" << cou->maxstudent << "\n";
+	std::cout << "Schedule:\n";
 	for (int i = 0; i < 2; i++) {
 		std::cout << "   Day: "; printCourseDay(cou->performed[i].day);
 		std::cout << "   Session: S" << cou->performed[i].session + 1 << "\n";
 	}
 	std::cout << '\n';
+}
+void displayCourse(Course** cou) {
+	int n = _msize(cou) / sizeof(cou);
+	std::cout << std::setw(10) << "ID" << std::setw(15) << "Course Name" << std::setw(15) << "Teacher" << std::setw(15) << "Student" << std::setw(30) << "Schedule";
+	for (int i = 0; i < n; i++) {
+		std::cout << cou[i]->ID;
+		_LText();
+		std::wcout << cou[i]->name << std::setw(20) << cou[i]->teacher;
+		_SText();
+		std::cout << std::setw(10) << cou[i]->numberofstudent << "/" << cou[i]->maxstudent << std::setw(10);
+
+	}
 }
 
 void displayScore(Score* a) {
@@ -284,7 +296,70 @@ void searchScore(_Course* allcourse) {
 	}
 	_SText();
 }
-	
+Date TakeDateEnd(std::string current) {
+	int sem = current.find('\\', 0);
+	sem = current.find('\\', sem + 1);
+	int temp = current.find('\\', sem + 1);
+	char* year = new char[temp - sem];
+	current.copy(year, temp - sem, sem + 1);
+	year[temp - sem - 1] = '\0';
+	sem = current[current.size() - 1] - '0';
+
+	std::fstream fi("Data\\SchoolYear\\" + ToString(year) + "\\time", std::fstream::in | std::fstream::binary);
+	Date check;
+	for (int i = 0; i < sem; i++) {
+		fi.read((char*)&check, sizeof(Date));
+		fi.read((char*)&check, sizeof(Date));
+	}
+	delete[] year;
+	return check;
+}
+void editCourse(Course* cour, std::string filename, std::string current) {
+	Date check = TakeDateEnd(current);
+	system("cls");
+	std::cout << check;
+	std::cout << "-------- Edit course --------";
+	if (check < GetTime()) {
+		char** menu = new char* [6];
+		menu[0] = new char[] {"Teacher"};
+		menu[1] = new char[] {"Max Student"};
+		menu[2] = new char[] {"Performed"};
+		menu[0] = new char[] {"Back"};
+		int chose = -1;
+		_getwch();
+	}
+	else {
+		char** menu = new char* [6];
+		menu[0] = new char[] {"Teacher"};
+		menu[3] = new char[] {"Score"};
+		menu[0] = new char[] {"Back"};
+		int chose = -1;
+	}
+}
+
+void deleteCourse(Course* cour, std::string filename, std::string current) {
+
+}
+
+
+
+void editCourse(std::string filename,std::string current) {
+	system("cls");
+	std::cout << "-------- Edit Course ----------\n";
+	Course* cour = BinToCourse(current + "\\" + filename);
+	displayCourse(cour);
+	char** menu = new char* [3];
+	menu[0] = new char[] {"Edit"};
+	menu[1] = new char[] {"Delete (Only before register time) "};
+	menu[2] = new char[] {"back"};
+	int chose = Menu(menu, 5, 10);
+	DealocatedArrString(menu);
+	switch (chose)
+	{
+	case 0: editCourse(cour,filename,current); break;
+	case 1: deleteCourse(cour,filename,current); break;
+	}
+}
 
 Course* searchCourseFile(std::string search ) {
 	char year[5];
