@@ -6,13 +6,12 @@
 #include"menu.h"
 #include <cstdint>
 #include <filesystem>
-
+#include"Data.h"
 void main()
 {
 	//int a = InputNumber();
 	//std::cout << '\t' << a;
 	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
-	//userTypeMode();
+	userTypeMode();
 	//std::cout << SearchCurrent();
-	BinToCourse("Data\\SchoolYear\\2022\\Semester1\\TOAN20CLC11");
 }

@@ -30,10 +30,10 @@ struct Course
 	unsigned short credit;
 	struct Performed
 	{
-		short day=0;
-		short session=0;
+		unsigned short day=0;
+		unsigned short session=0;
 	};
-	Performed* performed = new Performed[2];
+	Performed performed[2];
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
 	unsigned __int64* stuID;

@@ -696,28 +696,26 @@ void CourseToBin(Course* course, std::string filename,std::string current) {
 	std::fstream fo(current+"\\"+filename, std::fstream::out | std::fstream::binary);
 	int k;
 
-	k = strlen(course->ID) + 1;
+	fo.write((char*)&course->numberofstudent, sizeof(unsigned short));
+	fo.write((char*)&course->maxstudent, sizeof(unsigned short));
+	fo.write((char*)&course->performed[0].day, sizeof(unsigned short));
+	fo.write((char*)&course->performed[0].session, sizeof(unsigned short));
+	fo.write((char*)&course->performed[1].day, sizeof(unsigned short));
+	fo.write((char*)&course->performed[1].session, sizeof(unsigned short));
+	fo.write((char*)&course->credit, sizeof(unsigned short));
 
+	k = strlen(course->ID) + 1;
 	fo.write((char*)&k, sizeof(int));
 	fo.write(course->ID, k);
 
 	k = wcslen(course->name) + 1;
 	fo.write((char*)&k, sizeof(int));
-	fo.write((char*)&course->name, (sizeof(wchar_t) / sizeof(char))* k);
+	fo.write((char*)&*course->name, (sizeof(wchar_t) / sizeof(char) * k));
 
 	k = wcslen(course->teacher) + 1;
 	fo.write((char*)&k, sizeof(int));
-	fo.write((char*)&course->teacher, (sizeof(wchar_t) / sizeof(char))* k);
+	fo.write((char*)&*course->teacher, (sizeof(wchar_t) / sizeof(char) * k));
 
-	fo.write((char*)&course->performed[0].day, sizeof(short));
-	fo.write((char*)&course->performed[0].session, sizeof(short));
-	fo.write((char*)&course->performed[1].day, sizeof(short));
-	fo.write((char*)&course->performed[1].session, sizeof(short));
-
-	fo.write((char*)&course->credit, sizeof(unsigned short));
-	fo.write((char*)&course->maxstudent, sizeof(unsigned short));
-	fo.write((char*)&course->numberofstudent, sizeof(unsigned short));
-	
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fo.write((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}
@@ -739,29 +737,26 @@ Course* BinToCourse(std::string filename) {
 	if (!fi) return nullptr;
 	int k;
 	Course* course = new Course;
+
+	fi.read((char*)&course->numberofstudent, sizeof(unsigned short));
+	fi.read((char*)&course->maxstudent, sizeof(unsigned short));
+	fi.read((char*)&course->performed[0].day, sizeof(unsigned short));
+	fi.read((char*)&course->performed[0].session, sizeof(unsigned short));
+	fi.read((char*)&course->performed[1].day, sizeof(unsigned short));
+	fi.read((char*)&course->performed[1].session, sizeof(unsigned short));
+	fi.read((char*)&course->credit, sizeof(unsigned short));
+
 	fi.read((char*)&k, sizeof(int));
 	course->ID = new char[k];
 	fi.read(course->ID, k);
 
-	std::cout << course->ID;
-
 	fi.read((char*)&k, sizeof(int));
 	course->name = new wchar_t[k];
-	fi.read((char*)&course->name, (sizeof(wchar_t) / sizeof(char))* k);
+	fi.read((char*)&*course->name, (sizeof(wchar_t) / sizeof(char) * k));
 
 	fi.read((char*)&k, sizeof(int));
 	course->teacher = new wchar_t[k];
-	fi.read((char*)&course->teacher, (sizeof(wchar_t) / sizeof(char)) * k);
-
-	fi.read((char*)&course->performed[0].day, sizeof(short));
-	fi.read((char*)&course->performed[0].session, sizeof(short));
-	fi.read((char*)&course->performed[1].day, sizeof(short));
-	fi.read((char*)&course->performed[1].session, sizeof(short));
-
-	fi.read((char*)&course->credit, sizeof(unsigned short));
-	fi.read((char*)&course->maxstudent, sizeof(unsigned short));
-	fi.read((char*)&course->numberofstudent, sizeof(unsigned short));
-
+	fi.read((char*)&*course->teacher, (sizeof(wchar_t) / sizeof(char) * k));
 
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fi.read((char*)&course->stuID[i], sizeof(unsigned __int64));
