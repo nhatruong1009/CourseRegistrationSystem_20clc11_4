@@ -82,7 +82,7 @@ Student* StringToStudent(std::wstring str) {
 	temp = new wchar_t[end - beg + 1];
 	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
-	if (wcscmp(temp, L"Nam") == 0)stu->gender = 'M';
+	if (wcscmp(temp, L"Nam") == 0 || wcscmp(temp,L"Men"))stu->gender = 'M';
 	else stu->gender = 'W';
 	delete[] temp;
 
@@ -261,6 +261,7 @@ void SaveNewStu(_Student* stu, char* direction) {
 	} while (stu != temp);
 	delete[] direc;
 }
+
 int NumberOfStudent(_Student* stu) {
 	if (stu == nullptr) return 0;
 	int k = 0;
@@ -276,16 +277,17 @@ void PrintStu(Student* a) {
 	_LText();
 	std::wcout << a->ID;
 	std::wcout <<std::setw(23) << a->firstname << std::setw(10);
-	std::wcout << a->lastname << std::setw(10);
-	std::wcout << a->gender << std::setw(10);
-	std::wcout << a->birth << std::setw(10);
+	std::wcout << a->lastname << std::setw(11);
+	if (a->gender == 'M' || a->gender=='N') std::wcout << "Men";
+	else std::wcout << "Women";
+	std::wcout << std::setw(10) << a->birth << std::setw(17);
 	std::wcout << a->SocialID << std::setw(10) << '\n';
 	_SText();
 }
 void PrintStu(_Student* stu) {
 	if (stu == nullptr) return;
 	_Student* temp = stu;
-	std::cout << "ID"<<std::setw(23)<<"Fist Name"<< "Last name\t\tGender\t\tBirth\t\tSocial ID\n";
+	std::cout <<std::setw(5) << "ID" << std::setw(23) << "Fist Name" << std::setw(15) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID\n";
 	do
 	{
 		PrintStu(stu->student);
@@ -296,7 +298,7 @@ void PrintStu(_Student* stu) {
 void PrintStu(Student** stu) {
 	if (stu == nullptr) return;
 	int n = _msize(stu) / sizeof(stu);
-	std::cout << "ID\t\tFist Name\t\tLast name\tGender\t\tBirth\tSocial ID\n";
+	std::cout << std::setw(5) << "ID" << std::setw(23) << "Fist Name" << std::setw(15) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID\n";
 	for (int i = 0; i < n; i++) {
 		PrintStu(stu[i]);
 	}
@@ -386,6 +388,7 @@ Classes MakeClass(_Student *&all,bool cls,int x, int y ) {
 		std::cin >> temp;
 		_Student* thisclass = FileInStudent(temp);
 		result.numberofstudent = CountStudent(thisclass);
+		thisclass = thisclass->pNext;
 		if (result.numberofstudent != 0) {
 			result.ID = new unsigned __int64[result.numberofstudent];
 			for (int i = 0; i < result.numberofstudent; i++) {
@@ -431,21 +434,25 @@ _Student* TypeInStudent() {
 	char** chooselist = new char* [2];
 	chooselist[0] = new char[] {"Add"};
 	chooselist[1] = new char[] {"Done"};
-	Student *stu=new Student;
 	std::wstring temp;
 	std::string temp1;
 	int choose;
 	do {
+		Student* stu = new Student;
+		std::cin.ignore(1000, '\n');
 		std::cout << "ID: "; std::cin >> stu->ID;
-		std::cin.clear();
+		std::cin.ignore(1000, '\n');
 		_LText();
 		std::wcout << "Fistname: "; std::getline(std::wcin, temp); stu->firstname = StrToChar(temp);
 		std::wcout << "Lastname: "; std::getline(std::wcin, temp); stu->lastname = StrToChar(temp);
 		_SText();
-		std::cout << "Gender: "; std::cin >> stu->gender; stu->gender = toupper(stu->gender);
+		std::cout << "Gender: "; std::getline(std::cin, temp1);
+		if (toupper(temp1[1])=='A' || toupper(temp[1]=='E'))
+			stu->gender = 'M';
 		do {
 			std::cout << "Birth(dd/mm/yy): "; stu->birth = InputDate();
-		} while (CheckDate(stu->birth));
+		} while (CheckDate(stu->birth)==false);
+		std::cin.ignore(1000, '\n');
 		std::cout << "Social ID: "; std::cin >> stu->SocialID;
 
 		stu->account.username = NumToStr(stu->ID);

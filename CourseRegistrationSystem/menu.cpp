@@ -479,6 +479,10 @@ void editCourse(){
 	}
 	Filelist* temp = Cour;
 	system("cls");
+	do {
+		displayCourse(BinToCourse(current + "\\" + temp->filename));
+		temp = temp->pNext;
+	}while (temp != Cour);
 	_getwch();
 }
 void removeCourse(){}

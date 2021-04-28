@@ -223,10 +223,23 @@ void printCourseDay(short a) {
 		std::wcout << std::setw(10) << std::left << "Sunday";
 		break;
 	}
+	_SText();
 }
 
 void displayCourse(Course* cou) {
-
+	std::cout << "1. ID: " << cou->ID << "\n";
+	_LText();
+	std::wcout << "2. Name: " << cou->name << "\n";
+	std::wcout << "3. Teacher: " << cou->teacher << "\n";
+	_SText();
+	std::cout << "4. Credits: " << cou->credit << "\n";
+	std::cout << "5. Number of students: " << cou->numberofstudent << "/" << cou->maxstudent << "\n";
+	std::cout << "6. Schedule:\n";
+	for (int i = 0; i < 2; i++) {
+		std::cout << "   Day: "; printCourseDay(cou->performed[i].day);
+		std::cout << "   Session: S" << cou->performed[i].session + 1 << "\n";
+	}
+	std::cout << '\n';
 }
 
 void displayScore(Score* a) {
