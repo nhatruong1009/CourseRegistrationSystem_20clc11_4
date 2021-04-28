@@ -317,23 +317,30 @@ Date TakeDateEnd(std::string current) {
 void editCourse(Course* cour, std::string filename, std::string current) {
 	Date check = TakeDateEnd(current);
 	system("cls");
-	std::cout << check;
+	std::cout << check<<" " <<GetTime();
 	std::cout << "-------- Edit course --------";
-	if (check < GetTime()) {
-		char** menu = new char* [6];
+	if (check >= GetTime()) {
+		char** menu = new char* [4];
 		menu[0] = new char[] {"Teacher"};
 		menu[1] = new char[] {"Max Student"};
 		menu[2] = new char[] {"Performed"};
-		menu[0] = new char[] {"Back"};
+		menu[3] = new char[] {"Back"};
 		int chose = -1;
+		do {
+			chose = Menu(menu, 5, 3);
+		} while (chose != -1 && chose != 3);
 		_getwch();
 	}
 	else {
-		char** menu = new char* [6];
+		char** menu = new char* [3];
 		menu[0] = new char[] {"Teacher"};
-		menu[3] = new char[] {"Score"};
-		menu[0] = new char[] {"Back"};
+		menu[1] = new char[] {"Score"};
+		menu[2] = new char[] {"Back"};
 		int chose = -1;
+		do {
+			chose = Menu(menu, 5, 3);
+		} while (chose != -1 && chose != 3);
+		_getwch();
 	}
 }
 

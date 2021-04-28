@@ -658,6 +658,7 @@ int countFile(Filelist* list) {
 }
 
 std::string ChoseFolder(Filelist* list, short x, short y) {
+	if (list == nullptr) return"";
 	Filelist* temp = list;
 	int i = 0;
 	do {

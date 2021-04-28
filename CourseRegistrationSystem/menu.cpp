@@ -480,13 +480,17 @@ void addCourse(){
 	if (current != "") {
 		addCourseInSemmester(current);
 	}
+	else{
+		std::cout << "None Exits";
+		_getwch();
+	}
 	DealocatedArrString(menu);
 	courseStaff();
 }
 
 //tam thoi xong
 void viewCourse(){
-	std::string current = chooseTime();
+	std::string current = chooseTime(false);
 	if (current != "") {
 		Filelist* Cour = TakeFileInFolder(current);
 		for (int i = 0; i < CountFile(Cour); i++) {
@@ -505,7 +509,7 @@ void viewCourse(){
 }
 
 void editCourse(){
-	std::string current = chooseTime();
+	std::string current = chooseTime(false);
 	system("cls");
 	std::cout << "---------- Edit Course -----------";
 	Filelist* Cour = TakeFileInFolder(current);
