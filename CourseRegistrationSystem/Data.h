@@ -16,11 +16,9 @@ struct Account
 };
 struct Score
 {
-	Score* pPrev;
 	unsigned int ID;
 	wchar_t* name;
 	float totals, finals, mids, others;
-	Score* pNext;
 };
 struct Course
 {
@@ -36,7 +34,7 @@ struct Course
 	Performed performed[2];
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
-	unsigned __int64* stuID;
+	unsigned __int64* stuID=nullptr;
 	Score* score=nullptr;
 };
 struct Student

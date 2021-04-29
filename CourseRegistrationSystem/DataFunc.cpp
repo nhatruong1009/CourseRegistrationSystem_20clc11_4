@@ -309,6 +309,7 @@ void PrintStu(_Student* stu) {
 
 void PrintStu(Student** stu,int c) {
 	if (stu == nullptr) return;
+	system("cls");
 	int n = _msize(stu) / sizeof(stu);
 	int cur = c;
 	char u;
@@ -635,7 +636,7 @@ void MakeCurentTime(int year) {
 	do
 	{
 		for (int i = 0; i < 3; i++) {
-			std::cout << "Date start register semester " << i + 1 << ": ";
+			std::cout << "Date start semester " << i + 1 << ": ";
 			while (true)
 			{
 				start[i] = InputDate();
@@ -644,7 +645,7 @@ void MakeCurentTime(int year) {
 				}
 				else break;
 			}
-			std::cout << "Date end register semester " << i + 1 << ": ";
+			std::cout << "Date end semester " << i + 1 << ": ";
 			while (true)
 			{
 				end[i] = InputDate();

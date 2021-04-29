@@ -14,4 +14,5 @@ void main()
 	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
 	userTypeMode();
 	//std::cout << SearchCurrent();
+	//std::cout << "dada";
 }

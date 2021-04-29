@@ -275,9 +275,8 @@ void DoSomeThingInClass(Classes* cls,std::string grade) {
 	menu[1] = new char[] {"Print out CSV"};
 	menu[2] = new char[] {"back"};
 	int chose = 0;
-	while (chose!=-1 || chose!=2)
+	while (chose!=-1 && chose!=2)
 	{
-		system("cls");
 		chose = Menu(menu, 5, 2);
 		switch (chose)
 		{
@@ -399,7 +398,7 @@ void schoolPlan() {
 }
 
 std::string chooseTime(bool timeout=true) {
-	system("cls");
+	//system("cls");
 	Filelist* list = TakeFileInFolder("Data\\SchoolYear");
 	if (list != nullptr) {
 		int n = CountFile(list);

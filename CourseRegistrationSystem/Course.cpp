@@ -97,11 +97,7 @@ Course* StringToCourse(std::wstring str) {
 
 	return cou;
 }
-void AddCourse(_Course*& courselist, Course* course) {
-	if (courselist == nullptr) { courselist = new _Course{ course }; courselist->pNext = courselist, courselist->pPrev = courselist; return; }
-	courselist->pPrev = new _Course{ course,courselist,courselist->pPrev };
-	courselist->pPrev->pPrev->pNext = courselist->pPrev;
-}
+
 _Course* FileInCourse(std::string filename) {
 	_LText();
 	std::wfstream fi(filename, std::wfstream::in);
@@ -412,7 +408,6 @@ Date TakeDateEnd(std::string current) {
 void editCourse(Course* cour, std::string filename, std::string current) {
 	Date check = TakeDateEnd(current);
 	system("cls");
-	std::cout << check<<" " <<GetTime();
 	std::cout << "-------- Edit course --------";
 	if (check >= GetTime()) {
 		char** menu = new char* [4];
