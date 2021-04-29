@@ -4,6 +4,7 @@
 Course* MakeCourse();
 void FileOutCourse(_Course*, std::string);
 void AddCourse(_Course*&, Course);
+unsigned short LStringToPerform(wchar_t*);
 
 Course* searchCourseFile(std::string search);
 _Course* searchCourse(_Course*, std::wstring&);
@@ -22,6 +23,100 @@ void AddCourse(_Course*& courselist, Course* course) {
 	if (courselist == nullptr) { courselist = new _Course{ course }; courselist->pNext = courselist, courselist->pPrev = courselist; return; }
 	courselist->pPrev = new _Course{ course,courselist,courselist->pPrev };
 	courselist->pPrev->pPrev->pNext = courselist->pPrev;
+}
+
+unsigned short LStringToPerform(wchar_t* temp) {
+	if (wcscmp(temp, L"Mon") == 0)return 0;
+	if (wcscmp(temp, L"Tue") == 0)return 1;
+	if (wcscmp(temp, L"Wed") == 0)return 2;
+	if (wcscmp(temp, L"Thu") == 0)return 3;
+	if (wcscmp(temp, L"Fri") == 0)return 4;
+	if (wcscmp(temp, L"Sat") == 0)return 5;
+	if (wcscmp(temp, L"Sun") == 0)return 6;
+	if (wcscmp(temp, L"S1") == 0) return 0;
+	if (wcscmp(temp, L"S2") == 0) return 1;
+	if (wcscmp(temp, L"S3") == 0) return 2;
+	if (wcscmp(temp, L"S4") == 0) return 3;
+	return 0;
+}
+
+Course* StringToCourse(std::wstring str) {
+	//ID, Course name, Teacher, Credit, Perform
+	Course* cou = new Course;
+	wchar_t* temp = nullptr;
+	int beg = str.find(L',', 0) + 1;
+	int end = str.find(L',', beg);
+
+	temp = new wchar_t[end - beg + 1];
+	temp[end - beg] = L'\0';
+	str.copy(temp, end - beg, beg);
+	_LText();
+
+	cou->ID = new char[end - beg + 1];
+	cou->ID[end - beg] = L'\0';
+	LStrToStr(cou->ID, end - beg, temp);
+	delete[] temp;
+
+	beg = end + 1;
+	end = str.find(L',', beg);
+	cou->name = new wchar_t[end - beg + 1];
+	cou->name[end - beg] = L'\0';
+	str.copy(cou->name, end - beg, beg);
+
+	beg = end + 1;
+	end = str.find(L',', beg);
+	cou->teacher = new wchar_t[end - beg + 1];
+	cou->teacher[end - beg] = L'\0';
+	str.copy(cou->teacher, end - beg, beg);
+
+	beg = end + 1;
+	end = str.find(L',', beg);
+	temp = new wchar_t[end - beg + 1];
+	temp[end - beg] = L'\0';
+	str.copy(temp, end - beg, beg);
+	cou->credit = unsigned short(StringToInt(temp));
+	delete[]temp;
+
+	for (int i = 0; i < 2; i++) {
+		beg = end + 1;
+		end = str.find(L',', beg);
+		temp = new wchar_t[end - beg + 1];
+		temp[end - beg] = L'\0';
+		str.copy(temp, end - beg, beg);
+		cou->performed[i].day = LStringToPerform(temp);
+		delete[] temp;
+
+		beg = end + 1;
+		end = str.find(L',', beg);
+		temp = new wchar_t[end - beg + 1];
+		temp[end - beg] = L'\0';
+		str.copy(temp, end - beg, beg);
+		cou->performed[i].session = LStringToPerform(temp);
+		delete[] temp;
+	}
+
+	return cou;
+}
+void AddCourse(_Course*& courselist, Course* course) {
+	if (courselist == nullptr) { courselist = new _Course{ course }; courselist->pNext = courselist, courselist->pPrev = courselist; return; }
+	courselist->pPrev = new _Course{ course,courselist,courselist->pPrev };
+	courselist->pPrev->pPrev->pNext = courselist->pPrev;
+}
+_Course* FileInCourse(std::string filename) {
+	_LText();
+	std::wfstream fi(filename, std::wfstream::in);
+	if (!fi) { return nullptr; }
+	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
+	fi.ignore(1i64, wchar_t(0xfeff));
+	_Course* cou = nullptr;
+	std::wstring temp;
+	while (fi)
+	{
+		std::getline(fi, temp);
+		if (temp.length() != 0) AddCourse(cou, StringToCourse(temp));
+	}
+	_SText();
+	return cou;
 }
 
 void FileOutCourse(_Course* cou, std::string fileout) {
