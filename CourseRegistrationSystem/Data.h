@@ -139,5 +139,6 @@ Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
 std::string TakeCurrent();
 void displayScore(Score* a);
 void displayCourse(Course* cou);
+wchar_t* RemoveSpace(wchar_t* a);
 #endif // _Structs
 
