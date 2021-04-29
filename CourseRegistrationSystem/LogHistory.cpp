@@ -276,3 +276,31 @@ Student** SearchStuArr(unsigned __int64* ID, std::string Grade)	// Use dynamic a
 
 	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
+
+wchar_t* RemoveSpace(wchar_t* a)
+{
+	std::wstring temp = ToWstring(a);
+
+	// Delete first spaces
+	short space = 0;
+	for (int j = 0; temp[j] == ' '; j++)
+		space++;
+	temp.erase(0, space);
+
+	// Delete the remainings
+	int i = 0;
+	int pos = 0;
+	while (1)
+	{
+		pos = temp.find_first_of(' ', i) + 1;
+		if (pos == 0)
+			break;
+		i = pos;
+		while (temp[i] == ' ')
+			i++;
+		temp.erase(pos, i - pos);
+		std::cout << pos << " " << i << std::endl;
+		i = pos; // set i back cause string strink
+	}
+	return StrToChar(temp);
+}
