@@ -269,12 +269,25 @@ void AddClass() {
 
 void DoSomeThingInClass(Classes* cls,std::string grade) {
 	Student** teee = SearchStuArr(cls->ID, grade);
-	system("cls");
-	// xuat mot lon thong tin o day
-	// option1 xuat file
-	//option2 out
-	PrintStu(teee);
-	_getwch();
+
+	char** menu = new char* [3];
+	menu[0] = new char[] {"View"};
+	menu[1] = new char[] {"Print out CSV"};
+	menu[2] = new char[] {"back"};
+	int chose = 0;
+	while (chose!=-1 || chose!=2)
+	{
+		system("cls");
+		chose = Menu(menu, 5, 2);
+		switch (chose)
+		{
+		case 0:PrintStu(teee, 30); break;
+		case 1:break;//cout somthing here
+		case 2:
+		case -1:
+			break;
+		}
+	}
 }
 void ViewClass() {
 	system("cls");
@@ -353,20 +366,18 @@ void ViewCouse(Student* stu) {
 void courseStaff() {
 	system("cls");
 	std::cout << "---------- Course ----------";
-	char** menu = new char* [5];
+	char** menu = new char* [4];
 	menu[0] = new char[] {"Add Course"};
-	menu[1] = new char[] {"View/Edit Course"};
-	menu[2] = new char[] {"Delete Course"};
-	menu[3] = new char[] {"Remove Course"};
-	menu[4] = new char[] {"Back"};
+	menu[1] = new char[] {"View Course"};
+	menu[2] = new char[] {"Edit Course"};
+	menu[3] = new char[] {"Back"};
 	switch (Menu(menu,5,2))
 	{
 	case 0: addCourse(); break;
-	case 1: editCourse(); break;
-	case 2: removeCourse(); break;
-	case 3: break;
+	case 1: viewCourse(); break;
+	case 2: editCourse(); break;
 	case -1:
-	case 4: break;
+	case 3: break;
 	}
 
 	DealocatedArrString(menu);
@@ -425,6 +436,7 @@ std::string chooseTime(bool timeout=true) {
 			semester = ChoseFolder(sem, 20, 2);
 			if (semester != "") { 
 				return "Data\\SchoolYear\\" + year + "\\" + semester; 
+				std::fstream a;
 			}
 		}
 	}
@@ -433,12 +445,13 @@ std::string chooseTime(bool timeout=true) {
 
 void addCourseInSemmester(std::string current){
 	system("cls");
-	std::cout << "--------- Add Course ---------";
+	std::cout << current;
+	std::cout << "\n--------- Add Course ---------";
 	char** menu = new char*[3];
 	menu[0] = new char[] { "From CSV" };
 	menu[1] = new char[] {"Type in"};
 	menu[2] = new char[] {"back"};
-	switch (Menu(menu,5,2))
+	switch (Menu(menu,5,3))
 	{
 	case 0: break;// csv in
 	case 1: MakeCourse(current); break; // type in
@@ -467,18 +480,62 @@ void addCourse(){
 	if (current != "") {
 		addCourseInSemmester(current);
 	}
+	else{
+		std::cout << "None Exits";
+		_getwch();
+	}
 	DealocatedArrString(menu);
 	courseStaff();
 }
+
+//tam thoi xong
+void viewCourse(){
+	std::string current = chooseTime(false);
+	if (current != "") {
+		Filelist* Cour = TakeFileInFolder(current);
+		for (int i = 0; i < CountFile(Cour); i++) {
+			if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
+			else Cour = Cour->pNext;
+		}
+		Filelist* temp = Cour;
+		system("cls");
+		do {
+			displayCourse(BinToCourse(current + "\\" + temp->filename));
+			temp = temp->pNext;
+		} while (temp != Cour);
+		_getwch();
+	}
+	courseStaff();
+}
+
 void editCourse(){
 	std::string current = chooseTime(false);
-	Filelist* Cour = TakeFileInFolder(current);
-	for (int i = 0; i < CountFile(Cour); i++) {
-		if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
-		else Cour = Cour->pNext;
-	}
-	Filelist* temp = Cour;
 	system("cls");
-	_getwch();
+	std::cout << "---------- Edit Course -----------";
+	Filelist* Cour = TakeFileInFolder(current);
+	if (Cour->filename!="..") {
+		for (int i = 0; i < CountFile(Cour); i++) {
+			if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
+			else Cour = Cour->pNext;
+		}
+		int n = CountFile(Cour);
+		wchar_t** choseCourse = new wchar_t* [n];
+		for (int i = 0; i < n; i++) {
+			Course* temp = BinToCourse(current + "\\" + Cour->filename);
+			choseCourse[i] = StrToChar(ToWstring(temp->ID) + L"  "+ ToWstring(temp->name));
+			Cour = Cour->pNext;
+			//delete temp here
+		}
+		int k = Menu(choseCourse, 5, 3);
+		if (k !=-1) {
+			Filelist* t = Cour;
+			for (int i = 0; i < k; i++)t = t->pNext;
+			editCourse(Cour->filename, current);
+		}
+	}
+	else{
+		std::cout << "\nNot available\n";
+		std::cout << "> Back <";
+	}
+	courseStaff();
 }
-void removeCourse(){}

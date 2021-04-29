@@ -111,7 +111,7 @@ void SaveNewStu(_Student* stu, char* directon);
 void FileOutStudent(_Student* stu, std::string fileout);
 void PrintStu(Student* a);
 void PrintStu(_Student* stu);
-void PrintStu(Student** stu);
+void PrintStu(Student** stu,int c);
 Classes* LoadClass(const char* filein);
 SchoolYear* AddSchoolYear(int year);
 _Student* TypeInStudent();
@@ -139,6 +139,6 @@ Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
 std::string TakeCurrent();
 void displayScore(Score* a);
 void displayCourse(Course* cou);
-wchar_t* RemoveSpace(wchar_t* a);
+void editCourse(std::string filename, std::string current);
 #endif // _Structs
 

@@ -3,16 +3,28 @@
 #include <sys/stat.h>
 std::ostream& operator<<(std::ostream& os, const Date& dt)
 {
-	os << dt.dd << '/' << dt.mm << '/' << dt.yy;
+	std::string temp;
+	if (dt.dd < 10) temp += '0' + std::to_string(dt.dd);
+	else temp += std::to_string(dt.dd);
+	temp += '/';
+	if (dt.mm < 10) temp += '0' + std::to_string(dt.mm);
+	else temp += std::to_string(dt.mm);
+	temp += '/';
+	temp += std::to_string(dt.yy);
+	os << temp;
 	return os;
 }
 std::wostream& operator<<(std::wostream& os, const Date& dt)
 {
-	if (dt.dd < 10) os << dt.dd << '/';
-	else os << dt.dd << '/';
-	if (dt.mm < 10) os << '0' << dt.mm << '/';
-	else os << dt.mm << '/';
-	os << dt.yy;
+	std::wstring temp;
+	if (dt.dd < 10) temp += L'0' + std::to_wstring(dt.dd);
+	else temp += std::to_wstring(dt.dd);
+	temp += L'/';
+	if (dt.mm < 10) temp += L'0' + std::to_wstring(dt.mm);
+	else temp += std::to_wstring(dt.mm);
+	temp += L'/';
+	temp += std::to_wstring(dt.yy);
+	os << temp;
 	return os;
 }
 std::wostream& operator<<(std::wostream& os, const tm& t) {
@@ -82,7 +94,7 @@ Student* StringToStudent(std::wstring str) {
 	temp = new wchar_t[end - beg + 1];
 	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
-	if (wcscmp(temp, L"Nam") == 0)stu->gender = 'M';
+	if (wcscmp(temp, L"Nam") == 0 || wcscmp(temp,L"Men"))stu->gender = 'M';
 	else stu->gender = 'W';
 	delete[] temp;
 
@@ -261,6 +273,7 @@ void SaveNewStu(_Student* stu, char* direction) {
 	} while (stu != temp);
 	delete[] direc;
 }
+
 int NumberOfStudent(_Student* stu) {
 	if (stu == nullptr) return 0;
 	int k = 0;
@@ -274,18 +287,19 @@ int NumberOfStudent(_Student* stu) {
 void PrintStu(Student* a) {
 	if (a == nullptr) return;
 	_LText();
-	std::wcout << a->ID;
-	std::wcout <<std::setw(23) << a->firstname << std::setw(10);
-	std::wcout << a->lastname << std::setw(10);
-	std::wcout << a->gender << std::setw(10);
-	std::wcout << a->birth << std::setw(10);
-	std::wcout << a->SocialID << std::setw(10) << '\n';
+	std::wcout << a->ID<<'\t';
+	std::wcout <<std::setw(25)<<std::left << a->firstname << std::setw(10);
+	std::wcout << a->lastname<<'\t' << std::setw(11);
+	if (a->gender == 'M' || a->gender=='N') std::wcout << "Men";
+	else std::wcout << "Women";
+	std::wcout <<std::left << a->birth << std::setw(15);
+	std::wcout <<std::right<< a->SocialID << '\n';
 	_SText();
 }
 void PrintStu(_Student* stu) {
 	if (stu == nullptr) return;
 	_Student* temp = stu;
-	std::cout << "ID"<<std::setw(23)<<"Fist Name"<< "Last name\t\tGender\t\tBirth\t\tSocial ID\n";
+	std::cout<<std::setw(5) << "ID" << std::setw(25) << "Fist Name" << std::setw(20) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID\n";
 	do
 	{
 		PrintStu(stu->student);
@@ -293,13 +307,33 @@ void PrintStu(_Student* stu) {
 	} while (stu != temp);
 }
 
-void PrintStu(Student** stu) {
+void PrintStu(Student** stu,int c) {
 	if (stu == nullptr) return;
 	int n = _msize(stu) / sizeof(stu);
-	std::cout << "ID\t\tFist Name\t\tLast name\tGender\t\tBirth\tSocial ID\n";
-	for (int i = 0; i < n; i++) {
-		PrintStu(stu[i]);
-	}
+	int cur = c;
+	char u;
+	std::cout << std::setw(5) << "ID" << std::setw(25) << "Fist Name" << std::setw(20) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID";
+	do {
+		GotoXY(0, 1);
+		for (int i = c-cur; i < c && i < n; i++) {
+			PrintStu(stu[i]);
+		}
+		u = toupper(_getwch());
+		if (u == 'A' || u == KEY_LEFT) {
+			if (c != cur) {
+				c -= cur;
+				system("cls");
+				std::cout << std::setw(5) << "ID" << std::setw(25) << "Fist Name" << std::setw(20) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID";
+			}
+		}
+		if (u == 'D' || u == KEY_RIGHT) {
+			if (c < n) {
+				c += cur;
+				system("cls");
+				std::cout << std::setw(5) << "ID" << std::setw(25) << "Fist Name" << std::setw(20) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID";
+			}
+		}
+	} while (u != KEY_ENTER);
 }
 
 Student* FindStudent(_Student* studentlist, unsigned __int64 ID) {
@@ -386,6 +420,7 @@ Classes MakeClass(_Student *&all,bool cls,int x, int y ) {
 		std::cin >> temp;
 		_Student* thisclass = FileInStudent(temp);
 		result.numberofstudent = CountStudent(thisclass);
+		thisclass = thisclass->pNext;
 		if (result.numberofstudent != 0) {
 			result.ID = new unsigned __int64[result.numberofstudent];
 			for (int i = 0; i < result.numberofstudent; i++) {
@@ -431,21 +466,25 @@ _Student* TypeInStudent() {
 	char** chooselist = new char* [2];
 	chooselist[0] = new char[] {"Add"};
 	chooselist[1] = new char[] {"Done"};
-	Student *stu=new Student;
 	std::wstring temp;
 	std::string temp1;
 	int choose;
 	do {
+		Student* stu = new Student;
+		std::cin.ignore(1000, '\n');
 		std::cout << "ID: "; std::cin >> stu->ID;
-		std::cin.clear();
+		std::cin.ignore(1000, '\n');
 		_LText();
 		std::wcout << "Fistname: "; std::getline(std::wcin, temp); stu->firstname = StrToChar(temp);
 		std::wcout << "Lastname: "; std::getline(std::wcin, temp); stu->lastname = StrToChar(temp);
 		_SText();
-		std::cout << "Gender: "; std::cin >> stu->gender; stu->gender = toupper(stu->gender);
+		std::cout << "Gender: "; std::getline(std::cin, temp1);
+		if (toupper(temp1[1])=='A' || toupper(temp[1]=='E'))
+			stu->gender = 'M';
 		do {
 			std::cout << "Birth(dd/mm/yy): "; stu->birth = InputDate();
-		} while (CheckDate(stu->birth));
+		} while (CheckDate(stu->birth)==false);
+		std::cin.ignore(1000, '\n');
 		std::cout << "Social ID: "; std::cin >> stu->SocialID;
 
 		stu->account.username = NumToStr(stu->ID);
@@ -596,7 +635,7 @@ void MakeCurentTime(int year) {
 	do
 	{
 		for (int i = 0; i < 3; i++) {
-			std::cout << "Date start semester " << i + 1 << ": ";
+			std::cout << "Date start register semester " << i + 1 << ": ";
 			while (true)
 			{
 				start[i] = InputDate();
@@ -605,7 +644,7 @@ void MakeCurentTime(int year) {
 				}
 				else break;
 			}
-			std::cout << "Date end semester " << i + 1 << ": ";
+			std::cout << "Date end register semester " << i + 1 << ": ";
 			while (true)
 			{
 				end[i] = InputDate();
