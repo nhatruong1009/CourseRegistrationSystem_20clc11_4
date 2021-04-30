@@ -838,3 +838,20 @@ bool CheckDate(Date dat)
 			return 0;
 	return 1;
 }
+void removeAcourseForStudents(int studentsIDs[],char* courseID) {
+	int size = sizeof(studentsIDs) / sizeof(studentsIDs[0]);
+	for (int i = 0; i < size; ++i) {
+		Student* s = SearchStu(studentsIDs[i]);
+		int sizeCourse = sizeof(s->coursenow) / sizeof(s->coursenow[0]);
+		for (int j = 0; j < sizeCourse; ++j) {
+			if (s->coursenow[j] == courseID) {
+				//deleteCourse
+				//xoa course kieu gi :D
+			}
+		}
+		
+		
+	}
+	
+
+}
