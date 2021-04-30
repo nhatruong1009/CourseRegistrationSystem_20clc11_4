@@ -587,7 +587,7 @@ Course* searchCourseFile(std::string search ) {
 	for (int i = 0; i < 4; i++) {
 		year[i] = search[n + i];
 	}
-	char* local = new char[] {"Data\\Grade\\K"};
+	char* local = new char[] {"Data\\SchoolYear"};
 	char* temp = StrCat(year, "\\Semester" + search[size - 1]);
 	char* temp1 = StrCat(temp, "\\");
 	delete[]temp;
