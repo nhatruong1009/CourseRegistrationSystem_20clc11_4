@@ -8,6 +8,11 @@ void deleteAccount(Account& a) {
 }
 void deleteScore(Score*& s) {
 	delete[] s->name;
+	delete s->name;
+	while (s != nullptr) {
+		Score* pTemp = s;
+		delete pTemp;
+	}
 }
 void deleteCourse(Course*& c) {
 	delete c->ID, c->name, c->teacher;
