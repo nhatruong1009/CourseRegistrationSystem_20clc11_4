@@ -138,5 +138,6 @@ std::string TakeCurrent();
 void displayScore(Score* a);
 void displayCourse(Course* cou);
 void editCourse(std::string filename, std::string current);
+Course* searchCourseFile(std::string search);
 #endif // _Structs
 

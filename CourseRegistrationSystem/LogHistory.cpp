@@ -305,7 +305,7 @@ wchar_t* RemoveSpace(wchar_t* a)
 	return StrToChar(temp);
 }
 
-bool WarningStudent(unsigned __int64 ID)
+bool AddStudentWarning(unsigned __int64 ID)
 {
 	if (ID < 10000000)
 	{
@@ -350,7 +350,7 @@ std::string NumToDay(unsigned short day)
 	}
 }
 
-void SessionConflict(Course* a, Course* b, bool& canChoose)		// false means conflict, true is not
+void SessionConflictWarning(Course* a, Course* b)		// false means conflict, true is not
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -360,7 +360,6 @@ void SessionConflict(Course* a, Course* b, bool& canChoose)		// false means conf
 			{
 				if (a->performed[i].session == b->performed[j].session)
 				{
-					canChoose = false;
 					std::string daya = NumToDay(a->performed[i].day);
 					std::string dayb = NumToDay(b->performed[i].day);
 					std::cout << "S" << a->performed[i].session + 1 << " on " << daya << " of Course " << a->ID << " has conflicted with " << "S" << b->performed[j].session + 1 << " on " << dayb << " of Course " << b->ID << std::endl;
@@ -368,7 +367,45 @@ void SessionConflict(Course* a, Course* b, bool& canChoose)		// false means conf
 			}
 		}
 	}
-	if (canChoose == false)
-		return;
-	canChoose = true;
+}
+
+bool isConflict(Course* a, Course* b)		// true means conflict, false is not
+{
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			if (a->performed[i].day == b->performed[j].day)
+			{
+				if (a->performed[i].session == b->performed[j].session)
+					return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+void SessionConflict(Course** a, int numOfCourseA, Course** b, int numOfCourseB, bool& canChoose)
+{
+	int n = _msize(a) / sizeof(a);
+	int m = _msize(b) / sizeof(b);
+
+}
+
+void SessionConflict(Student* a)
+{
+	int n = _msize(a->coursenow) / sizeof(a->coursenow);
+	Course** course = new Course*[n];
+	for (int i = 0; i < n; i++)
+	{
+		course[i] = searchCourseFile(ToString(a->coursenow[i]));
+	}
+	for (int i = 0; i < n - 1; i++)
+	{
+		for (int j = i + 1; j < n; j++)
+		{
+			SessionConflictWarning(course[i], course[j]);
+		}
+	}
+	delete[]course;
 }
