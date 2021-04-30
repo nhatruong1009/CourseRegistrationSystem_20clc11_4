@@ -318,20 +318,21 @@ void printCourseDay(short a) {
 }
 
 void displayCourse(Course* cou) {
-	std::cout << "ID: " << cou->ID << "\n";
+	std::cout << "   ID: " << cou->ID << "\n";
 	_LText();
-	std::wcout << "Name: " << cou->name << "\n";
-	std::wcout << "Teacher: " << cou->teacher << "\n";
+	std::wcout << "   Name: " << cou->name << "\n";
+	std::wcout << "   Teacher: " << cou->teacher << "\n";
 	_SText();
-	std::cout << "Credits: " << cou->credit << "\n";
-	std::cout << "Number of students: " << cou->numberofstudent << "/" << cou->maxstudent << "\n";
-	std::cout << "Schedule:\n";
+	std::cout << "   Credits: " << cou->credit << "\n";
+	std::cout << "   Number of students: " << std::setfill(0) << std::setw(2) << cou->numberofstudent << "/" << cou->maxstudent << "\n";
+	std::cout << "   Schedule:\n";
 	for (int i = 0; i < 2; i++) {
-		std::cout << "   Day: "; printCourseDay(cou->performed[i].day);
-		std::cout << "   Session: S" << cou->performed[i].session + 1 << "\n";
+		std::cout << "      Day: "; printCourseDay(cou->performed[i].day);
+		std::cout << "      Session: S" << cou->performed[i].session + 1 << "\n";
 	}
-	std::cout << '\n';
+	std::cout << "------------------------\n";
 }
+
 void displayCourse(Course** cou) {
 	int n = _msize(cou) / sizeof(cou);
 	std::cout << std::setw(10) << "ID" << std::setw(15) << "Course Name" << std::setw(15) << "Teacher" << std::setw(15) << "Student" << std::setw(30) << "Schedule";
@@ -345,15 +346,14 @@ void displayCourse(Course** cou) {
 	}
 }
 
-void displayScore(Score* a) {
+void displayScore(Score a) {
 	_LText();
-	std::wcout << "Name: " << a->name;
-	std::wcout << "\nID: " << a->ID;
-	std::wcout << "\nScore: ";
-	std::wcout << "\nMid term: " << a->mids;
-	std::wcout << "   Final: " << a->finals;
-	std::wcout << "   Others: " << a->others;
-	std::wcout << "\nTotal: " << a->totals;
+	std::wcout << "   Name: " << a.name;
+	std::wcout << "    ID: " << a.ID;
+	std::wcout << "\n" << std::setw(16) << "Mid term: " << std::setw(4) << a.mids;
+	std::wcout << std::setw(16) << "Final: " << std::setw(4) << a.finals;
+	std::wcout << std::setw(16) << "Others: " << std::setw(4) << a.others;
+	std::wcout << "\n" << std::setw(16) << "Total: " << a.totals << "\n\n";
 	_SText();
 }
 
@@ -405,40 +405,164 @@ Date TakeDateEnd(std::string current) {
 	delete[] year;
 	return check;
 }
-void editCourse(Course* cour, std::string filename, std::string current) {
+
+void editCourse(Course* cou, std::string filename, std::string current) {
 	Date check = TakeDateEnd(current);
+	int chose = -1;
+	bool t = (check >= GetTime());
 	system("cls");
 	std::cout << "-------- Edit course --------";
-	if (check >= GetTime()) {
+	if (t) {
 		char** menu = new char* [4];
 		menu[0] = new char[] {"Teacher"};
 		menu[1] = new char[] {"Max Student"};
 		menu[2] = new char[] {"Performed"};
 		menu[3] = new char[] {"Back"};
-		int chose = -1;
 		do {
 			chose = Menu(menu, 5, 3);
 		} while (chose != -1 && chose != 3);
+		DealocatedArrString(menu);
 		_getwch();
+		if (chose == 3) return;
 	}
 	else {
 		char** menu = new char* [3];
 		menu[0] = new char[] {"Teacher"};
 		menu[1] = new char[] {"Score"};
 		menu[2] = new char[] {"Back"};
-		int chose = -1;
 		do {
 			chose = Menu(menu, 5, 3);
 		} while (chose != -1 && chose != 3);
+		if (chose == 1) chose = 3;
+		DealocatedArrString(menu);
 		_getwch();
+		if (chose == 2) return;
 	}
+	EditChoices(chose, cou, t, filename, current);
+}
+
+void EditChoices(int chose, Course* cou, bool check, std::string filename, std::string current) {
+	system("cls");
+	displayCourse(cou);
+	if (check == 0) {
+		GotoXY(0, 12);
+		for (int i = 0; i < cou->numberofstudent; i++) {
+			std::cout << " " << i + 1 << ". ";
+			displayScore(cou->score[i]);
+			std::cout << "\n";
+		}
+	}
+	_LText();
+	switch (chose) {
+	case 0:
+		std::wcout << "New teacher: ";
+		std::wcin >> cou->name;
+		break;
+	case 1:
+		std::wcout << "New credits: ";
+		std::wcin >> cou->credit;
+		break;
+	case 3:
+		char** day = new char* [7];
+		char** ses = new char* [4];
+		day[0] = new char[] { "MONDAY" };
+		day[1] = new char[] { "TUESDAY" };
+		day[2] = new char[] { "WEDNESDAY" };
+		day[3] = new char[] { "THURSDAY" };
+		day[4] = new char[] { "FRIDAY" };
+		day[5] = new char[] { "SATURDAY" };
+		day[6] = new char[] { "SUNDAY" };
+
+		ses[0] = new char[] { "S1 (07:30)" };
+		ses[1] = new char[] { "S2 (09:30)" };
+		ses[2] = new char[] { "S3 (13:30)" };
+		ses[3] = new char[] { "S4 (15:30)" };
+
+		for (int i = 0; i < 2; i++) {
+			GotoXY(0, 10 + i);
+			std::cout << "Day: ";
+			cou->performed[i].day = Choose(day, 15, 10 + i);
+			GotoXY(26, 10 + i);
+			std::cout << "Ses: ";
+			cou->performed[i].session = Choose(ses, 31, 10 + i);
+		}
+		DealocatedArrString(ses);
+		DealocatedArrString(day);
+		break;
+	case 4:
+		char book;
+		int num;
+		while (true) {
+			do {
+				GotoXY(0, 12 + 4 * cou->numberofstudent + 2);
+				std::cout << "Pick a student (0. Stop):      ";
+				GotoXY(26, 12 + 4 * cou->numberofstudent + 2);
+				std::cin >> num;
+			} while (num < 0 || num > cou->numberofstudent);
+			if (num == 0) break;
+			int X, Y;
+			X = 3;
+			Y = 12 + 4 * (num - 1) + 1;
+			book = _getwch();
+			book = toupper(book);
+			while (true) {
+				if (book == 'A' || book == KEY_LEFT) {
+					GotoXY(X, Y);
+					std::cout << "  ";
+					if (X == 3) X = 45;
+					if (X == 26) X == 3;
+					if (X == 45) X = 26;
+					GotoXY(X, Y);
+					std::cout << ">>";
+				}
+				else if (book == 'D' || book == KEY_RIGHT) {
+					GotoXY(X, Y);
+					std::cout << "  ";
+					if (X == 3) X = 26;
+					if (X == 26) X == 45;
+					if (X == 45)X = 3;
+					GotoXY(X, Y);
+					std::cout << ">>";
+				}
+				else if (book == KEY_ENTER || book == ' ') {
+					if (X == 3) {
+						GotoXY(16, Y);
+						std::cout << "    ";
+						GotoXY(16, Y);
+						std::cin >> cou->score[num - 1].mids;
+					}
+					if (X == 26) {
+						GotoXY(36, Y);
+						std::cout << "    ";
+						GotoXY(36, Y);
+						std::cin >> cou->score[num - 1].finals;
+					}
+					if (X == 45) {
+						GotoXY(56, Y);
+						std::cout << "    ";
+						GotoXY(56, Y);
+						std::cin >> cou->score[num - 1].others;
+					}
+					GotoXY(16, Y + 1);
+					cou->score[num - 1].totals = cou->score[num - 1].mids + cou->score[num - 1].finals + cou->score[num - 1].others;
+				}
+				else if (book == KEY_ESC) {
+					break;
+				}
+			}
+		}
+	}
+	if (chose < 4) {
+		system("cls");
+		displayCourse(cou);
+	}
+	CourseToBin(cou, filename, current);
+	_getwch();
 }
 
 void deleteCourse(Course* cour, std::string filename, std::string current) {
 
 }
-
-
 
 void editCourse(std::string filename,std::string current) {
 	system("cls");
