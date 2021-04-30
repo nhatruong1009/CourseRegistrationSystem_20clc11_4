@@ -19,12 +19,12 @@ void deleteCourse(Course*& c) {
 	delete[] c->performed;
 	deleteScore(c->score);
 }
-void deleteCourseNow(char** c) {
+void deleteCourseNow(char**& c) {
 	int n = _msize(c) / sizeof(char*);
 	for (int i = 0; i < n; i++) {
-		c[i] = nullptr;
+		delete[] c[i];
 	}
-	delete c, c = nullptr;
+	delete c;
 }
 void deleteStudent(Student*& s) {
 	delete s->firstname, s->lastname;
