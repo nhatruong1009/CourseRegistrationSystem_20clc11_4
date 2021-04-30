@@ -203,7 +203,7 @@ _Student* SearchStuList(unsigned __int64* ID) // Return LL _Student		// Use dyna
 	int n = _msize(ID)/8;
 	for (int i = 0; i < n; i++)
 	{
-		if (ID[i] < 10)
+		if (ID[i] < 10000000)
 			continue;
 		std::string id = ToString(NumToStr(ID[i]));
 		std::string foldername = "K20"; 
@@ -245,7 +245,7 @@ _Student* SearchStuList(unsigned __int64* ID) // Return LL _Student		// Use dyna
 
 Student* SearchStu(unsigned __int64 ID) 
 {
-	if (ID < 10)
+	if (ID < 10000000)
 	{
 		std::cout << ID << " does not exist " << std::endl;
 		return nullptr;
@@ -303,4 +303,22 @@ wchar_t* RemoveSpace(wchar_t* a)
 		i = pos; // set i back cause string strink
 	}
 	return StrToChar(temp);
+}
+
+bool WarningStudent(unsigned __int64 ID)
+{
+	if (ID < 10000000)
+	{
+		std::cout << "ID must be a 8-digit number";
+		return 0;
+	}
+	std::string foldername = "K20";
+	std::string id = NumToStr(ID);
+	foldername = foldername + id[0] + id[1];
+	if (BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id))
+	{
+		std::cout << "This ID already existed ";
+		return 0;
+	}
+	return 1;
 }
