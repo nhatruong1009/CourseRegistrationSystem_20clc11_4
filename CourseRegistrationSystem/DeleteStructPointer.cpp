@@ -3,28 +3,23 @@
 #include"CommonFunc.h"
 
 void deleteAccount(Account& a) {
-	delete a.username;
-	delete a.password;
+	delete[] a.username;
+	delete[] a.password;
 }
 void deleteScore(Score*& s) {
 	delete[] s->name;
-	delete s->name;
-	while (s != nullptr) {
-		Score* pTemp = s;
-		delete pTemp;
-	}
 }
 void deleteCourse(Course*& c) {
-	delete c->ID, c->name, c->teacher;
-	delete[] c->performed;
+	delete[] c->ID, c->name, c->teacher, c->stuID;
 	deleteScore(c->score);
 }
 void deleteCourseNow(char** c) {
 	int n = _msize(c) / sizeof(char*);
 	for (int i = 0; i < n; i++) {
+		delete[] c[i];
 		c[i] = nullptr;
 	}
-	delete c, c = nullptr;
+	delete[] c, c = nullptr;
 }
 void deleteStudent(Student*& s) {
 	delete s->firstname, s->lastname;
