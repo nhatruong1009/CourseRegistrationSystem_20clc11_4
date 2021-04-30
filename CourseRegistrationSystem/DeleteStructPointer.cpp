@@ -10,7 +10,6 @@ void deleteScore(Score*& s) {
 	delete s->name;
 	while (s != nullptr) {
 		Score* pTemp = s;
-		s = s->pNext;
 		delete pTemp;
 	}
 
