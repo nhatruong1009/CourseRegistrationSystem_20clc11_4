@@ -7,10 +7,10 @@ void AddCourse(_Course*&, Course);
 unsigned short LStringToPerform(wchar_t*);
 
 Course* searchCourseFile(std::string search);
-_Course* searchCourse(_Course*, std::wstring&);
-_Course* searchID(_Course*, std::wstring);
-_Course* searchName(_Course*, std::wstring);
-_Course* searchTeacher(_Course*, std::wstring);
+Course* searchCourse(_Course*, std::wstring&);
+Course* searchID(_Course*, std::wstring);
+Course* searchName(_Course*, std::wstring);
+Course* searchTeacher(_Course*, std::wstring);
 
 void printCourseDay(short);
 void displayCourse(_Course*);
@@ -212,13 +212,14 @@ void MakeCourse(std::string current) {
 	_getwch();
 	//delete cou here;
 }
-_Course* searchID(_Course* courselist, std::wstring search) {
+
+Course* searchID(_Course* courselist, std::wstring search) {
 	int size = strlen(courselist->course->ID);
 	wchar_t* t = new wchar_t[size];
 	StrToLStr(t, size, courselist->course->ID);
 	if (wcscmp(t, StrToChar(search)) == 0) {
 		delete[]t;
-		return courselist;
+		return courselist->course;
 	}
 	delete[]t;
 
@@ -230,7 +231,7 @@ _Course* searchID(_Course* courselist, std::wstring search) {
 		StrToLStr(t, size, courselist->course->ID);
 		if (wcscmp(t, StrToChar(search)) == 0) {
 			delete[]t;
-			return courselist;
+			return courselist->course;
 		}
 		delete[]t;
 		courselist = courselist->pNext;
@@ -238,30 +239,30 @@ _Course* searchID(_Course* courselist, std::wstring search) {
 	return nullptr;
 }
 
-_Course* searchName(_Course* courselist, std::wstring search) {
-	if (wcscmp(courselist->course->name, StrToChar(search)) == 0) return courselist;
+Course* searchName(_Course* courselist, std::wstring search) {
+	if (wcscmp(courselist->course->name, StrToChar(search)) == 0) return courselist->course;
 	_Course* first = courselist;
 	courselist = courselist->pNext;
 	while (courselist != first) {
-		if (wcscmp(courselist->course->name, StrToChar(search)) == 0) return courselist;
+		if (wcscmp(courselist->course->name, StrToChar(search)) == 0) return courselist->course;
 		courselist = courselist->pNext;
 	}
 	return nullptr;
 }
 
-_Course* searchTeacher(_Course* courselist, std::wstring search) {
-	if (wcscmp(courselist->course->teacher, StrToChar(search)) == 0) return courselist;
+Course* searchTeacher(_Course* courselist, std::wstring search) {
+	if (wcscmp(courselist->course->teacher, StrToChar(search)) == 0) return courselist->course;
 	_Course* first = courselist;
 	courselist = courselist->pNext;
 	while (courselist != first) {
-		if (wcscmp(courselist->course->teacher, StrToChar(search)) == 0) return courselist;
+		if (wcscmp(courselist->course->teacher, StrToChar(search)) == 0) return courselist->course;
 		courselist = courselist->pNext;
 	}
 	return nullptr;
 }
 
-_Course* searchCourse(_Course* courselist, std::wstring& search) {
-	_Course* result = nullptr;
+Course* searchCourse(_Course* courselist, std::wstring& search) {
+	Course* result = nullptr;
 	char book;
 	_LText();
 	std::wcout << "Search options:\n";
@@ -342,7 +343,6 @@ void displayCourse(Course** cou) {
 		std::wcout << cou[i]->name << std::setw(20) << cou[i]->teacher;
 		_SText();
 		std::cout << std::setw(10) << cou[i]->numberofstudent << "/" << cou[i]->maxstudent << std::setw(10);
-
 	}
 }
 
@@ -359,34 +359,31 @@ void displayScore(Score a) {
 
 void searchScore(_Course* allcourse) {
 	_LText();
+	bool flag = 0;
+	int index;
 	unsigned int id;
 	std::wstring search;
-	_Course* cou = searchCourse(allcourse, search);
+	Course* cou = searchCourse(allcourse, search);
 	system("cls");
 	std::wcout << "Course: " << search << "\n";
 	std::wcout << "Student ID: ";
 	std::wcin >> id;
 	std::wcin.ignore(1000, L'\n');
 
-	if (cou->course->score == nullptr) {
-		std::wcout << "No score available\n";
-	}
-	else if (id == cou->course->score->ID) {
-		std::wcout << "\n";
-		displayScore(cou->course->score);
-	}
-	else {
-		Score* first = cou->course->score;
-		Score* cur = first->pNext;
-		while (cur != first) {
-			if (id == cur->ID) break;
-			cur = cur->pNext;
+	if (cou->score != nullptr) {
+		for (int i = 0; i < cou->numberofstudent; i++) {
+			if (id == cou->score[i].ID) {
+				index = i;
+				flag = 1;
+				break;
+			}
 		}
-		if (cur != first) displayScore(cur);
-		else std::wcout << "Unable to find student\n";
 	}
 	_SText();
+	if (flag == 0) std::cout << "No score available\n";
+	else displayScore(cou->score[index]);
 }
+
 Date TakeDateEnd(std::string current) {
 	int sem = current.find('\\', 0);
 	sem = current.find('\\', sem + 1);
