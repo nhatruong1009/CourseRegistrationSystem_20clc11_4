@@ -17,9 +17,8 @@ void deleteCourseNow(char** c) {
 	int n = _msize(c) / sizeof(char*);
 	for (int i = 0; i < n; i++) {
 		delete[] c[i];
-		c[i] = nullptr;
 	}
-	delete[] c, c = nullptr;
+	delete[] c;
 }
 void deleteStudent(Student*& s) {
 	delete s->firstname, s->lastname;
