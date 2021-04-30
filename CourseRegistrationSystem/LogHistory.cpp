@@ -322,3 +322,53 @@ bool WarningStudent(unsigned __int64 ID)
 	}
 	return 1;
 }
+
+std::string NumToDay(unsigned short day)
+{
+	switch (day)				
+	{
+	case 0: 
+		return "Monday";
+		 
+	case 1:
+		return "Tuesday";
+			 
+	case 2:
+		return "Wednesday";
+			 
+	case 3:
+		return "Thursday";
+			 
+	case 4:
+		return "Friday";
+			 
+	case 5:
+		return "Saturday";
+			 
+	case 6:
+		return "Sunday";
+	}
+}
+
+void SessionConflict(Course* a, Course* b, bool& canChoose)		// false means conflict, true is not
+{
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			if (a->performed[i].day == b->performed[j].day)
+			{
+				if (a->performed[i].session == b->performed[j].session)
+				{
+					canChoose = false;
+					std::string daya = NumToDay(a->performed[i].day);
+					std::string dayb = NumToDay(b->performed[i].day);
+					std::cout << "S" << a->performed[i].session + 1 << " on " << daya << " of Course " << a->ID << " has conflicted with " << "S" << b->performed[j].session + 1 << " on " << dayb << " of Course " << b->ID << std::endl;
+				}
+			}
+		}
+	}
+	if (canChoose == false)
+		return;
+	canChoose = true;
+}
