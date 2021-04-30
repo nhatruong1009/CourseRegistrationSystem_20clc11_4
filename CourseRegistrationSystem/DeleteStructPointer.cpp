@@ -7,18 +7,12 @@ void deleteAccount(Account& a) {
 	delete a.password;
 }
 void deleteScore(Score*& s) {
-	delete s->name;
-	while (s != nullptr) {
-		Score* pTemp = s;
-		s = s->pNext;
-		delete pTemp;
-	}
-
+	delete[] s->name;
 }
-void deleteCourse(Course& c) {
-	delete c.ID, c.name, c.teacher;
-	delete[] c.performed;
-	deleteScore(c.score);
+void deleteCourse(Course*& c) {
+	delete c->ID, c->name, c->teacher;
+	delete[] c->performed;
+	deleteScore(c->score);
 }
 void deleteCourseNow(char** c) {
 	int n = _msize(c) / sizeof(char*);
@@ -27,18 +21,19 @@ void deleteCourseNow(char** c) {
 	}
 	delete c, c = nullptr;
 }
-void deleteStudent(Student& s) {
-	delete s.firstname, s.lastname;
-	deleteCourseNow(s.allcourse);
-	deleteCourseNow(s.coursenow);
-	deleteAccount(s.account);
+void deleteStudent(Student*& s) {
+	delete s->firstname, s->lastname;
+	deleteCourseNow(s->allcourse);
+	deleteCourseNow(s->coursenow);
+	deleteAccount(s->account);
 }
 void deleteClasses(Classes& c) {
-	delete c.name, c.ID;
+	delete[] c.name, c.ID;
 }
 void delete_Student(_Student*& s) {
 	while (s != nullptr) {
 		_Student* pTemp = s;
+		deleteStudent(pTemp->student);
 		s = s->pNext;
 		delete pTemp;
 	}
@@ -53,6 +48,7 @@ void delete_Class(_Class*& s) {
 void delete_Course(_Course*& s) {
 	while (s != nullptr) {
 		_Course* pTemp = s;
+		deleteCourse(pTemp->course);
 		s = s->pNext;
 		delete pTemp;
 	}
