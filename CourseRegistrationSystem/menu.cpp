@@ -635,3 +635,46 @@ void OpenRegister() {
 		return;
 	}
 }
+
+void takeCourseReg(Course** course, int*& take) {
+	bool side = 0;
+	int left = 0;
+	int right = 0;
+	int index = 0;
+	int n = _msize(course) / sizeof(course);
+	while (true)
+	{
+		for (int i = 0; i < n; i++) {
+			GotoXY(0, i+3);
+			displayCourse(course[i]);
+			if (take[i] == 1) std::cout << "O";
+			else if (take[i] == -1) std::cout << "X";
+		}
+	}
+	// do something here
+}
+
+void registerMenu(Student*stu,std::string current) {
+	Filelist* filelist = TakeFileInFolder(current);
+	if (filelist == nullptr) return;
+	int n = CountFile(filelist);
+	Course** course = new Course * [n];
+	int m = _msize(stu->coursenow) / sizeof(stu->coursenow);
+	char** registed = new char* [m];
+	for (int i = 0; i < m; i++) {
+		registed[i] = new char[strlen(stu->coursenow[i]) - 4];
+		strcpy_s(registed[i], strlen(stu->coursenow[i]) - 5, stu->coursenow[i]);
+		registed[i][strlen(stu->coursenow[i]) - 5] = '\0';
+	}
+ 	int* canReg = new int[n];
+	for (int i = 0; i < n; i++) {
+		course[i] = BinToCourse(current + "\\" + filelist->filename);
+		filelist = filelist->pNext;
+		canReg[i] = 0;
+		for (int j = 0; j < m; j++) {
+			if (strcmp(registed[j], filelist->filename.c_str()) == 0)
+				canReg[i] = 1;
+		}
+	}
+	takeCourseReg(course, canReg);
+}

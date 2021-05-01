@@ -140,6 +140,7 @@ Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
 std::string TakeCurrent();
 void displayScore(Score* a);
 void displayCourse(Course* cou);
+void displaylistCourse(Course* cou);
 void SaveScore(Course* cou, std::string filename);
 void SaveScore(Score* score, std::string filename);
 Score* LoadScore(std::string filename);
@@ -147,5 +148,6 @@ void editCourse(std::string filename, std::string current);
 Course* searchCourseFile(std::string search);
 Date TakeDateStart(std::string current);
 Date TakeDateEnd(std::string current);
+std::string GetFilePath(unsigned __int64 ID);
 #endif // _Structs
 

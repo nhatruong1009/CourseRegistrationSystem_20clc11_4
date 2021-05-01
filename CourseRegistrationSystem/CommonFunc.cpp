@@ -846,9 +846,5 @@ void removeAcourseForStudents(int studentsIDs[],char* courseID) {
 				//xoa course kieu gi :D
 			}
 		}
-		
-		
 	}
-	
-
 }

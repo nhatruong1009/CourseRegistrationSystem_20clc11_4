@@ -122,7 +122,7 @@ void registerCourse(Student*stu,Course**cou,std::string sem) {
 		coursefile.write((char*)&stu->ID, sizeof(unsigned __int64));
 		coursefile.close();
 	}
-	///save student
+	StuToBin(stu, GetFilePath(stu->ID));
 }
 
 void ChangePassword(Student* CurrentUser)

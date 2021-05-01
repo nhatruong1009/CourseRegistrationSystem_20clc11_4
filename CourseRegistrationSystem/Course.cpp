@@ -334,15 +334,20 @@ void displayCourse(Course* cou) {
 	std::cout << "------------------------\n";
 }
 
+void displaylistCourse(Course* cou) {
+	std::cout << cou->ID;
+	_LText();
+	std::wcout << cou->name << std::setw(20) << cou->teacher;
+	_SText();
+	std::cout << std::setw(10) << cou->numberofstudent << "/" << cou->maxstudent << std::setw(10);
+}
+
 void displayCourse(Course** cou) {
 	int n = _msize(cou) / sizeof(cou);
 	std::cout << std::setw(10) << "ID" << std::setw(15) << "Course Name" << std::setw(15) << "Teacher" << std::setw(15) << "Student" << std::setw(30) << "Schedule";
 	for (int i = 0; i < n; i++) {
-		std::cout << cou[i]->ID;
-		_LText();
-		std::wcout << cou[i]->name << std::setw(20) << cou[i]->teacher;
-		_SText();
-		std::cout << std::setw(10) << cou[i]->numberofstudent << "/" << cou[i]->maxstudent << std::setw(10);
+		displayCourse(cou[i]);
+		std::cout << '\n';
 	}
 }
 
