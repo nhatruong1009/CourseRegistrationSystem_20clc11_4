@@ -443,3 +443,17 @@ void SessionConflict(Student* a)
 	}
 	delete[]course;
 }
+
+std::string GetFilePath(unsigned __int64 ID)
+{
+	if (ID < 10000000)
+		return"";
+	std::string foldername = "K20";
+	std::string id = NumToStr(ID);
+	foldername = foldername + id[0] + id[1];
+	std::string path = "Data\\Grade\\" + foldername;
+	Student* a = BinToStu(path + "\\Student\\" + id);
+	if (a)
+		return path;
+	else return "";
+}
