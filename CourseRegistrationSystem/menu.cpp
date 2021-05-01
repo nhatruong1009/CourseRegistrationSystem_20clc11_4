@@ -538,3 +538,14 @@ void editCourse(){
 	}
 	courseStaff();
 }
+
+
+void OpenRegister() {
+	std::cout << "------ Register time ------";
+	std::string sem = chooseTime();
+	if (sem == "") return;
+	Date start = TakeDateStart(sem);
+	Date End = TakeDateEnd(sem);
+	Date startReg;
+	Date endReg;	
+}

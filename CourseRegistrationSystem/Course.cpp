@@ -403,39 +403,28 @@ Date TakeDateEnd(std::string current) {
 	return check;
 }
 
+Date TakeDateStart(std::string current) {
+	int sem = current.find('\\', 0);
+	sem = current.find('\\', sem + 1);
+	int temp = current.find('\\', sem + 1);
+	char* year = new char[temp - sem];
+	current.copy(year, temp - sem, sem + 1);
+	year[temp - sem - 1] = '\0';
+	sem = current[current.size() - 1] - '0';
+
+	std::fstream fi("Data\\SchoolYear\\" + ToString(year) + "\\time", std::fstream::in | std::fstream::binary);
+	Date check;
+	fi.read((char*)&check, sizeof(Date));
+	for (int i = 1; i < sem; i++) {
+		fi.read((char*)&check, sizeof(Date));
+		fi.read((char*)&check, sizeof(Date));
+	}
+	delete[] year;
+	return check;
+}
+
 void editCourse(Course* cou, std::string filename, std::string current) {
-	Date check = TakeDateEnd(current);
-	int chose = -1;
-	bool t = (check >= GetTime());
-	system("cls");
-	std::cout << "-------- Edit course --------";
-	if (t) {
-		char** menu = new char* [4];
-		menu[0] = new char[] {"Teacher"};
-		menu[1] = new char[] {"Max Student"};
-		menu[2] = new char[] {"Performed"};
-		menu[3] = new char[] {"Back"};
-		do {
-			chose = Menu(menu, 5, 3);
-		} while (chose != -1 && chose != 3);
-		DealocatedArrString(menu);
-		_getwch();
-		if (chose == 3) return;
-	}
-	else {
-		char** menu = new char* [3];
-		menu[0] = new char[] {"Teacher"};
-		menu[1] = new char[] {"Score"};
-		menu[2] = new char[] {"Back"};
-		do {
-			chose = Menu(menu, 5, 3);
-		} while (chose != -1 && chose != 3);
-		if (chose == 1) chose = 3;
-		DealocatedArrString(menu);
-		_getwch();
-		if (chose == 2) return;
-	}
-	EditChoices(chose, cou, t, filename, current);
+
 }
 
 void EditChoices(int chose, Course* cou, bool check, std::string filename, std::string current) {

@@ -671,7 +671,7 @@ void MakeCurentTime(int year) {
 }
 
 int CountFile(Filelist* a) {
-	if (a == nullptr) return 0;
+	if (a == nullptr || a->filename == "..") return 0;
 	Filelist* flag = a;
 	int num = 0;
 	do {
@@ -711,7 +711,7 @@ void AddInListFile(Filelist*& direc, std::string add) {
 	direc->pPrev = new Filelist{ add,direc,direc->pPrev };
 	direc->pPrev->pPrev->pNext = direc->pPrev;
 }
-
+//it will have bug here
 void SaveScore(Score* score, std::string filename) {
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
 	if (score == nullptr) { fo.close(); return; }
@@ -759,7 +759,6 @@ void CourseToBin(Course* course, std::string filename,std::string current) {
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fo.write((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}
-	SaveScore(course->score, current+ "\\" + filename + "Score");
 	fo.close();
 }
 

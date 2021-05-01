@@ -139,5 +139,7 @@ void displayScore(Score* a);
 void displayCourse(Course* cou);
 void editCourse(std::string filename, std::string current);
 Course* searchCourseFile(std::string search);
+Date TakeDateStart(std::string current);
+Date TakeDateEnd(std::string current);
 #endif // _Structs
 
