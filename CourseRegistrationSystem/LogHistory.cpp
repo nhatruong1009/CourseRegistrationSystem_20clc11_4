@@ -1,5 +1,6 @@
-#include"CommonFunc.h"
+﻿#include"CommonFunc.h"
 #include"Data.h"
+#include<queue>
 
 
 void ChangeInfo(Student*& CurrentUser);
@@ -46,6 +47,12 @@ void LoginStu(Student*& CurrentUser)
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
 		std::getline(std::cin, U);
+		if (U.size() < 8)
+		{
+			system("cls");
+			std::cout << "Username must be a 8-digit number, please try again." << std::endl;
+			continue;
+		}
 		std::cout << "Password: ";
 		P = InputHidden();
 		if (P == "") { CurrentUser = 0; break; }// don't input password;
@@ -385,16 +392,43 @@ bool isConflict(Course* a, Course* b)		// true means conflict, false is not
 	return 0;
 }
 
-void SessionConflict(Course** a, int numOfCourseA, Course** b, int numOfCourseB, bool& canChoose)
+char** SessionConflict(Course** a, Course** b)	
 {
+	std::queue<char*>temp;
 	int n = _msize(a) / sizeof(a);
 	int m = _msize(b) / sizeof(b);
-
+	int sth = 0;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (isConflict(a[i], b[j]))
+			{
+				temp.push(a[i]->ID);
+				temp.push(b[j]->ID);
+				sth+=2;
+			}
+		}
+	}
+	// Mảng chứa các con trỏ char*, 2 môn trùng giờ sẽ là 1 cặp, vd arr[0] với arr[1] hay arr[2] với arr[3]
+	if (sth != 0)
+	{
+		char** arr = new char* [sth];
+		for (int i = 0; i < sth; i++)
+		{
+			arr[i] = temp.front();
+			temp.pop();
+		}
+		return arr;
+	}
+	return nullptr;
+	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
 
 void SessionConflict(Student* a)
 {
 	int n = _msize(a->coursenow) / sizeof(a->coursenow);
+	if (n < 2) return;
 	Course** course = new Course*[n];
 	for (int i = 0; i < n; i++)
 	{
