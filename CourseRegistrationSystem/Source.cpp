@@ -56,12 +56,6 @@ void main()
 	//int a = InputNumber();
 	//std::cout << '\t' << a;
 	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
-	Filelist* file = TakeFileInFolder("Data\\SchoolYear\\2022");
-	Filelist* temp = file;
-	do {
-		std::cout << file->filename<<'\n';
-		file = file->pNext;
-	} while (temp != file);
 	std::string current;
 	std::cout<<fistrun(current);
 	std::cout << current;
