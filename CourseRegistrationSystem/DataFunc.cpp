@@ -671,7 +671,7 @@ void MakeCurentTime(int year) {
 }
 
 int CountFile(Filelist* a) {
-	if (a == nullptr || a->filename == "..") return 0;
+	if (a == nullptr) return 0;
 	Filelist* flag = a;
 	int num = 0;
 	do {
@@ -712,24 +712,40 @@ void AddInListFile(Filelist*& direc, std::string add) {
 	direc->pPrev->pPrev->pNext = direc->pPrev;
 }
 //it will have bug here
-void SaveScore(Score* score, std::string filename) {
+void SaveScore(Course*cou, std::string filename) {
+	if (cou == nullptr) return;
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
-	if (score == nullptr) { fo.close(); return; }
-	int n = _msize(score) / sizeof(score);
-	for (int i = 0; i < n; i++) {
-		fo.write((char*)&score[i], sizeof(Score));
+	fo.write((char*)&cou->numberofstudent, sizeof(unsigned short));
+	Score temp;
+	for (int i = 0; i < cou->numberofstudent;i++) {
+		fo.write((char*)cou->stuID[i], sizeof(unsigned __int64));
+		fo.write((char*)&temp.totals, sizeof(float) * 4);
 	}
 	fo.close();
 }
 
-void LoadScore(Score*score, std::string filename) {
-	if (score == nullptr) return;
-	std::fstream fi(filename, std::fstream::in | std::fstream::binary);
-	int n = _msize(score) / sizeof(Score);
-	for(int i=0;i<n;i++){
-		fi.read((char*)&score[i], sizeof(Score));
+void SaveScore(Course*cou, Score*score, std::string filename) {
+	if (cou == nullptr) return;
+	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
+	fo.write((char*)&cou->numberofstudent, sizeof(unsigned short));
+	for (int i = 0; i < cou->numberofstudent; i++) {
+		fo.write((char*)cou->stuID[i], sizeof(unsigned __int64));
+		fo.write((char*)&score->totals, sizeof(float) * 4);
 	}
-	fi.close();
+	fo.close();
+}
+
+Score* LoadScore(std::string filename) {
+	std::fstream fi(filename, std::fstream::in | std::fstream::binary);
+	if (!fi) return nullptr;
+	unsigned short numberofstu;
+	fi.read((char*)&numberofstu, sizeof(unsigned short));
+	Score* sco = new Score[numberofstu];
+	for (int i = 0; i < numberofstu; i++) {
+		fi.read((char*)sco[i].ID, sizeof(unsigned __int64));
+		fi.read((char*)&sco[i].totals, sizeof(float) * 4);
+	}
+	return sco;
 }
 
 void CourseToBin(Course* course, std::string filename,std::string current) {
@@ -800,8 +816,6 @@ Course* BinToCourse(std::string filename) {
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fi.read((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}
-	course->score = new Score[course->numberofstudent];
-	LoadScore(course->score, filename + "Scores");
 	fi.close();
 	return course;
 }

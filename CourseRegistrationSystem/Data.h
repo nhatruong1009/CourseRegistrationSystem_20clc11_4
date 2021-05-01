@@ -17,8 +17,11 @@ struct Account
 struct Score
 {
 	unsigned int ID;
-	wchar_t* name;
-	float totals, finals, mids, others;
+	wchar_t* name = nullptr;
+	float totals = 0;
+	float finals = 0;
+	float mids = 0;
+	float others = 0;
 };
 struct Course
 {
@@ -137,6 +140,9 @@ Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
 std::string TakeCurrent();
 void displayScore(Score* a);
 void displayCourse(Course* cou);
+void SaveScore(Course* cou, std::string filename);
+void SaveScore(Score* score, std::string filename);
+Score* LoadScore(std::string filename);
 void editCourse(std::string filename, std::string current);
 Course* searchCourseFile(std::string search);
 Date TakeDateStart(std::string current);

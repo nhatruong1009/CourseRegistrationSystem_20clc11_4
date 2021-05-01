@@ -436,11 +436,8 @@ Filelist* TakeFileInFolder(const std::wstring& name)
 	WIN32_FIND_DATA data;
 	HANDLE hFind;
 	if ((hFind = FindFirstFile(pattern.c_str(), &data)) != INVALID_HANDLE_VALUE) {
-		for (int i = 0; i < 2; i++) {
-			FindNextFile(hFind, &data);
-		}
 		do {
-			AddInListFile(result, ToString(data.cFileName));
+			if (!(wcscmp(data.cFileName, L".") == 0 || wcscmp(data.cFileName, L"..") == 0)) AddInListFile(result, ToString(data.cFileName));
 		} while (FindNextFile(hFind, &data) != 0);
 		FindClose(hFind);
 	}

@@ -28,4 +28,5 @@ void viewCourse();
 void removeCourse();
 void addStuInClass();
 void viewStu();
+void OpenRegister();
 #endif // !_Menu

@@ -365,18 +365,20 @@ void ViewCouse(Student* stu) {
 void courseStaff() {
 	system("cls");
 	std::cout << "---------- Course ----------";
-	char** menu = new char* [4];
+	char** menu = new char* [5];
 	menu[0] = new char[] {"Add Course"};
 	menu[1] = new char[] {"View Course"};
 	menu[2] = new char[] {"Edit Course"};
-	menu[3] = new char[] {"Back"};
+	menu[3] = new char[] {"Open Register time"};
+	menu[4] = new char[] {"Back"};
 	switch (Menu(menu,5,2))
 	{
 	case 0: addCourse(); break;
 	case 1: viewCourse(); break;
 	case 2: editCourse(); break;
+	case 3:OpenRegister(); break;
 	case -1:
-	case 3: break;
+	case 4: break;
 	}
 
 	DealocatedArrString(menu);
@@ -509,10 +511,11 @@ void viewCourse(){
 
 void editCourse(){
 	std::string current = chooseTime(false);
+	if (current == "") return;
 	system("cls");
 	std::cout << "---------- Edit Course -----------";
 	Filelist* Cour = TakeFileInFolder(current);
-	if (Cour->filename!="..") {
+	if (CountFile(Cour)!=0) {
 		for (int i = 0; i < CountFile(Cour); i++) {
 			if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
 			else Cour = Cour->pNext;
@@ -539,33 +542,81 @@ void editCourse(){
 	courseStaff();
 }
 
-void resetRegister(std::fstream* file) {
+void resetRegister() {
 
 }
 
+void timeRegister(std::string sem,Date startReg,Date endReg){
+	int semester = sem[sem.length() - 1] - '0';
+	char y[5];
+	sem.copy(y, 4, sem.length() - 14);
+	y[4] = '\0';
+	int year = StringToInt(y);
+	std::cout << semester << '\n';
+	std::cout << year;
+	std::fstream fo("firstrun", std::fstream::out | std::fstream::binary);
+	fo.write((char*)&year, sizeof(int));
+	fo.write((char*)&semester, sizeof(int));
+	fo.write((char*)&startReg, sizeof(Date));
+	fo.write((char*)&endReg, sizeof(Date));
+	fo.close();
+}
+
 void OpenRegister() {
-	std::cout << "------ Register time ------\n";
-	std::fstream file("fistrun", std::fstream::in | std::ios::binary);
+	system("cls");
+	std::fstream file("firstrun", std::fstream::in | std::ios::binary);
 	if (file) { 
+		file.close();
 		std::cout << "Register time had made, you will override it and reset all register data after done!"; 
 		char** menu = new char* [2];
 		menu[0] = new char[] {"Confimn"};
 		menu[1] = new char[] {"Cancel"};
 		switch (Menu(menu,5,3))
 		{
-		case 0: break;
+		case 0: DealocatedArrString(menu);  break;
 		case 1:
 		case -1:
-			file.close();
 			DealocatedArrString(menu);
 			return;
 		}
 	}
+	system("cls");
+	std::cout << "------- Register time -------\n";
+	std::cout << "     > pick Time <";
+	if (_getwch() == KEY_ESC) return;
 	std::string sem = chooseTime();
 	if (sem == "") return;
 	Date start = TakeDateStart(sem);
 	Date End = TakeDateEnd(sem);
 	Date startReg;
 	Date endReg;
-
+	system("cls");
+	std::cout << "---------- Add Register time ----------\n";
+	std::cout << "Semester start: " << start << "\tSemester end: " << End << '\n';
+	do {
+		std::cout << "End register date (before semester's start date): ";
+		endReg = InputDate();
+		if (endReg >= start) std::cout << "Not Ivalid day\n";
+	} while (endReg >= start);
+	do {
+		std::cout << "Start register date(before register's end date): ";
+		startReg = InputDate();
+		if (startReg>=endReg) std::cout << "Not Ivalid day\n";
+	} while (startReg >= endReg);
+	system("cls");
+	std::cout << "Confinm date\n";
+	std::cout << "Start: " << startReg << "\tEnd:" << endReg << '\n';
+	char** menu = new char* [2];
+	menu[0] = new char[] {"Confimn"};
+	menu[1] = new char[] {"Cancel"};
+	switch (Menu(menu, 5, 4))
+	{
+	case 0: 
+		resetRegister(); 
+		timeRegister(sem, startReg, endReg);
+		break;
+	case -1:
+	case 1:
+		return;
+	}
 }

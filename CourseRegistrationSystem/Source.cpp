@@ -8,9 +8,8 @@
 #include <filesystem>
 #include"Data.h"
 
-int fistrun(std::string&current) {
-	current = "";
-	std::fstream file("fistrun", std::fstream::in | std::ios::binary);
+int fistrun(std::string current) {
+	std::fstream file("firstrun", std::fstream::in | std::ios::binary);
 	if (!file) return -1;// everything done for this semester
 	int year;
 	int sem;
@@ -23,15 +22,16 @@ int fistrun(std::string&current) {
 	Date now = GetTime();
 	if (now < Start) return 0;// not in register time;
 	else if (now >= Start && now <= End) {
-		current = "Data\\SchoolYear" + std::to_string(year) + "\\Semester" + std::to_string(sem);
+		current = "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
 		return 1;// can register
 	}
 	else {//end register
-		std::string temp= "Data\\SchoolYear" + std::to_string(year) + "\\Semester" + std::to_string(sem);
-		Filelist* filelist = TakeFileInFolder(temp);
+		current= "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
+		Filelist* filelist = TakeFileInFolder(current);
+		//std::cout << filelist->filename;
 		int n = CountFile(filelist);
 		for (int i = 0; i < n; i++) {
-			Course* cour = BinToCourse(temp + "\\" + filelist->filename);
+			Course* cour = BinToCourse(current + "\\" + filelist->filename);
 			for (int m = 0; m < cour->numberofstudent; m++) {
 				for (int n = m + 1; n < cour->numberofstudent; n++) {
 					if (cour->stuID[m] > cour->stuID[n]) {
@@ -41,12 +41,12 @@ int fistrun(std::string&current) {
 					}
 				}
 			}
-			CourseToBin(cour, filelist->filename, temp);
-			std::ofstream filetemp(temp + "\\" + filelist->filename + "Score");
-			filetemp.close();
+			CourseToBin(cour, filelist->filename, current);
+			SaveScore(cour, current + "\\" + filelist->filename + "Score");
+			filelist = filelist->pNext;
 		}
 		file.close();
-		_wrmdir(L"fistrun");
+		_wremove(L"firstrun");
 		return 2;
 	}
 }
@@ -56,8 +56,16 @@ void main()
 	//int a = InputNumber();
 	//std::cout << '\t' << a;
 	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
+	Filelist* file = TakeFileInFolder("Data\\SchoolYear\\2022");
+	Filelist* temp = file;
+	do {
+		std::cout << file->filename<<'\n';
+		file = file->pNext;
+	} while (temp != file);
 	std::string current;
-	fistrun(current);
+	std::cout<<fistrun(current);
+	std::cout << current;
+	_getwch();
 	userTypeMode();
 	//std::cout << SearchCurrent();
 	//std::cout << "dada";

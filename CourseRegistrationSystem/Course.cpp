@@ -325,7 +325,7 @@ void displayCourse(Course* cou) {
 	std::wcout << "   Teacher: " << cou->teacher << "\n";
 	_SText();
 	std::cout << "   Credits: " << cou->credit << "\n";
-	std::cout << "   Number of students: " << std::setfill(0) << std::setw(2) << cou->numberofstudent << "/" << cou->maxstudent << "\n";
+	std::cout << "   Number of students: "  << std::setw(2) << cou->numberofstudent << "/" << cou->maxstudent << "\n";
 	std::cout << "   Schedule:\n";
 	for (int i = 0; i < 2; i++) {
 		std::cout << "      Day: "; printCourseDay(cou->performed[i].day);
