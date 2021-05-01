@@ -539,13 +539,33 @@ void editCourse(){
 	courseStaff();
 }
 
+void resetRegister(std::fstream* file) {
+
+}
 
 void OpenRegister() {
-	std::cout << "------ Register time ------";
+	std::cout << "------ Register time ------\n";
+	std::fstream file("fistrun", std::fstream::in | std::ios::binary);
+	if (file) { 
+		std::cout << "Register time had made, you will override it and reset all register data after done!"; 
+		char** menu = new char* [2];
+		menu[0] = new char[] {"Confimn"};
+		menu[1] = new char[] {"Cancel"};
+		switch (Menu(menu,5,3))
+		{
+		case 0: break;
+		case 1:
+		case -1:
+			file.close();
+			DealocatedArrString(menu);
+			return;
+		}
+	}
 	std::string sem = chooseTime();
 	if (sem == "") return;
 	Date start = TakeDateStart(sem);
 	Date End = TakeDateEnd(sem);
 	Date startReg;
-	Date endReg;	
+	Date endReg;
+
 }

@@ -426,125 +426,126 @@ Date TakeDateStart(std::string current) {
 void editCourse(Course* cou, std::string filename, std::string current) {
 
 }
-
-void EditChoices(int chose, Course* cou, bool check, std::string filename, std::string current) {
-	system("cls");
-	displayCourse(cou);
-	if (check == 0) {
-		GotoXY(0, 12);
-		for (int i = 0; i < cou->numberofstudent; i++) {
-			std::cout << " " << i + 1 << ". ";
-			displayScore(cou->score[i]);
-			std::cout << "\n";
-		}
-	}
-	_LText();
-	switch (chose) {
-	case 0:
-		std::wcout << "New teacher: ";
-		std::wcin >> cou->name;
-		break;
-	case 1:
-		std::wcout << "New credits: ";
-		std::wcin >> cou->credit;
-		break;
-	case 3:
-		char** day = new char* [7];
-		char** ses = new char* [4];
-		day[0] = new char[] { "MONDAY" };
-		day[1] = new char[] { "TUESDAY" };
-		day[2] = new char[] { "WEDNESDAY" };
-		day[3] = new char[] { "THURSDAY" };
-		day[4] = new char[] { "FRIDAY" };
-		day[5] = new char[] { "SATURDAY" };
-		day[6] = new char[] { "SUNDAY" };
-
-		ses[0] = new char[] { "S1 (07:30)" };
-		ses[1] = new char[] { "S2 (09:30)" };
-		ses[2] = new char[] { "S3 (13:30)" };
-		ses[3] = new char[] { "S4 (15:30)" };
-
-		for (int i = 0; i < 2; i++) {
-			GotoXY(0, 10 + i);
-			std::cout << "Day: ";
-			cou->performed[i].day = Choose(day, 15, 10 + i);
-			GotoXY(26, 10 + i);
-			std::cout << "Ses: ";
-			cou->performed[i].session = Choose(ses, 31, 10 + i);
-		}
-		DealocatedArrString(ses);
-		DealocatedArrString(day);
-		break;
-	case 4:
-		char book;
-		int num;
-		while (true) {
-			do {
-				GotoXY(0, 12 + 4 * cou->numberofstudent + 2);
-				std::cout << "Pick a student (0. Stop):      ";
-				GotoXY(26, 12 + 4 * cou->numberofstudent + 2);
-				std::cin >> num;
-			} while (num < 0 || num > cou->numberofstudent);
-			if (num == 0) break;
-			int X, Y;
-			X = 3;
-			Y = 12 + 4 * (num - 1) + 1;
-			book = _getwch();
-			book = toupper(book);
-			while (true) {
-				if (book == 'A' || book == KEY_LEFT) {
-					GotoXY(X, Y);
-					std::cout << "  ";
-					if (X == 3) X = 45;
-					if (X == 26) X == 3;
-					if (X == 45) X = 26;
-					GotoXY(X, Y);
-					std::cout << ">>";
-				}
-				else if (book == 'D' || book == KEY_RIGHT) {
-					GotoXY(X, Y);
-					std::cout << "  ";
-					if (X == 3) X = 26;
-					if (X == 26) X == 45;
-					if (X == 45)X = 3;
-					GotoXY(X, Y);
-					std::cout << ">>";
-				}
-				else if (book == KEY_ENTER || book == ' ') {
-					if (X == 3) {
-						GotoXY(16, Y);
-						std::cout << "    ";
-						GotoXY(16, Y);
-						std::cin >> cou->score[num - 1].mids;
-					}
-					if (X == 26) {
-						GotoXY(36, Y);
-						std::cout << "    ";
-						GotoXY(36, Y);
-						std::cin >> cou->score[num - 1].finals;
-					}
-					if (X == 45) {
-						GotoXY(56, Y);
-						std::cout << "    ";
-						GotoXY(56, Y);
-						std::cin >> cou->score[num - 1].others;
-					}
-					GotoXY(16, Y + 1);
-					cou->score[num - 1].totals = cou->score[num - 1].mids + cou->score[num - 1].finals + cou->score[num - 1].others;
-				}
-				else if (book == KEY_ESC) {
-					break;
-				}
-			}
-		}
-	}
-	if (chose < 4) {
-		system("cls");
-		displayCourse(cou);
-	}
-	CourseToBin(cou, filename, current);
-	_getwch();
-}
+//can use
+//void EditChoices(int chose, Course* cou, bool check, std::string filename, std::string current) {
+//	system("cls");
+//	displayCourse(cou);
+//	if (check == 0) {
+//		GotoXY(0, 12);
+//		for (int i = 0; i < cou->numberofstudent; i++) {
+//			std::cout << " " << i + 1 << ". ";
+//			displayScore(cou->score[i]);
+//			std::cout << "\n";
+//		}
+//	}
+//	_LText();
+//	switch (chose) {
+//	case 0: 
+//		std::wcout << "New teacher: ";
+//		std::wcin >> cou->name;
+//		break;
+//	case 1:
+//		std::wcout << "New credits: ";
+//		std::wcin >> cou->credit;
+//		break;
+//	case 3: {
+//		char** day = new char* [7];
+//		char** ses = new char* [4];
+//		day[0] = new char[] { "MONDAY" };
+//		day[1] = new char[] { "TUESDAY" };
+//		day[2] = new char[] { "WEDNESDAY" };
+//		day[3] = new char[] { "THURSDAY" };
+//		day[4] = new char[] { "FRIDAY" };
+//		day[5] = new char[] { "SATURDAY" };
+//		day[6] = new char[] { "SUNDAY" };
+//
+//		ses[0] = new char[] { "S1 (07:30)" };
+//		ses[1] = new char[] { "S2 (09:30)" };
+//		ses[2] = new char[] { "S3 (13:30)" };
+//		ses[3] = new char[] { "S4 (15:30)" };
+//
+//		for (int i = 0; i < 2; i++) {
+//			GotoXY(0, 10 + i);
+//			std::cout << "Day: ";
+//			cou->performed[i].day = Choose(day, 15, 10 + i);
+//			GotoXY(26, 10 + i);
+//			std::cout << "Ses: ";
+//			cou->performed[i].session = Choose(ses, 31, 10 + i);
+//		}
+//		DealocatedArrString(ses);
+//		DealocatedArrString(day);
+//		break; 
+//	}
+//	case 4:
+//		char book;
+//		int num;
+//		while (true) {
+//			do {
+//				GotoXY(0, 12 + 4 * cou->numberofstudent + 2);
+//				std::cout << "Pick a student (0. Stop):      ";
+//				GotoXY(26, 12 + 4 * cou->numberofstudent + 2);
+//				std::cin >> num;
+//			} while (num < 0 || num > cou->numberofstudent);
+//			if (num == 0) break;
+//			int X, Y;
+//			X = 3;
+//			Y = 12 + 4 * (num - 1) + 1;
+//			book = _getwch();
+//			book = toupper(book);
+//			while (true) {
+//				if (book == 'A' || book == KEY_LEFT) {
+//					GotoXY(X, Y);
+//					std::cout << "  ";
+//					if (X == 3) X = 45;
+//					if (X == 26) X == 3;
+//					if (X == 45) X = 26;
+//					GotoXY(X, Y);
+//					std::cout << ">>";
+//				}
+//				else if (book == 'D' || book == KEY_RIGHT) {
+//					GotoXY(X, Y);
+//					std::cout << "  ";
+//					if (X == 3) X = 26;
+//					if (X == 26) X == 45;
+//					if (X == 45)X = 3;
+//					GotoXY(X, Y);
+//					std::cout << ">>";
+//				}
+//				else if (book == KEY_ENTER || book == ' ') {
+//					if (X == 3) {
+//						GotoXY(16, Y);
+//						std::cout << "    ";
+//						GotoXY(16, Y);
+//						std::cin >> cou->score[num - 1].mids;
+//					}
+//					if (X == 26) {
+//						GotoXY(36, Y);
+//						std::cout << "    ";
+//						GotoXY(36, Y);
+//						std::cin >> cou->score[num - 1].finals;
+//					}
+//					if (X == 45) {
+//						GotoXY(56, Y);
+//						std::cout << "    ";
+//						GotoXY(56, Y);
+//						std::cin >> cou->score[num - 1].others;
+//					}
+//					GotoXY(16, Y + 1);
+//					cou->score[num - 1].totals = cou->score[num - 1].mids + cou->score[num - 1].finals + cou->score[num - 1].others;
+//				}
+//				else if (book == KEY_ESC) {
+//					break;
+//				}
+//			}
+//		}
+//	}
+//	if (chose < 4) {
+//		system("cls");
+//		displayCourse(cou);
+//	}
+//	CourseToBin(cou, filename, current);
+//	_getwch();
+//}
 
 void deleteCourse(Course* cour, std::string filename, std::string current) {
 
