@@ -97,6 +97,33 @@ void Logout(Student* CurrentUser)
 	SaveLogoutHistory(CurrentUser->account.username);
 	// Go to menu
 }
+//may be work
+
+void registerCourse(Student*stu,Course**cou,std::string sem) {
+	int semester = sem[sem.length() - 1] - '0';
+	char y[5];
+	sem.copy(y, 4, sem.length() - 14);
+	y[4] = '\0';
+	int year = StringToInt(y);
+	int n = _msize(cou) / sizeof(cou);
+	stu->coursenow = new char* [n];
+	std::string temp;
+	for (int i = 0; i < n; i++) {
+		temp = ToString(cou[i]->ID) + std::to_string(year) + std::to_string(semester);
+		stu->coursenow[i] = StrToChar(temp);
+		std::fstream coursefile(sem + "\\" + ToString(cou[i]->ID), std::fstream::in | std::fstream::out | std::fstream::binary);
+		coursefile.seekg(0, std::fstream::beg);
+		short k;
+		coursefile.read((char*)&k, sizeof(unsigned short));
+		k += 1;
+		coursefile.seekg(0, std::fstream::beg);
+		coursefile.write((char*)&k, sizeof(unsigned short));
+		coursefile.seekg(0, std::fstream::end);
+		coursefile.write((char*)&stu->ID, sizeof(unsigned __int64));
+		coursefile.close();
+	}
+	///save student
+}
 
 void ChangePassword(Student* CurrentUser)
 {

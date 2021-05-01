@@ -541,9 +541,26 @@ void editCourse(){
 	}
 	courseStaff();
 }
-
+//maybe work
 void resetRegister() {
-
+	std::fstream file("firstrun", std::fstream::in | std::ios::binary);
+	int year;
+	int sem;
+	file.read((char*)&year, sizeof(int));
+	file.read((char*)&sem, sizeof(int));
+	file.close();
+	std::string current = "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
+	Filelist* filelist = TakeFileInFolder(current);
+	if (filelist != nullptr) {
+		Filelist* temp = filelist;
+		do {
+			Course* cou = BinToCourse(current + "\\" + temp->filename);
+			cou->numberofstudent = 0;
+			delete[]cou->stuID;
+			CourseToBin(cou, temp->filename, current);
+			filelist = filelist->pNext;
+		} while (temp != filelist);
+	}
 }
 
 void timeRegister(std::string sem,Date startReg,Date endReg){
@@ -557,8 +574,6 @@ void timeRegister(std::string sem,Date startReg,Date endReg){
 	std::fstream fo("firstrun", std::fstream::out | std::fstream::binary);
 	fo.write((char*)&year, sizeof(int));
 	fo.write((char*)&semester, sizeof(int));
-	fo.write((char*)&startReg, sizeof(Date));
-	fo.write((char*)&endReg, sizeof(Date));
 	fo.close();
 }
 
