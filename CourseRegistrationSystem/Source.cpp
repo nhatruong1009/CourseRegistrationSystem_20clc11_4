@@ -56,10 +56,10 @@ void main()
 	//int a = InputNumber();
 	//std::cout << '\t' << a;
 	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
-	std::string current;
+	/*std::string current;
 	std::cout<<fistrun(current);
 	std::cout << current;
-	_getwch();
+	_getwch();*/
 	userTypeMode();
 	//std::cout << SearchCurrent();
 	//std::cout << "dada";

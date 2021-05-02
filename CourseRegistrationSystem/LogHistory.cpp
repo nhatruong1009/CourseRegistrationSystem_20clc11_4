@@ -47,39 +47,24 @@ void LoginStu(Student*& CurrentUser)
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
 		std::getline(std::cin, U);
+		std::cout << "Password: ";
+		P = InputHidden();
+		if (P == "") { CurrentUser = 0; break; }// don't input password;
+		std::string foldername = "K20";
+		foldername = foldername + U[0] + U[1];
 		if (U.size() < 8)
 		{
 			system("cls");
 			std::cout << "Username must be a 8-digit number, please try again." << std::endl;
 			continue;
 		}
-		std::cout << "Password: ";
-		P = InputHidden();
-		if (P == "") { CurrentUser = 0; break; }// don't input password;
-		std::string foldername = "K20";
-		foldername = foldername + U[0] + U[1];
-		Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
-		if (list == nullptr)
+		Student* a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + U);
+		if (a == nullptr)
 		{
 			system("cls");
 			std::cout << "Username is invalid, please try again." << std::endl;
 			continue;
 		}
-		Filelist* cur = list;
-		// Read Account File
-		do
-		{
-			if (U == cur->filename)
-				break;
-			cur = cur->pNext;
-		} while (cur != list);
-		if (U != cur->filename)
-		{
-			system("cls");
-			std::cout << "Username is invalid, please try again." << std::endl;
-			continue;
-		}
-		Student* a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + cur->filename);
 		if (P.compare(ToString(a->account.password)) == 0)
 		{
 			CurrentUser = a;
@@ -419,37 +404,34 @@ bool isConflict(Course* a, Course* b)		// true means conflict, false is not
 	return 0;
 }
 
-char** SessionConflict(Course** a, Course** b)	
+void SessionConflict(Course** a, Course** b, int*& Register)
 {
-	std::queue<char*>temp;
 	int n = _msize(a) / sizeof(a);
 	int m = _msize(b) / sizeof(b);
-	int sth = 0;
+	Register = new int[n] {};
+
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
 		{
-			if (isConflict(a[i], b[j]))
+			if (*a[i]->ID == *b[j]->ID)
 			{
-				temp.push(a[i]->ID);
-				temp.push(b[j]->ID);
-				sth+=2;
+				Register[i] = 1;
+				break;
 			}
+			else
+			{
+				if (isConflict(a[i], b[j]))
+				{
+					Register[i] = -1;
+					break;
+				}
+			}
+
 		}
 	}
-	// Mảng chứa các con trỏ char*, 2 môn trùng giờ sẽ là 1 cặp, vd arr[0] với arr[1] hay arr[2] với arr[3]
-	if (sth != 0)
-	{
-		char** arr = new char* [sth];
-		for (int i = 0; i < sth; i++)
-		{
-			arr[i] = temp.front();
-			temp.pop();
-		}
-		return arr;
-	}
-	return nullptr;
-	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
+
+	// REMEMBER TO DEALLOCATE WHEN USING FUNCTION !!!
 }
 
 void SessionConflict(Student* a)
@@ -478,8 +460,8 @@ std::string GetFilePath(unsigned __int64 ID)
 	std::string foldername = "K20";
 	std::string id = NumToStr(ID);
 	foldername = foldername + id[0] + id[1];
-	std::string path = "Data\\Grade\\" + foldername;
-	Student* a = BinToStu(path + "\\Student\\" + id);
+	std::string path = "Data\\Grade\\" + foldername + "\\Student\\" + id;
+	Student* a = BinToStu(path);
 	if (a)
 		return path;
 	else return "";
