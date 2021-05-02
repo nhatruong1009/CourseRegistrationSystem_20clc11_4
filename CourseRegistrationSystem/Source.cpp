@@ -57,16 +57,17 @@ void main()
 	//std::cout << '\t' << a;
 	//Student* test = BinToStu("Data\\Grade\\K2020\\Student\\20127376");
 	//
-	Student* a = BinToStu(GetFilePath(20127303));
-	std::cout << _msize(a->coursenow) / sizeof(a->coursenow);
+	/*Student* a = BinToStu(GetFilePath(20127303));
+	std::cout << _msize(a->coursenow) / sizeof(a->coursenow);*/
 
-	//std::cout << GetTime();
-	//std::string current;
-	//std::cout<<fistrun(current);
-	//std::cout << current;
-	//_getwch();
-	//userTypeMode();
-	// 
+	
+	std::cout << GetTime();
+	std::string current = "";
+	std::cout<<fistrun(current)<<" ";
+	std::cout << current;
+	_getwch();
+	userTypeMode();
+	 
 	//std::cout << SearchCurrent();
 	//std::cout << "dada";
 }

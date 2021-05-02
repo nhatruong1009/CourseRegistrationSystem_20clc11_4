@@ -339,7 +339,11 @@ void displaylistCourse(Course* cou) {
 	_LText();
 	std::wcout << cou->name << '\t' << cou->teacher;
 	_SText();
-	std::cout << '\t' << cou->numberofstudent << "/" << cou->maxstudent ;
+	std::cout << '\t' << cou->numberofstudent << "/" << cou->maxstudent <<"\t";
+	for (int i = 0; i < 2; i++) {
+		printCourseDay(cou->performed[i].day);
+		std::cout << "  S" << cou->performed[i].session + 1 << "  ";
+	}
 }
 
 void displayCourse(Course** cou) {

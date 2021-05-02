@@ -645,7 +645,7 @@ inline void removereg(Course** reg, Course* re) {
 		}
 	}
 	for (int i = n; i < 4; i++) {
-		reg[n] = reg[n + 1];
+		reg[i] = reg[i + 1];
 	}
 	reg[4] = nullptr;
 }
@@ -656,14 +656,22 @@ void takeCourseReg(Course** course, int*& take,Student*stu,std::string current) 
 	int n = _msize(course) / sizeof(course);
 	int had = 0;
 	Course** reg = new Course * [5];
+	Course** wasreg = new Course * [5];
 	for (int i = 0; i < 5; i++) {
 		reg[i] = nullptr;
 	}
 	for (int i = 0; i < n; i++) {
 		GotoXY(4, i + 3);
 		displaylistCourse(course[i]);
-		if (take[i] == 1) { std::cout << "O"; reg[had] = course[i]; had += 1; }
-		else if (take[i] == -1) std::cout << "X";
+		if (take[i] == 1) { wasreg[had] = course[i]; reg[had] = course[i]; had += 1; }
+
+	}
+	SessionConflict(course, reg, take);
+	for (int i = 0; i < n; i++) {
+		GotoXY(100, i + 3);
+		if (take[i] == 1) { std::cout << 'O'; }
+		else if (take[i] == -1) { std::cout << 'X'; }
+		else std::cout << " ";
 	}
 	GotoXY(0, 3); std::cout << "->";
 	char get;
@@ -714,7 +722,7 @@ void takeCourseReg(Course** course, int*& take,Student*stu,std::string current) 
 			}
 		}
 	} while (get!='E');
-
+	// phan loai mon sau do save
 	registerCourse(stu, reg, current);
 }
 
@@ -727,23 +735,15 @@ void registerMenu(Student*stu) {
 	Course** course = new Course * [n];
 	int m = 0;
 	if(stu->coursenow!=nullptr) m = _msize(stu->coursenow) / sizeof(stu->coursenow);
-	char** registed = new char* [m];
-	for (int i = 0; i < 5; i++) {
-		if (i < m)
-		{
-			registed[i] = new char[strlen(stu->coursenow[i]) - 4];
-			strcpy_s(registed[i], strlen(stu->coursenow[i]) - 5, stu->coursenow[i]);
-			registed[i][strlen(stu->coursenow[i]) - 5] = '\0';
-		}
-	}
  	int* canReg = new int[n];
 	for (int i = 0; i < n; i++) {
 		course[i] = BinToCourse(current + "\\" + filelist->filename);
 		filelist = filelist->pNext;
 		canReg[i] = 0;
 		for (int j = 0; j < m; j++) {
-			if (strcmp(registed[j], filelist->filename.c_str()) == 0)
+			if (strncmp(stu->coursenow[j], course[i]->ID, strlen(course[i]->ID)) == 0) {
 				canReg[i] = 1;
+			}
 		}
 	}
 	takeCourseReg(course, canReg, stu, current);
