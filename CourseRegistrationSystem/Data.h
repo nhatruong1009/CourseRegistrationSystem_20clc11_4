@@ -151,5 +151,6 @@ Date TakeDateEnd(std::string current);
 std::string GetFilePath(unsigned __int64 ID);
 void SessionConflict(Course** a, Course** b, int*& Register);
 int fistrun(std::string& current);
+void registerCourse(Student* stu, Course** cou, std::string sem);
 #endif // _Structs
 

@@ -184,16 +184,18 @@ void StuToBin(Student* stu, std::string fileout) {
 	fo.write((char*)&stu->birth, sizeof(Date));
 
 	if (stu->coursenow == nullptr) k = 0;
-	else k = _msize(stu->coursenow) / sizeof(char*);
+	else k = _msize(stu->coursenow) / sizeof(stu->coursenow);
+	std::cout << " heare" << k;
 	fo.write((char*)&k, sizeof(int));
 	for (int i = 0; i < k; i++) {
 		int e = _msize(stu->coursenow[i]) / sizeof(char)+1;
 		fo.write((char*)&e, sizeof(int));
 		fo.write(stu->coursenow[i], e);
+		std::cout << stu->coursenow[i];
 	}
-
+	_getwch();
 	if (stu->allcourse == nullptr) k = 0;
-	else k = _msize(stu->allcourse) / sizeof(char*);
+	else k = _msize(stu->allcourse) / sizeof(stu->allcourse);
 	fo.write((char*)&k, sizeof(int));
 	for (int i = 0; i < k; i++) {
 		int e = _msize(stu->allcourse[i]) / sizeof(char) + 1;
@@ -234,8 +236,9 @@ Student* BinToStu(std::string filein) {
 	fi.read((char*)&stu->birth, sizeof(Date));
 
 	fi.read((char*)&k, sizeof(int));
+	stu->coursenow = nullptr;
+	//std::cout << k;
 	if (k > 0) stu->coursenow = new char* [k];
-	else { stu->coursenow = nullptr; }
 	for (int i = 0; i < k; i++) {
 		int e = 0;
 		fi.read((char*)&e, sizeof(int));
@@ -245,7 +248,7 @@ Student* BinToStu(std::string filein) {
 
 	fi.read((char*)&k, sizeof(int));
 	if (k > 0) stu->allcourse = new char* [k];
-	else {stu->coursenow = nullptr;}
+	else {stu->allcourse = nullptr;}
 	for (int i = 0; i < k; i++) {
 		int e = 0;
 		fi.read((char*)&e, sizeof(int));
@@ -771,9 +774,11 @@ void CourseToBin(Course* course, std::string filename,std::string current) {
 	k = wcslen(course->teacher) + 1;
 	fo.write((char*)&k, sizeof(int));
 	fo.write((char*)&*course->teacher, (sizeof(wchar_t) / sizeof(char) * k));
-
+	std::cout << course->numberofstudent;
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fo.write((char*)&course->stuID[i], sizeof(unsigned __int64));
+		std::cout << course->stuID[i];
+		_getwch();
 	}
 	fo.close();
 }
@@ -794,6 +799,7 @@ Course* BinToCourse(std::string filename) {
 	Course* course = new Course;
 
 	fi.read((char*)&course->numberofstudent, sizeof(unsigned short));
+	std::cout << course->numberofstudent;
 	fi.read((char*)&course->maxstudent, sizeof(unsigned short));
 	fi.read((char*)&course->performed[0].day, sizeof(unsigned short));
 	fi.read((char*)&course->performed[0].session, sizeof(unsigned short));
@@ -813,6 +819,7 @@ Course* BinToCourse(std::string filename) {
 	course->teacher = new wchar_t[k];
 	fi.read((char*)&*course->teacher, (sizeof(wchar_t) / sizeof(char) * k));
 
+	course->stuID = new unsigned __int64[course->numberofstudent];
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fi.read((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}

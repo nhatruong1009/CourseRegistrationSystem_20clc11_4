@@ -90,23 +90,27 @@ void registerCourse(Student*stu,Course**cou,std::string sem) {
 	sem.copy(y, 4, sem.length() - 14);
 	y[4] = '\0';
 	int year = StringToInt(y);
-	int n = _msize(cou) / sizeof(cou);
+	int n = 0;
+	for (int i = 0; i < 5; i++) {
+		if (cou[i] == nullptr) {
+			n = i;
+			break;
+		}
+	}
 	stu->coursenow = new char* [n];
 	std::string temp;
 	for (int i = 0; i < n; i++) {
-		temp = ToString(cou[i]->ID) + std::to_string(year) + std::to_string(semester);
+		temp = ToString(cou[i]->ID) + ToString(y) + std::to_string(semester);
 		stu->coursenow[i] = StrToChar(temp);
-		std::fstream coursefile(sem + "\\" + ToString(cou[i]->ID), std::fstream::in | std::fstream::out | std::fstream::binary);
-		coursefile.seekg(0, std::fstream::beg);
-		short k;
-		coursefile.read((char*)&k, sizeof(unsigned short));
-		k += 1;
-		coursefile.seekg(0, std::fstream::beg);
-		coursefile.write((char*)&k, sizeof(unsigned short));
-		coursefile.seekg(0, std::fstream::end);
-		coursefile.write((char*)&stu->ID, sizeof(unsigned __int64));
-		coursefile.close();
+		cou[i]->numberofstudent += 1;
+		std::fstream filecou(sem + "\\" + cou[i]->ID, std::fstream::in | std::fstream::out | std::fstream::binary);
+		filecou.seekp(0, std::fstream::beg);
+		filecou.write((char*)&cou[i]->numberofstudent, sizeof(unsigned short));
+		filecou.seekp(0, std::fstream::end);
+		filecou.write((char*)&stu->ID, sizeof(unsigned __int64));
+		filecou.close();
 	}
+	std::cout <<"n: "<<n <<  "this: " << _msize(stu->coursenow) / sizeof(char*);
 	StuToBin(stu, GetFilePath(stu->ID));
 }
 
@@ -414,18 +418,15 @@ void SessionConflict(Course** a, Course** b, int*& Register)
 		for (int j = 0; j < 5; j++)
 		{
 			if (b[j] == nullptr) break;
-			if (*a[i]->ID == *b[j]->ID)
+			if (a[i] == b[j])
 			{
 				Register[i] = 1;
 				break;
 			}
-			else
+			if (isConflict(a[i], b[j]))
 			{
-				if (isConflict(a[i], b[j]))
-				{
-					Register[i] = -1;
-					break;
-				}
+				Register[i] = -1;
+				break;
 			}
 
 		}

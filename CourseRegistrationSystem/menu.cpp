@@ -351,9 +351,6 @@ void CourseInformaion(Student* stu){
 	studentMode(stu);
 }
 
-void RegisterCouse(Student* stu) {
-
-}
 void ViewCouse(Student* stu) {
 	system("cls");
 	std::cout << "------------- All Course ---------------";
@@ -653,7 +650,7 @@ inline void removereg(Course** reg, Course* re) {
 	reg[4] = nullptr;
 }
 
-void takeCourseReg(Course** course, int*& take) {
+void takeCourseReg(Course** course, int*& take,Student*stu,std::string current) {
 	system("cls");
 	int index = 0;
 	int n = _msize(course) / sizeof(course);
@@ -718,7 +715,7 @@ void takeCourseReg(Course** course, int*& take) {
 		}
 	} while (get!='E');
 
-	//register here
+	registerCourse(stu, reg, current);
 }
 
 void registerMenu(Student*stu) {
@@ -749,6 +746,8 @@ void registerMenu(Student*stu) {
 				canReg[i] = 1;
 		}
 	}
-	takeCourseReg(course, canReg);
+	takeCourseReg(course, canReg, stu, current);
+	//dealocate
 	std::cout << "done";
+
 }
