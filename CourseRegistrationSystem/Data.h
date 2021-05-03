@@ -129,6 +129,7 @@ void CourseToBin(_Course* course, std::string current);
 
 Classes MakeClass(_Student*& all, bool cls = true, int x = 5, int y = 2);
 void SaveClass(Classes cl,const char* fileout);
+void PrintClass(Classes a);
 
 
 void LoginStu(Student*& CurrentUser);
@@ -155,5 +156,17 @@ void registerCourse(Student* stu, Course** cou, std::string sem);
 void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**& newReg);
 void registerCourse(Course** newReg, std::string sem, unsigned __int64 stuID);
 void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID);
+
+void deleteStu(Student*& a);
+void delete_Stu(_Student*& a);
+void deleteCourse(Course*& a);
+void delete_Course(_Course*& a);
+void deleteClasses(Classes*& a);
+void deleteSemester(Semester*& a);
+void deleteSchoolyear(SchoolYear*& a);
+void deleteFilelist(Filelist*& a);
+void deleteIntArray(int*& a);
+void deleteIntArray(unsigned __int64*& a);
+void deleteStuArray(Student**& a);
 #endif // _Structs
 
