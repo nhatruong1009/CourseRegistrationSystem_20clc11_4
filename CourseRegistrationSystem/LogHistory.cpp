@@ -467,3 +467,51 @@ std::string GetFilePath(unsigned __int64 ID)
 		return path;
 	else return "";
 }
+
+void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**& newReg)
+{
+	int n = _msize(reg) / sizeof(reg);
+	int m = _msize(wasReg) / sizeof(wasReg);
+	std::vector<int> a;
+	std::vector<int> b;
+	for (int i = 0; i < n; i++)
+	{
+		bool check = 0;
+		for (int j = 0; j < m; j++)
+		{
+			if (reg[i] == wasReg[j])
+			{
+				check = 1;
+				break;
+			}
+		}
+		if (!check)
+			a.push_back(i);
+	}
+	
+	for (int j = 0; j < m; j++)
+	{
+		bool check = 0;
+		for (int i = 0; i < n; i++)
+		{
+			if (wasReg[j] == reg[i])
+			{
+				check = 1;
+				break;
+			}
+			if (!check)
+				b.push_back(j);
+		}
+	}
+	int N, M;
+	N = a.size();
+	M = b.size();
+	cancelReg = new Course * [N];
+	newReg = new Course * [M];
+	for (int i = 0; i < N; i++)
+		newReg[i] = reg[a[i]];
+	for (int i = 0; i < M; i++)
+		cancelReg[i] = wasReg[b[i]];
+	a.clear();
+	b.clear();
+}
