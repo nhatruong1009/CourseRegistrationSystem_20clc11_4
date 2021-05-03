@@ -80,6 +80,7 @@ void Logout(Student* CurrentUser)
 {
 	system("cls");
 	SaveLogoutHistory(CurrentUser->account.username);
+	// Delete Stu
 	// Go to menu
 }
 //may be work
@@ -255,28 +256,18 @@ _Student* SearchStuList(unsigned __int64* ID) // Return LL _Student		// Use dyna
 		std::string id = ToString(NumToStr(ID[i]));
 		std::string foldername = "K20"; 
 		foldername = foldername + id[0] + id[1];
-		Filelist* list = TakeFileInFolder("Data\\Grade\\" + foldername + "\\Student");
-		if (list == nullptr)
-		{
-			std::cout << id << " does not exist "<<std::endl;
-		}
-		Filelist* curlist = list;
-		do
-		{
-			if (id == curlist->filename)
-				break;
-			curlist = curlist->pNext;
-		} while (curlist != list);
-		if (id != curlist->filename)
+		Student* temp = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id);
+		if (temp == nullptr)
 			std::cout << id << " does not exist " << std::endl;
 		else
 		{
 			cur->pNext = new _Student;
 			cur->pNext->pPrev = cur;
 			cur = cur->pNext;
-			cur->student = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + curlist->filename);
+			cur->student = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id);
 			cur->pNext = head;
 			head->pPrev = cur;
+			deleteStu(temp);
 		}
 	}
 	_Student* temp = head;
@@ -286,7 +277,6 @@ _Student* SearchStuList(unsigned __int64* ID) // Return LL _Student		// Use dyna
 		head->pPrev = cur;
 	delete temp;	//delete dummy node
 	return head;
-
 	// REMEMBER TO DEALLOCATE WHEN FINISHED SEARCHING !!!
 }
 
@@ -362,9 +352,11 @@ bool AddStudentWarning(unsigned __int64 ID)
 	std::string foldername = "K20";
 	std::string id = NumToStr(ID);
 	foldername = foldername + id[0] + id[1];
-	if (BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id))
+	Student* temp = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id);
+	if (temp)
 	{
 		std::cout << "This ID already existed ";
+		deleteStu(temp);
 		return 0;
 	}
 	return 1;
@@ -444,7 +436,7 @@ void SessionConflict(Course** a, Course** b, int*& Register)
 			if (b[j] == nullptr) break;
 			if (a[i] == b[j])
 			{
-				Register[i] = 1;
+				Register[i] = 1;	
 				break;
 			}
 			if (isConflict(a[i], b[j]))
@@ -488,7 +480,10 @@ std::string GetFilePath(unsigned __int64 ID)
 	std::string path = "Data\\Grade\\" + foldername + "\\Student\\" + id;
 	Student* a = BinToStu(path);
 	if (a)
+	{
+		deleteStu(a);
 		return path;
+	}
 	else return "";
 }
 
