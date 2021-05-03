@@ -264,7 +264,7 @@ void SaveNewStu(_Student* stu, char* direction) {
 	char* direc = StrCat(direction, "\\Student\\");
 	_Student* temp = stu;
 	do {
-		char* filename = NumToStr(stu->student->ID);
+		char* filename = StrToChar(NumToStr(stu->student->ID));
 		char* fileout = AddTwoStr(direc, filename);
 		StuToBin(stu->student, fileout);
 		delete[] filename;
@@ -488,7 +488,7 @@ _Student* TypeInStudent() {
 		std::cin.ignore(1000, '\n');
 		std::cout << "Social ID: "; std::cin >> stu->SocialID;
 
-		stu->account.username = NumToStr(stu->ID);
+		stu->account.username = StrToChar(NumToStr(stu->ID));
 		temp1 = "";
 		stu->birth.dd < 10 ? temp1 += "0" + std::to_string(stu->birth.dd) : temp1 += std::to_string(stu->birth.dd);
 		stu->birth.mm < 10 ? temp1 += "0" + std::to_string(stu->birth.mm) : temp1 += std::to_string(stu->birth.mm);
@@ -570,7 +570,7 @@ SchoolYear* AddSchoolYear(int year) {
 	delete[] data;
 	SchoolYear* a = new SchoolYear;
 	a->year = year;
-	wchar_t* yy = NumToLStr(a->year);
+	wchar_t* yy = StrToChar(NumToLStr(a->year));
 	wchar_t* file = new wchar_t[]{ L"Data\\Grade\\K" };
 	StrCat(file, wcslen(yy), yy);
 	_wmkdir(file);
@@ -603,7 +603,7 @@ SchoolYear* AddSchoolYear(int year) {
 void SaveSchoolYear(SchoolYear*sch) {
 	if (sch == nullptr) return;
 	char* local = new char[] {"Data\\Grade\\K"};
-	char* year = NumToStr(sch->year);
+	char* year = StrToChar(NumToStr(sch->year));
 	char* direction = StrCat(local, year);
 	SaveNewStu(sch->student, direction);
 	SaveClass(sch->classes, direction);

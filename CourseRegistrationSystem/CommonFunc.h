@@ -48,8 +48,8 @@ unsigned __int64 StringToInt(char* ch);
 unsigned __int64 StringToInt(std::wstring str);
 unsigned __int64 StringToInt(std::string str);
 
-char* NumToStr(unsigned __int64 num);
-wchar_t* NumToLStr(unsigned __int64 num);
+std::string NumToStr(unsigned __int64 num);
+std::wstring NumToLStr(unsigned __int64 num);
 Date StringToDate(const wchar_t* ch);
 Date StringToDate(const char* ch);
 Date StringToDate(std::wstring ch);

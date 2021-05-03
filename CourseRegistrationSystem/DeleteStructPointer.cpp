@@ -91,6 +91,7 @@ void deleteStu(Student*& a)
 		delete[]a->allcourse;
 	}
 	delete a;
+	a = nullptr;
 }
 
 void delete_Stu(_Student*& a)
@@ -119,10 +120,14 @@ void deleteCourse(Course*& a)
 		delete[]a->stuID;
 	if (a->score)
 	{
-		delete[] a->score->name;
+		int n = _msize(a->score);
+		for (int i = 0; i < n; i++) {
+			delete[] a->score[i].name;
+		}
 		delete a->score;
 	}
 	delete a;
+	a = nullptr;
 }
 
 void delete_Course(_Course*& a)
@@ -147,6 +152,7 @@ void deleteClasses(Classes*& a)
 	delete[]a->name;
 	delete[]a->ID;
 	delete a;
+	a = nullptr;
 }
 
 void deleteClasses(Classes& a)
@@ -171,7 +177,7 @@ void delete_Class(_Class*& a)
 	a = nullptr;
 }
 
-void deleteSemester(Semester*& a)
+void deleteSemester(Semester* a)
 {
 	delete_Course(a->course);
 	delete a;
@@ -179,7 +185,10 @@ void deleteSemester(Semester*& a)
 
 void deleteSchoolyear(SchoolYear*& a)
 {
-	deleteSemester(a->semester);
+	int n = _msize(a->semester) / sizeof(a->semester);
+	for (int i = 0; i < n; i++) {
+		deleteSemester(&a->semester[i]);
+	}
 	delete_Class(a->classes);
 	delete_Stu(a->student);
 	delete a;
@@ -209,6 +218,7 @@ void deleteIntArray(int*& a)
 void deleteIntArray(unsigned __int64*& a)
 {
 	delete[]a;
+	a = nullptr;
 }
 
 void deleteStuArray(Student**& a)
@@ -222,4 +232,5 @@ void deleteStuArray(Student**& a)
 			deleteStu(a[i]);
 	}
 	delete[]a;
+	a = nullptr;
 }

@@ -235,24 +235,24 @@ Date StringToDate(std::string ch) {
 	return result;
 }
 
- char* NumToStr(unsigned __int64 num) {
-	if (num == 0) return new char[]{ "0\0" };
+ std::string NumToStr(unsigned __int64 num) {
+	if (num == 0) return { "" };
 	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
-	char* result = new char[n + 1];
-	result[n] = '\0';
+	std::string result;
+	result.resize(n);
 	for (int i = n - 1; i >= 0; i--) {
 		result[i] = temp % 10 + '0';
 		temp = temp / 10;
 	}
 	return result;
 }
-wchar_t* NumToLStr(unsigned __int64 num) {
-	if (num == 0) return new wchar_t[] { L"0\0" };
+std::wstring NumToLStr(unsigned __int64 num) {
+	if (num == 0) return { L"" };
 	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
-	wchar_t* result = new wchar_t[n + 1];
-	result[n] = L'\0';
+	std::wstring result;
+	result.resize(n);
 	for (int i = n - 1; i >= 0; i--) {
 		result[i] = temp % 10 + L'0';
 		temp = temp / 10;

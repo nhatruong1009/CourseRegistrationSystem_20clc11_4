@@ -96,6 +96,9 @@ void registerCourse(Course**newReg,std::string sem,unsigned __int64 stuID) {
 		filecou.seekp(0, std::fstream::end);
 		filecou.write((char*)&stuID, sizeof(unsigned __int64));
 		filecou.close();
+		char* accountID = StrToChar(NumToStr(stuID));
+		SaveCourseRegHis(accountID, *newReg[i]);
+		delete[]accountID;
 	}
 }
 
@@ -113,7 +116,9 @@ void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID) {
 		cancelReg[i]->numberofstudent -= 1;
 		cancelReg[i]->stuID[n] = cancelReg[i]->stuID[cancelReg[i]->numberofstudent];
 		CourseToBin(cancelReg[i], cancelReg[i]->ID, sem);
-
+		char* accountID = StrToChar(NumToStr(stuID));
+		SaveCourseCancelHis(accountID, *cancelReg[i]);
+		delete[]accountID;
 	}
 }
 
@@ -253,7 +258,7 @@ _Student* SearchStuList(unsigned __int64* ID) // Return LL _Student		// Use dyna
 	{
 		if (ID[i] < 10000000)
 			continue;
-		std::string id = ToString(NumToStr(ID[i]));
+		std::string id = NumToStr(ID[i]);
 		std::string foldername = "K20"; 
 		foldername = foldername + id[0] + id[1];
 		Student* temp = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id);
@@ -287,7 +292,7 @@ Student* SearchStu(unsigned __int64 ID)
 		std::cout << ID << " does not exist " << std::endl;
 		return nullptr;
 	}
-	std::string id = ToString(NumToStr(ID));
+	std::string id = NumToStr(ID);
 	std::string foldername = "K20";
 	foldername = foldername + id[0] + id[1];
 	Student* a = BinToStu("Data\\Grade\\" + foldername + "\\Student\\" + id);
@@ -475,9 +480,8 @@ std::string GetFilePath(unsigned __int64 ID)
 	if (ID < 10000000)
 		return"";
 	std::string foldername = "K20";
-	std::string id = NumToStr(ID);
-	foldername = foldername + id[0] + id[1];
-	std::string path = "Data\\Grade\\" + foldername + "\\Student\\" + id;
+	foldername = foldername + NumToStr(ID)[0] + NumToStr(ID)[1];
+	std::string path = "Data\\Grade\\" + foldername + "\\Student\\" + NumToStr(ID);
 	Student* a = BinToStu(path);
 	if (a)
 	{
