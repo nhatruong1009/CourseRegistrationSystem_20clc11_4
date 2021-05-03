@@ -333,17 +333,32 @@ void StuInformation(Student* stu){
 	studentMode(stu);
 }
 
+void viewCourseNow(Student* stu) {
+	system("cls");
+	std::cout << "------------- Registed Course ---------------";
+	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); return; }
+	int n = _msize(stu->coursenow) / sizeof(char*);
+	char sem = stu->coursenow[0][strlen(stu->coursenow[0]) - 1] + '0';
+	char y[5];
+	ToString(stu->coursenow[0]).copy(y, 4, strlen(stu->coursenow[0]) - 5);
+	y[4] = '\0';
+	std::cout << sem << y;
+	_getwch();
+}
+
 void CourseInformaion(Student* stu){
 	system("cls");
 	std::cout << "------------- Course ---------------";
-	char** menu = new char* [3];
+	char** menu = new char* [4];
 	menu[0] = new char[] {"Register Course"};
-	menu[1] = new char[] {"Completed Courses"};
-	menu[2] = new char[] {"Back"};
+	menu[1] = new char[] {"Regsited Couse"};
+	menu[2] = new char[] {"Completed Courses"};
+	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2)) {
 	case 0: registerMenu(stu); break;
 	case 1: ViewCouse(stu); break;
-	case 2:
+	case 2: viewCourseNow(stu); break;
+	case 3:
 	case -1:
 		break;
 	}

@@ -191,7 +191,6 @@ void StuToBin(Student* stu, std::string fileout) {
 		fo.write((char*)&e, sizeof(int));
 		fo.write(stu->coursenow[i], e);
 	}
-	_getwch();
 	if (stu->allcourse == nullptr) k = 0;
 	else k = _msize(stu->allcourse) / sizeof(stu->allcourse);
 	fo.write((char*)&k, sizeof(int));
