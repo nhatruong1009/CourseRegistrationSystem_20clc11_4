@@ -772,7 +772,6 @@ void CourseToBin(Course* course, std::string filename,std::string current) {
 	k = wcslen(course->teacher) + 1;
 	fo.write((char*)&k, sizeof(int));
 	fo.write((char*)&*course->teacher, (sizeof(wchar_t) / sizeof(char) * k));
-	std::cout << course->numberofstudent;
 	for (int i = 0; i < course->numberofstudent; i++) {
 		fo.write((char*)&course->stuID[i], sizeof(unsigned __int64));
 	}

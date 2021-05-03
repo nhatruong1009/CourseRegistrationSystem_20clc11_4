@@ -152,5 +152,8 @@ std::string GetFilePath(unsigned __int64 ID);
 void SessionConflict(Course** a, Course** b, int*& Register);
 int fistrun(std::string& current);
 void registerCourse(Student* stu, Course** cou, std::string sem);
+void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**& newReg);
+void registerCourse(Course** newReg, std::string sem, unsigned __int64 stuID);
+void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID);
 #endif // _Structs
 

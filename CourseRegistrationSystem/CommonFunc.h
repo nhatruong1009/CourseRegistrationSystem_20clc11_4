@@ -7,7 +7,6 @@
 #include<fstream>
 #include<ctime>
 #include<locale>
-#include<vector>
 
 #define KEY_UP 72 
 #define KEY_DOWN 80

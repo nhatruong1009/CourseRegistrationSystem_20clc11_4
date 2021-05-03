@@ -84,6 +84,38 @@ void Logout(Student* CurrentUser)
 }
 //may be work
 
+void registerCourse(Course**newReg,std::string sem,unsigned __int64 stuID) {
+	if (newReg == nullptr) return;
+	int n = _msize(newReg) / sizeof(newReg);
+	for (int i = 0; i < n; i++) {
+		newReg[i]->numberofstudent += 1;
+		std::fstream filecou(sem + "\\" + newReg[i]->ID, std::fstream::in | std::fstream::out | std::fstream::binary);
+		filecou.seekp(0, std::fstream::beg);
+		filecou.write((char*)&newReg[i]->numberofstudent, sizeof(unsigned short));
+		filecou.seekp(0, std::fstream::end);
+		filecou.write((char*)&stuID, sizeof(unsigned __int64));
+		filecou.close();
+	}
+}
+
+void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID) {
+	if (cancelReg == nullptr) return;
+	int n = _msize(cancelReg) / sizeof(cancelReg);
+	for (int i = 0; i < n; i++) {
+		int n = 0;
+		for (int j = 0; j < cancelReg[i]->maxstudent; j++) {
+			if (cancelReg[i]->stuID[j] == stuID) {
+				n = j;
+				break;
+			}
+		}
+		cancelReg[i]->numberofstudent -= 1;
+		cancelReg[i]->stuID[n] = cancelReg[i]->stuID[cancelReg[i]->numberofstudent];
+		CourseToBin(cancelReg[i], cancelReg[i]->ID, sem);
+
+	}
+}
+
 void registerCourse(Student*stu,Course**cou,std::string sem) {
 	int semester = sem[sem.length() - 1] - '0';
 	char y[5];
@@ -102,15 +134,7 @@ void registerCourse(Student*stu,Course**cou,std::string sem) {
 	for (int i = 0; i < n; i++) {
 		temp = ToString(cou[i]->ID) + ToString(y) + std::to_string(semester);
 		stu->coursenow[i] = StrToChar(temp);
-		cou[i]->numberofstudent += 1;
-		std::fstream filecou(sem + "\\" + cou[i]->ID, std::fstream::in | std::fstream::out | std::fstream::binary);
-		filecou.seekp(0, std::fstream::beg);
-		filecou.write((char*)&cou[i]->numberofstudent, sizeof(unsigned short));
-		filecou.seekp(0, std::fstream::end);
-		filecou.write((char*)&stu->ID, sizeof(unsigned __int64));
-		filecou.close();
 	}
-	std::cout <<"n: "<<n <<  "this: " << _msize(stu->coursenow) / sizeof(char*);
 	StuToBin(stu, GetFilePath(stu->ID));
 }
 
@@ -470,10 +494,21 @@ std::string GetFilePath(unsigned __int64 ID)
 
 void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**& newReg)
 {
-	int n = _msize(reg) / sizeof(reg);
-	int m = _msize(wasReg) / sizeof(wasReg);
-	std::vector<int> a;
-	std::vector<int> b;
+	int n = 0;
+	int m = 0;
+	
+	for (int i = 0; i < 5; i++) {
+		if (reg[i] == nullptr) {
+			n = i; break;
+		}
+	}
+
+	if(wasReg!=nullptr) m = _msize(wasReg) / sizeof(wasReg);
+	if (m + n == 0) return;
+	int* a = new int[n + m];
+	int* b = new int[n + m];
+	int N = 0;
+	int M = 0;
 	for (int i = 0; i < n; i++)
 	{
 		bool check = 0;
@@ -486,7 +521,10 @@ void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**
 			}
 		}
 		if (!check)
-			a.push_back(i);
+		{
+			a[N] = i;
+			N += 1;
+		}
 	}
 	
 	for (int j = 0; j < m; j++)
@@ -499,19 +537,20 @@ void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**
 				check = 1;
 				break;
 			}
-			if (!check)
-				b.push_back(j);
+		}
+		if (!check)
+		{
+			b[M] = j;
+			M += 1;
 		}
 	}
-	int N, M;
-	N = a.size();
-	M = b.size();
-	cancelReg = new Course * [N];
-	newReg = new Course * [M];
+
+	if (N > 0) newReg = new Course * [N];
+	if (M > 0) cancelReg = new Course * [M];
 	for (int i = 0; i < N; i++)
 		newReg[i] = reg[a[i]];
 	for (int i = 0; i < M; i++)
 		cancelReg[i] = wasReg[b[i]];
-	a.clear();
-	b.clear();
+	delete[] a;
+	delete[] b;
 }

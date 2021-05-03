@@ -656,16 +656,24 @@ void takeCourseReg(Course** course, int*& take,Student*stu,std::string current) 
 	int n = _msize(course) / sizeof(course);
 	int had = 0;
 	Course** reg = new Course * [5];
-	Course** wasreg = new Course * [5];
+	Course** tempwasreg = new Course * [5];
 	for (int i = 0; i < 5; i++) {
 		reg[i] = nullptr;
 	}
 	for (int i = 0; i < n; i++) {
 		GotoXY(4, i + 3);
 		displaylistCourse(course[i]);
-		if (take[i] == 1) { wasreg[had] = course[i]; reg[had] = course[i]; had += 1; }
-
+		if (take[i] == 1) { tempwasreg[had] = course[i]; reg[had] = course[i]; had += 1; }
 	}
+	Course** wasreg = nullptr;
+	if (had != 0) {
+		wasreg = new Course * [had];
+		for (int i = 0; i < had; i++) {
+			wasreg[i] = tempwasreg[i];
+		}
+	}
+	delete[] tempwasreg;
+
 	SessionConflict(course, reg, take);
 	for (int i = 0; i < n; i++) {
 		GotoXY(100, i + 3);
@@ -723,7 +731,15 @@ void takeCourseReg(Course** course, int*& take,Student*stu,std::string current) 
 		}
 	} while (get!='E');
 	// phan loai mon sau do save
+	std::cout << "out";
+	Course** newReg = nullptr;
+	Course** cancelReg = nullptr;
+
+	classifyCourse(reg, wasreg, cancelReg, newReg);
+	registerCourse(newReg, current, stu->ID);
+	cancelCourse(cancelReg, current, stu->ID);
 	registerCourse(stu, reg, current);
+
 }
 
 void registerMenu(Student*stu) {
@@ -747,7 +763,5 @@ void registerMenu(Student*stu) {
 		}
 	}
 	takeCourseReg(course, canReg, stu, current);
-	//dealocate
-	std::cout << "done";
 
 }
