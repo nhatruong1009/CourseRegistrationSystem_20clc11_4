@@ -494,6 +494,20 @@ void editInfo(Course* cou, std::string filename, std::string current) {
 }
 
 void editScore(Course* cou, std::string filename, std::string current) {
+	int test = current[current.length() - 1] - '0';
+	Date start, end;
+	char* file = new char[current.length()-9];
+	current.copy(file, current.length() - 9);
+	file[current.length() - 10] = '\0';
+	
+	std::fstream fi(file, std::fstream::in | std::fstream::binary);
+	for (int i = 0; i < test; i++) {
+		fi.read((char*)&start, sizeof(Date));
+		fi.read((char*)&end, sizeof(Date));
+	}
+	delete[] file;
+	if (!(GetTime() > start && GetTime() < end)) { return; }
+
 	std::cout <<"ID: "<< cou->ID << "\n";
 	std::cout << "Course name: " << cou->name << "\n";
 	_LText();
