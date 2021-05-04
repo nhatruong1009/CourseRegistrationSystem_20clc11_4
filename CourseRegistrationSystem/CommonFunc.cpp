@@ -5,6 +5,7 @@ void _LText()
 {
 	_setmode(_fileno(stdin), _O_U16TEXT); 
 	_setmode(_fileno(stdout), _O_U16TEXT);
+	return;
 } 
 void _SText() {
 	_setmode(_fileno(stdin), _O_TEXT);
@@ -427,7 +428,7 @@ std::wstring ToWstring(wchar_t* source) {
 	return result;
 }
 
-
+//
 Filelist* TakeFileInFolder(const std::wstring& name)
 {
 	Filelist* result = nullptr;
@@ -593,7 +594,7 @@ short Choose(wchar_t** list,short X,short Y) {
 		}
 		else if (book == KEY_ENTER || book == ' ') {
 			GotoXY(0, Y + 1);
-			_SText();
+			//_SText();
 			return index;
 		}
 		else if (book == KEY_ESC) {
