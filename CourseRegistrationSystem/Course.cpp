@@ -5,13 +5,15 @@ Course* MakeCourse();
 void FileOutCourse(_Course*, std::string);
 void AddCourse(_Course*&, Course);
 unsigned short LStringToPerform(wchar_t*);
-
+void editScore(Course* cou, std::string filename, std::string current);
+void editInfo(Course* cou, std::string filename, std::string current);
 Course* searchCourseFile(std::string search);
 Course* searchCourse(_Course*, std::wstring&);
 Course* searchID(_Course*, std::wstring);
 Course* searchName(_Course*, std::wstring);
 Course* searchTeacher(_Course*, std::wstring);
-
+void pickSchedule(Course* cou, int x, int y);
+void StringToScore(Score& a, std::wstring str);
 void printCourseDay(short);
 void displayCourse(_Course*);
 void editCourse(_Course*&);
@@ -604,6 +606,23 @@ void FileInScore(Course* cou, std::string direction) {		// I don't know file dir
 	_SText();
 }
 
+float StringToFloat(wchar_t* ch) {			// I added a commonFunc
+	float a = 0;
+	while (*ch != L'\0' && *ch != L'.')
+	{
+		a = a * 10 + *ch - L'0';
+		ch++;
+	}
+	if (*ch == L'.') {
+		ch++;
+		while (*ch != L'/0') {
+			a = a + (*ch - L'0') / 10;
+			ch++;
+		}
+	}
+	return a;
+}
+
 void StringToScore(Score& a, std::wstring str) {
 	//ID, Course name, Teacher, Credit, Perform
 	wchar_t* temp = nullptr;
@@ -656,22 +675,6 @@ void StringToScore(Score& a, std::wstring str) {
 	a.totals = StringToFloat(temp);
 }
 
-float StringToFloat(wchar_t* ch) {			// I added a commonFunc
-	float a = 0;
-	while (*ch != L'\0'&&*ch!=L'.')
-	{
-			a = a * 10 + *ch - L'0';
-			ch++;
-	}
-	if (*ch == L'.') {
-		ch++;
-		while (*ch != L'/0') {
-			a = a + (*ch - L'0') / 10;
-			ch++;
-		}
-	}
-	return a;
-}
 
 
 //  HAS BEEN RECYCLED v

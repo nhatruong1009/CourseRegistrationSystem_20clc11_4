@@ -332,17 +332,18 @@ void StuInformation(Student* stu){
 	}
 }
 
-void viewCourseNow(Student* stu) {
+void ViewCourseNow(Student* stu) {
 	system("cls");
 	std::cout << "------------- Registed Course ---------------";
-	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); return; }
+	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
 	int n = _msize(stu->coursenow) / sizeof(char*);
-	char sem = stu->coursenow[0][strlen(stu->coursenow[0]) - 1] + '0';
+	char sem = stu->coursenow[0][strlen(stu->coursenow[0]) - 1] ;
 	char y[5];
 	ToString(stu->coursenow[0]).copy(y, 4, strlen(stu->coursenow[0]) - 5);
 	y[4] = '\0';
-	std::cout << sem << y;
+	std::cout <<"[]"<< sem << ":" << y;
 	_getwch();
+	CourseInformaion(stu);
 }
 
 void CourseInformaion(Student* stu){
@@ -355,8 +356,8 @@ void CourseInformaion(Student* stu){
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2)) {
 	case 0: registerMenu(stu); break;
-	case 1: ViewCouse(stu); break;
-	case 2: viewCourseNow(stu); break;
+	case 1: ViewCourseNow(stu); break;
+	case 2: ViewCouse(stu); break;
 	case 3:
 	case -1:
 		DealocatedArrString(menu);
@@ -368,10 +369,10 @@ void CourseInformaion(Student* stu){
 void ViewCouse(Student* stu) {
 	system("cls");
 	std::cout << "------------- All Course ---------------";
-	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); return; }
+	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
 	int n = _msize(stu->allcourse) / sizeof(char*);
-
-	//Course*
+	_getwch();
+	CourseInformaion(stu);
 }
 
 void courseStaff() {
@@ -530,10 +531,6 @@ void editCourse(){
 	std::cout << "---------- Edit Course -----------";
 	Filelist* Cour = TakeFileInFolder(current);
 	if (CountFile(Cour)!=0) {
-		for (int i = 0; i < CountFile(Cour); i++) {
-			if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
-			else Cour = Cour->pNext;
-		}
 		int n = CountFile(Cour);
 		wchar_t** choseCourse = new wchar_t* [n];
 		for (int i = 0; i < n; i++) {
