@@ -120,7 +120,7 @@ void deleteCourse(Course*& a)
 		delete[]a->stuID;
 	if (a->score)
 	{
-		int n = _msize(a->score);
+		int n = _msize(a->score)/sizeof(a->score);
 		for (int i = 0; i < n; i++) {
 			delete[] a->score[i].name;
 		}
