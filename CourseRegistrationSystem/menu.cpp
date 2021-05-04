@@ -418,6 +418,7 @@ std::string chooseTime(bool timeout=true) {
 	//system("cls");
 	Filelist* list = TakeFileInFolder("Data\\SchoolYear");
 	if (list != nullptr) {
+
 		int n = CountFile(list);
 		Date date;
 		for (int i = 0; i < n; i++) {
@@ -509,9 +510,12 @@ void viewCourse(){
 	std::string current = chooseTime(false);
 	if (current != "") {
 		Filelist* Cour = TakeFileInFolder(current);
+		std::cout << CountFile(Cour);
 		for (int i = 0; i < CountFile(Cour); i++) {
-			if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
+			std::cout << Cour->filename << '\n';
+			if ( Cour->filename.length()>5 && Cour->filename.compare(Cour->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
 			else Cour = Cour->pNext;
+			
 		}
 		Filelist* temp = Cour;
 		system("cls");
@@ -530,6 +534,13 @@ void editCourse(){
 	system("cls");
 	std::cout << "---------- Edit Course -----------";
 	Filelist* Cour = TakeFileInFolder(current);
+	
+	for (int i = 0; i < CountFile(Cour); i++) {
+		if (Cour->filename.length() > 5 && Cour->filename.compare(Cour->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
+		else Cour = Cour->pNext;
+	}
+	
+
 	if (CountFile(Cour)!=0) {
 		int n = CountFile(Cour);
 		wchar_t** choseCourse = new wchar_t* [n];

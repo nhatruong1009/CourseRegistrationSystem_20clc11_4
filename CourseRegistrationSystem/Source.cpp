@@ -51,6 +51,10 @@ int fistrun(std::string& current) {
 		}
 		file.close();
 		_wremove(L"firstrun");
+		file.open("currentsem", std::fstream::out);
+		file.write((char*)&year, sizeof(int));
+		file.write((char*)&sem, sizeof(int));
+		file.close();
 		return 2;
 	}
 }

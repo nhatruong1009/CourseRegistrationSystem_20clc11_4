@@ -16,7 +16,7 @@ struct Account
 };
 struct Score
 {
-	unsigned int ID;
+	unsigned __int64 ID;
 	wchar_t* name = nullptr;
 	float totals = 0;
 	float finals = 0;
