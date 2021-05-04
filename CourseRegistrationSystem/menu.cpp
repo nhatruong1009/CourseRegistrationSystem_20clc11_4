@@ -71,7 +71,7 @@ void userTypeMode()
 	}
 	DealocatedArrString(menu);
 }
-void studentMode(Student* stu )
+void studentMode(Student* stu)
 {
 	if (stu == nullptr)
 	{
@@ -94,11 +94,12 @@ void studentMode(Student* stu )
 		break;
 	case -1:
 	case 2:
+		Logout(stu);
+		deleteStu(stu);
+		DealocatedArrString(menu);;
+		userTypeMode();
 		break;
 	}
-	Logout(stu);
-	DealocatedArrString(menu);
-	userTypeMode();
 }
 void staffMode()
 {
@@ -115,10 +116,9 @@ void staffMode()
 	case 1: courseStaff(); break;
 	case 2: schoolPlan(); break;
 	case -1:
-	case 4: break;
+	case 3: DealocatedArrString(menu); userTypeMode(); break;
 	}
-	DealocatedArrString(menu);
-	userTypeMode();
+	
 }
 void staffStudentMenu() {
 	system("cls");
@@ -134,9 +134,8 @@ void staffStudentMenu() {
 	case 1: classMenu(); break;
 	case 2: studentMenu(); break;
 	case-1:
-	case 3: staffMode(); break;
+	case 3:DealocatedArrString(menu); staffMode(); break;
 	}
-	DealocatedArrString(menu);
 }
 void gradeMenu() {
 	system("cls");
@@ -327,23 +326,24 @@ void StuInformation(Student* stu){
 	case 0: ChangeInfo(stu);
 	case-1:
 	case 1:
+		DealocatedArrString(menu);
+		studentMode(stu);
 		break;
 	}
-	DealocatedArrString(menu);
-	studentMode(stu);
 }
 
-void viewCourseNow(Student* stu) {
+void ViewCourseNow(Student* stu) {
 	system("cls");
 	std::cout << "------------- Registed Course ---------------";
-	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); return; }
+	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
 	int n = _msize(stu->coursenow) / sizeof(char*);
-	char sem = stu->coursenow[0][strlen(stu->coursenow[0]) - 1] + '0';
+	char sem = stu->coursenow[0][strlen(stu->coursenow[0]) - 1] ;
 	char y[5];
 	ToString(stu->coursenow[0]).copy(y, 4, strlen(stu->coursenow[0]) - 5);
 	y[4] = '\0';
-	std::cout << sem << y;
+	std::cout <<"[]"<< sem << ":" << y;
 	_getwch();
+	CourseInformaion(stu);
 }
 
 void CourseInformaion(Student* stu){
@@ -356,23 +356,23 @@ void CourseInformaion(Student* stu){
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2)) {
 	case 0: registerMenu(stu); break;
-	case 1: ViewCouse(stu); break;
-	case 2: viewCourseNow(stu); break;
+	case 1: ViewCourseNow(stu); break;
+	case 2: ViewCouse(stu); break;
 	case 3:
 	case -1:
+		DealocatedArrString(menu);
+		studentMode(stu);
 		break;
 	}
-	DealocatedArrString(menu);
-	studentMode(stu);
 }
 
 void ViewCouse(Student* stu) {
 	system("cls");
 	std::cout << "------------- All Course ---------------";
-	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); return; }
+	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
 	int n = _msize(stu->allcourse) / sizeof(char*);
-
-	//Course*
+	_getwch();
+	CourseInformaion(stu);
 }
 
 void courseStaff() {
@@ -391,11 +391,12 @@ void courseStaff() {
 	case 2: editCourse(); break;
 	case 3:OpenRegister(); break;
 	case -1:
-	case 4: break;
+	case 4:
+		DealocatedArrString(menu);
+		staffMode();
+		break;
 	}
 
-	DealocatedArrString(menu);
-	staffMode();
 }
 
 void schoolPlan() {
@@ -404,11 +405,12 @@ void schoolPlan() {
 	std::cout << "--------- School Plan ---------";
 	std::cout << "\nInput Year (Pass if take current year) :";
 	time = InputNumber();
-	if (time == -1) { staffMode(); return; }
-	if (time == 0) {time = GetTime().yy; std::cout << time << '\n'; }
-	MakeCurentTime(time);
-	std::cout << "\n__________ Sucess _________";
-	_getwch();
+	if (time == 0) {
+		time = GetTime().yy; std::cout << time << '\n';
+		MakeCurentTime(time);
+		std::cout << "\n__________ Sucess _________";
+		_getwch();
+	}
 	staffMode();
 }
 
@@ -471,10 +473,10 @@ void addCourseInSemmester(std::string current){
 	case 1: MakeCourse(current); break; // type in
 	case-1:
 	case 2:
+		DealocatedArrString(menu);
+		courseStaff();
 		break;
 	}
-	DealocatedArrString(menu);
-	courseStaff();
 }
 
 void addCourse(){
@@ -529,10 +531,6 @@ void editCourse(){
 	std::cout << "---------- Edit Course -----------";
 	Filelist* Cour = TakeFileInFolder(current);
 	if (CountFile(Cour)!=0) {
-		for (int i = 0; i < CountFile(Cour); i++) {
-			if (Cour->filename.compare(Cour->filename.size() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
-			else Cour = Cour->pNext;
-		}
 		int n = CountFile(Cour);
 		wchar_t** choseCourse = new wchar_t* [n];
 		for (int i = 0; i < n; i++) {
@@ -647,7 +645,7 @@ void OpenRegister() {
 		break;
 	case -1:
 	case 1:
-		return;
+		break;
 	}
 }
 

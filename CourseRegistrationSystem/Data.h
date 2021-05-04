@@ -168,5 +168,6 @@ void deleteFilelist(Filelist*& a);
 void deleteIntArray(int*& a);
 void deleteIntArray(unsigned __int64*& a);
 void deleteStuArray(Student**& a);
+void editCourse(std::string filename, std::string current);;
 #endif // _Structs
 

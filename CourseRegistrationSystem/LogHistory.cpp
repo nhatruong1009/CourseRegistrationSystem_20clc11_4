@@ -72,6 +72,7 @@ void LoginStu(Student*& CurrentUser)
 			break;
 		}
 		else { system("cls"); std::cout << "Password is invalid, please try again. " << std::endl; }
+		deleteStu(a);
 	} while (1);
 	// Go to Student menu
 }
