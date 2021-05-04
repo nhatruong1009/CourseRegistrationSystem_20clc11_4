@@ -535,9 +535,9 @@ void editScore(Course* cou, std::string filename, std::string current) {
 		Y = 6 + 4 * (num - 1) + 1;
 		GotoXY(0, Y - 1);		//go to before student number
 		std::cout << " >";
-		book = _getwch();
-		book = toupper(book);
 		while (true) {			//below is visually changing data
+			book = _getwch();
+			book = toupper(book);
 			if (book == 'A' || book == KEY_LEFT) {
 				GotoXY(X, Y);
 				std::cout << "  ";
