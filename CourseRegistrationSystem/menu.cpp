@@ -512,7 +512,6 @@ void viewCourse(){
 		Filelist* Cour = TakeFileInFolder(current);
 		std::cout << CountFile(Cour);
 		for (int i = 0; i < CountFile(Cour); i++) {
-			std::cout << Cour->filename << '\n';
 			if ( Cour->filename.length()>5 && Cour->filename.compare(Cour->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
 			else Cour = Cour->pNext;
 			

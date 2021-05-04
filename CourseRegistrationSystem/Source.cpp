@@ -11,6 +11,85 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
+void inline updateSemesterResult(std::string sem) {// this really hard :(( i hope it work
+	Filelist* Courses = TakeFileInFolder(sem);
+	int n = CountFile(Courses);
+	for (int i = 0; i < n; i++) {
+		if (Courses->filename.length() > 5 && Courses->filename.compare(Courses->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(Courses); i -= 1; n -= 1; }
+		else Courses = Courses->pNext;
+	}
+
+	for (int i = 0; i < n; i++) { // ok, time to update :<
+		Course* temp = BinToCourse(sem + "\\" + Courses->filename);
+		for (int j = 0; j < temp->numberofstudent; j++) {
+			Student* stu = BinToStu(GetFilePath(temp->stuID[j]));
+
+			//take the idCourse to the last
+			int m = _msize(stu->coursenow) / sizeof(stu->coursenow);
+			for (int i = 0; i < m; i++) {
+				if (strncmp(stu->coursenow[i], temp->ID, sizeof(temp->ID)) == 0) {
+					char* swap = stu->coursenow[i];
+					stu->coursenow[i] = stu->coursenow[m - 1];
+					stu->coursenow[m - 1] = swap;
+					break;
+				}
+			}
+			m -= 1;
+
+			Score* score=nullptr; // load score of this student here. but just need the total
+			delete[] score->name;// btw it not neccessary
+			int n = 0;
+			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(stu->allcourse);
+			n += 1;
+			//just keep;
+			char** his = stu->allcourse;
+			stu->allcourse = new char* [n];
+			for (int i = 0; i < n - 1; i++) {
+				stu->allcourse[i] = his[i];
+			}
+			stu->allcourse[n - 1] = stu->coursenow[m];
+
+			delete[] his; //detele the poiter point to data, not the data
+			his = stu->coursenow;
+			if (m > 0) stu->coursenow = new char* [m];
+			for (int i = 0; i < m; i++) {
+				stu->coursenow[i] = his[i];
+			}
+			delete[] his;
+
+			//update Score :((
+			stu->GPA = ((stu->GPA * (float(n) - 1)) + score->totals) / float(n); // Old GPA*number of olD Subject + this Course score and / for numberof subect
+			StuToBin(stu, GetFilePath(stu->ID));
+			deleteStu(stu);
+		}
+		deleteCourse(temp);
+		Courses = Courses->pNext;
+	}
+}
+
+int secondrun() {
+	std::fstream file("currentsem", std::fstream::in);
+	if (!file) return -1;// not in time of any semester
+	int year, sem;
+	file.read((char*)&year, sizeof(int));
+	file.read((char*)&sem, sizeof(int));
+	Date start, end;
+	file.close();
+	file.open("Data\\SchoolYear\\" + std::to_string(year) + "\\time", std::fstream::in);
+	for (int i = 0; i < sem; i++) {
+		file.read((char*)&start, sizeof(Date));
+		file.read((char*)&end, sizeof(Date));
+	}
+	if (GetTime() < start) return -1;// not in time so can't do anything
+	if (GetTime() > end) {
+		// load all student and update them score;
+		updateSemesterResult("Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem));
+
+		_wremove(L"currentsem");
+		return 1; // this end of semester so remove file, file not exits now so it can't change anything too;
+	}
+	return 0;// can change score and somthing just like this of any thing of Course
+}
 
 int fistrun(std::string& current) {
 	std::fstream file("firstrun", std::fstream::in | std::ios::binary);
@@ -29,7 +108,7 @@ int fistrun(std::string& current) {
 		current = "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
 		return 1;// can register
 	}
-	else {//end register
+	else {//end register // save new score file and made current time semester to update file.
 		current= "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
 		Filelist* filelist = TakeFileInFolder(current);
 		//std::cout << filelist->filename;

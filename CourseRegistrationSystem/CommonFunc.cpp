@@ -836,15 +836,29 @@ bool CheckDate(Date dat)
 			return 0;
 	return 1;
 }
-void removeAcourseForStudents(int studentsIDs[],char* courseID) {
-	int size = sizeof(studentsIDs) / sizeof(studentsIDs[0]);
-	for (int i = 0; i < size; ++i) {
+void removeAcourseForStudents(int *studentsIDs,char* courseID) {
+	int size = sizeof(studentsIDs) / sizeof(studentsIDs);
+	for (int i = 0; i < size; i++) {
 		Student* s = SearchStu(studentsIDs[i]);
-		int sizeCourse = sizeof(s->coursenow) / sizeof(s->coursenow[0]);
-		for (int j = 0; j < sizeCourse; ++j) {
+		int sizeCourse = sizeof(s->coursenow) / sizeof(s->coursenow);
+		for (int j = 0; j < sizeCourse; j++) {
 			if (s->coursenow[j] == courseID) {
-				deleteCourse(s->coursenow[j]);
+				delete[] s->coursenow[j];
+				if (sizeCourse != 1)s->coursenow[j] = s->coursenow[sizeCourse - 1];
+				break;
 			}
 		}
+		if (sizeCourse != 1) {
+			char** temp = s->coursenow;
+			s->coursenow = new char* [sizeCourse - 1];
+			for (int i = 0; i < sizeCourse - 1; i++) {
+				s->coursenow[i] = temp[i];
+			}
+			delete[] temp;
+		}
+		else s->coursenow = nullptr;
+		StuToBin(s, GetFilePath(s->ID));
+		deleteStu(s);
 	}
+
 }
