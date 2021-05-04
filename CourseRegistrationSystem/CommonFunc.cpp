@@ -843,8 +843,7 @@ void removeAcourseForStudents(int studentsIDs[],char* courseID) {
 		int sizeCourse = sizeof(s->coursenow) / sizeof(s->coursenow[0]);
 		for (int j = 0; j < sizeCourse; ++j) {
 			if (s->coursenow[j] == courseID) {
-				//deleteCourse
-				//xoa course kieu gi :D
+				deleteCourse(s->coursenow[j]);
 			}
 		}
 	}
