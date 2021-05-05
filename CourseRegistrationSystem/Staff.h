@@ -1,0 +1,58 @@
+#ifndef _StaffMode
+#define _StaffMode
+#include"Interface.h"
+#include"Data.h"
+#include"Sup.h"
+#include"Student.h"
+
+#ifndef _StaffMenuMode
+#define _StaffMenuMode
+
+void updateStudentsInClass(Classes& a);
+void userTypeMode();
+void staffMode();
+void staffStudentMenu();
+void gradeMenu();
+void classMenu();
+void studentMenu();
+void addGrade();
+void ViewGrade();
+void AddClass();
+void DoSomeThingInClass(Classes* cls, std::string grade);
+void ViewClass();
+void courseStaff();
+void schoolPlan();
+void addCourseInSemmester(std::string current);
+void addCourse();
+void viewCourse();
+void editCourse();
+void resetRegister();
+void timeRegister(std::string sem, Date startReg, Date endReg);
+void OpenRegister();
+std::string chooseTime(bool timeout = true);
+#endif // !_StaffMenuMode
+
+#ifndef _EditCourse
+#define _EditCourse
+
+unsigned short LStringToPerform(wchar_t* temp);
+float StringToFloat(wchar_t* ch);
+Course* StringToCourse(std::wstring str);
+Course* searchID(_Course* courselist, std::wstring search);
+Course* searchName(_Course* courselist, std::wstring search);
+Course* searchTeacher(_Course* courselist, std::wstring search);
+Course* searchCourse(_Course* courselist, std::wstring& search);
+_Course* FileInCourse(std::string filename);
+void FileOutCourse(_Course* cou, std::string fileout);
+void searchScore(_Course* allcourse);
+void editCourse(Course* cou, std::string filename, std::string current);
+void editInfo(Course* cou, std::string filename, std::string current);
+void editScore(Course* cou, std::string filename, std::string current);
+void FileInScore(Course* cou, std::string direction);
+void StringToScore(Score& a, std::wstring str);
+void editCourse(std::string filename, std::string current);
+void deleteCourse(Course* cour, std::string filename, std::string current);
+void displayScore(Score a);
+#endif // !_EditCourse
+
+#endif // !_StaffMode

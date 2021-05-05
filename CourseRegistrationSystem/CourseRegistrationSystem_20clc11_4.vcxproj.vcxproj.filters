@@ -1,40 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommonFunc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DataFunc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="menu.cpp">
-      <Filter>PNguyen</Filter>
-    </ClCompile>
-    <ClCompile Include="Course.cpp">
-      <Filter>BaoBao</Filter>
-    </ClCompile>
-    <ClCompile Include="DeleteStructPointer.cpp">
-      <Filter>PNguyen</Filter>
-    </ClCompile>
-    <ClCompile Include="LogHistory.cpp">
-      <Filter>Samnuel</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CommonFunc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="menu.h">
-      <Filter>PNguyen</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Header Files">
       <UniqueIdentifier>{d3b37247-6021-4179-a026-4ffeff873486}</UniqueIdentifier>
     </Filter>
@@ -50,5 +16,42 @@
     <Filter Include="PNguyen">
       <UniqueIdentifier>{c644158d-29ca-4f20-bc21-a8b1f188df21}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DataFunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InterfaceFunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaffFunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StudentFunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SupFunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Staff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Student.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,10 +1,15 @@
- #ifndef _Structs
-#define _Structs
+#ifndef _DataProject
+#define _DataProject
+
 #include<iostream>
-#include <iomanip>
-#include<locale>
-#include<codecvt>
 #include<string>
+#include<fstream>
+#include<iomanip>
+#include<codecvt>
+#include<Windows.h>
+#ifndef _StructData
+#define _StructData
+// the struct use for whole program
 struct Date
 {
 	unsigned int dd = 0, mm = 0, yy = 0;
@@ -31,14 +36,14 @@ struct Course
 	unsigned short credit;
 	struct Performed
 	{
-		unsigned short day=0;
-		unsigned short session=0;
+		unsigned short day = 0;
+		unsigned short session = 0;
 	};
 	Performed performed[2];
 	unsigned short numberofstudent = 0;
 	unsigned short maxstudent = 50;
-	unsigned __int64* stuID=nullptr;
-	Score* score=nullptr;
+	unsigned __int64* stuID = nullptr;
+	Score* score = nullptr;
 };
 struct Student
 {
@@ -55,7 +60,7 @@ struct Student
 struct Classes
 {
 	char* name;
-	int numberofstudent=0;
+	int numberofstudent = 0;
 	unsigned __int64* ID = nullptr;
 };
 struct _Student
@@ -93,6 +98,16 @@ struct Filelist {
 	Filelist* pNext = nullptr;
 	Filelist* pPrev = nullptr;
 };
+#endif // !_StructData
+
+#ifndef _FuncData
+#define _FuncData
+
+//------------Date
+Date GetTime();
+Date InputDate();
+Date TakeDateStart(std::string current);
+Date TakeDateEnd(std::string current);
 std::ostream& operator<<(std::ostream& os, const Date& dt);
 std::wostream& operator<<(std::wostream& os, const Date& dt);
 bool operator==(Date a, Date b);
@@ -100,74 +115,87 @@ bool operator<(Date a, Date b);
 bool operator<=(Date a, Date b);
 bool operator>(Date a, Date b);
 bool operator>=(Date a, Date b);
+bool LeapYear(int y);
+bool CheckDate(Date dat);
+//***********************************************************
 
-
-void AddInListFile(Filelist*& direc, std::string add);
-void AddStudent(_Student*& studentlist, Student* student);
-Student* StringToStudent(std::wstring str);
-_Student* FileInStudent(std::string filename);
-void StuToBin(Student* stu, std::string fileout);
-Student* BinToStu(std::string filein);
-void SaveNewStu(_Student* stu, char* directon);
-void FileOutStudent(_Student* stu, std::string fileout);
-void PrintStu(Student* a);
-void PrintStu(_Student* stu);
-void PrintStu(Student** stu,int c);
-Classes* LoadClass(const char* filein);
-SchoolYear* AddSchoolYear(int year);
-_Student* TypeInStudent();
-void SaveSchoolYear(SchoolYear* sch);
-void CourseToBin(Course* course, std::string filename, std::string current);
-Course* BinToCourse(std::string filename);
-void MakeCurentTime(int year);
-std::string ViewSemesterTime();
-int CountFile(Filelist* a);
-
-Course* MakeCourse();
-void MakeCourse(std::string current);
-void CourseToBin(_Course* course, std::string current);
-
-Classes MakeClass(_Student*& all, bool cls = true, int x = 5, int y = 2);
-void SaveClass(Classes cl,const char* fileout);
-void PrintClass(Classes a);
-
-
-void LoginStu(Student*& CurrentUser);
-void Logout(Student* CurrentUser);
-void ChangeInfo(Student*& CurrentUser);
-_Student* SearchStuList(unsigned __int64* ID);
-Student* SearchStu(unsigned __int64 ID);
-Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
-std::string TakeCurrent();
-void displayScore(Score* a);
-void displayCourse(Course* cou);
-void displaylistCourse(Course* cou);
-void SaveScore(Course* cou, std::string filename);
-void SaveScore(Score* score, std::string filename);
+//------------Score
 Score* LoadScore(std::string filename);
-void editCourse(std::string filename, std::string current);
+void SaveScore(Course* cou, std::string filename);
+void SaveScore(Course* cou, Score* score, std::string filename);
+//***********************************************************
+
+//------------Course
+Course* MakeCourse();
+Course* BinToCourse(std::string filename);
 Course* searchCourseFile(std::string search);
-Date TakeDateStart(std::string current);
-Date TakeDateEnd(std::string current);
-std::string GetFilePath(unsigned __int64 ID);
+void AddCourse(_Course*& courselist, Course* course);
+void CourseToBin(_Course* course, std::string current);
+void CourseToBin(Course* course, std::string filename, std::string current);
+void MakeCourse(std::string current);
+bool isConflict(Course* a, Course* b);
 void SessionConflict(Course** a, Course** b, int*& Register);
-int fistrun(std::string& current);
 void registerCourse(Student* stu, Course** cou, std::string sem);
 void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**& newReg);
 void registerCourse(Course** newReg, std::string sem, unsigned __int64 stuID);
 void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID);
+
+//***********************************************************
+
+//------------Student
+_Student* TypeInStudent();
+_Student* FileInStudent(std::string filename);
+_Student* SearchStuList(unsigned __int64* ID);
+Student* BinToStu(std::string filein);
+Student* StringToStudent(std::wstring str);
+Student* SearchStu(unsigned __int64 ID);
+Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
+std::string GetFilePath(unsigned __int64 ID);
+
+void SaveNewStu(_Student* stu, char* directon);
+void FileOutStudent(_Student* stu, std::string fileout);
+void StuToBin(Student* stu, std::string fileout);
+void AddStudent(_Student*& studentlist, Student* student);
+void removeAcourseForStudents(int* studentsIDs, char* courseID);
+//***********************************************************
+
+
+//------------Classes
+Classes MakeClass(_Student*& all, bool cls = true, int x = 5, int y = 2);
+Classes* LoadClass(const char* filein);
+void AddClass(_Class*& cls, Classes sourse);
+void SaveClass(_Class* cls, char* direction);
+void SaveClass(Classes cl, const char* fileout);
+void PrintClass(Classes a);
+//***********************************************************
+
+//------------FileList
+int CountFile(Filelist* list);
+Filelist* TakeFileInFolder(const std::wstring& name);
+Filelist* TakeFileInFolder(const std::string& name);
+std::string ChoseFolder(Filelist* list, short x, short y);
+void AddInListFile(Filelist*& direc, std::string add);
+void DeleteCurFileList(Filelist*& filelist);
+//***********************************************************
+
+#endif // !_FuncData
+
+#ifndef _DeallocateData
+#define _DeallocateData
 
 void deleteStu(Student*& a);
 void delete_Stu(_Student*& a);
 void deleteCourse(Course*& a);
 void delete_Course(_Course*& a);
 void deleteClasses(Classes*& a);
-void deleteSemester(Semester*& a);
+void deleteSemester(Semester* a);
 void deleteSchoolyear(SchoolYear*& a);
 void deleteFilelist(Filelist*& a);
 void deleteIntArray(int*& a);
 void deleteIntArray(unsigned __int64*& a);
 void deleteStuArray(Student**& a);
-void editCourse(std::string filename, std::string current);;
-#endif // _Structs
 
+#endif // !_DealocateData
+
+
+#endif // !_Data

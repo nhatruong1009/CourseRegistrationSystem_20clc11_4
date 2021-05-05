@@ -18,6 +18,21 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DataFunc.cpp" />
+    <ClCompile Include="InterfaceFunc.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="StaffFunc.cpp" />
+    <ClCompile Include="StudentFunc.cpp" />
+    <ClCompile Include="SupFunc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Data.h" />
+    <ClInclude Include="Interface.h" />
+    <ClInclude Include="Staff.h" />
+    <ClInclude Include="Student.h" />
+    <ClInclude Include="Sup.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -138,20 +153,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Course.cpp" />
-    <ClCompile Include="DataFunc.cpp" />
-    <ClCompile Include="CommonFunc.cpp" />
-    <ClCompile Include="DeleteStructPointer.cpp" />
-    <ClCompile Include="LogHistory.cpp" />
-    <ClCompile Include="menu.cpp" />
-    <ClCompile Include="Source.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CommonFunc.h" />
-    <ClInclude Include="Data.h" />
-    <ClInclude Include="menu.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
