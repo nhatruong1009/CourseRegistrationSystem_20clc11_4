@@ -186,11 +186,13 @@ void DeleteCurFileList(Filelist*& filelist);
 #define _DeallocateData
 
 void deleteStu(Student*& a);
+void deleteStu(Student**& a);
 void delete_Stu(_Student*& a);
 void deleteCourse(Course*& a);
 void deleteCourse(Course**& a);
 void delete_Course(_Course*& a);
 void deleteClasses(Classes*& a);
+void deleteClasses(Classes**& a);
 void deleteSemester(Semester* a);
 void deleteSchoolyear(SchoolYear*& a);
 void deleteFilelist(Filelist*& a);

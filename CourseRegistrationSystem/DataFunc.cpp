@@ -1187,6 +1187,7 @@ void AddInListFile(Filelist*& direc, std::string add) {
 //****************Delete Struct**************
 void deleteStu(Student*& a)
 {
+	if (a == nullptr) return;
 	delete[]a->account.password;
 	delete[]a->account.username;
 	delete[]a->firstname;
@@ -1206,6 +1207,15 @@ void deleteStu(Student*& a)
 		delete[]a->allcourse;
 	}
 	delete a;
+	a = nullptr;
+}
+void deleteStu(Student**& a) {
+	if (a == nullptr) return;
+	int n = _msize(a) / sizeof(a);
+	for (int i = 0; i < n; i++) {
+		deleteStu(a[i]);
+	}
+	delete[] a;
 	a = nullptr;
 }
 void delete_Stu(_Student*& a)
@@ -1269,11 +1279,23 @@ void delete_Course(_Course*& a)
 }
 void deleteClasses(Classes*& a)
 {
+	if (a == nullptr) return;
 	delete[]a->name;
 	delete[]a->ID;
 	delete a;
 	a = nullptr;
 }
+
+void deleteClasses(Classes**& a) {
+	if (a == nullptr) return;
+	int n = _msize(a) / sizeof(a);
+	for (int i = 0; i < n; i++) {
+		deleteClasses(a[i]);
+	}
+	delete[] a;
+	a = nullptr;
+}
+
 void deleteClasses(Classes& a)
 {
 	delete[]a.name;

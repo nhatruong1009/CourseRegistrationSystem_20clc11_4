@@ -170,9 +170,9 @@ void staffMode()
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: staffStudentMenu(); break;
-	case 1: courseStaff(); break;
-	case 2: schoolPlan(); break;
+	case 0:DealocatedArrString(menu); staffStudentMenu(); break;
+	case 1:DealocatedArrString(menu); courseStaff(); break;
+	case 2:DealocatedArrString(menu); schoolPlan(); break;
 	case -1:
 	case 3: DealocatedArrString(menu); userTypeMode(); break;
 	}
@@ -188,9 +188,9 @@ void staffStudentMenu() {
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: gradeMenu(); break;
-	case 1: classMenu(); break;
-	case 2: studentMenu(); break;
+	case 0:DealocatedArrString(menu); gradeMenu(); break;
+	case 1:DealocatedArrString(menu); classMenu(); break;
+	case 2:DealocatedArrString(menu); studentMenu(); break;
 	case-1:
 	case 3:DealocatedArrString(menu); staffMode(); break;
 	}
@@ -204,12 +204,11 @@ void gradeMenu() {
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: addGrade(); break;
-	case 1: ViewGrade(); break;
+	case 0:DealocatedArrString(menu); addGrade(); break;
+	case 1:DealocatedArrString(menu); ViewGrade(); break;
 	case-1:
-	case 2: staffStudentMenu(); break;
+	case 2:DealocatedArrString(menu); staffStudentMenu(); break;
 	}
-	DealocatedArrString(menu);
 }
 void classMenu() {
 	system("cls");
@@ -220,12 +219,12 @@ void classMenu() {
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: AddClass(); break;
-	case 1: ViewClass();  break;
+	case 0: DealocatedArrString(menu); AddClass(); break;
+	case 1: DealocatedArrString(menu); ViewClass();  break;
 	case-1:
-	case 2: staffStudentMenu();	break;
+	case 2:DealocatedArrString(menu); staffStudentMenu();break;
 	}
-	DealocatedArrString(menu);
+
 }
 void studentMenu() {
 	system("cls");
@@ -239,9 +238,8 @@ void studentMenu() {
 	case 0: break;
 	case 1: break;
 	case-1:
-	case 2: staffStudentMenu();	break;
+	case 2:DealocatedArrString(menu); staffStudentMenu();	break;
 	}
-	DealocatedArrString(menu);
 }
 void addGrade() {
 	system("cls");
@@ -252,6 +250,7 @@ void addGrade() {
 	SchoolYear* a = AddSchoolYear(grade);
 	std::cout << "Saving..... ";
 	SaveSchoolYear(a);
+	deleteSchoolyear(a);
 	std::cout << " done";
 	_getwch();
 	//delete schoolyear here
@@ -290,6 +289,8 @@ void ViewGrade() {
 			std::cout << "Class: " << temp[i]->name << "\t\t" << temp[i]->numberofstudent << " students";
 		}
 		//should delete temp and listclass here
+		deleteFilelist(listclass);
+		deleteClasses(temp);
 		char check = 0;
 		while (true)
 		{
@@ -305,7 +306,7 @@ void ViewGrade() {
 				break;
 			}
 			else if (check == KEY_ESC) {
-				//list delete here
+				deleteFilelist(list);
 				gradeMenu();
 				return;
 			}
@@ -321,14 +322,14 @@ void AddClass() {
 		int year = StringToInt(&grade[1]);
 		SchoolYear* newscholl = AddSchoolYear(year);
 		SaveSchoolYear(newscholl);
+		deleteSchoolyear(newscholl);
 	}
 
-	//dealocated list here
+	deleteFilelist(list);
 	classMenu();
 }
 void DoSomeThingInClass(Classes* cls, std::string grade) {
 	Student** teee = SearchStuArr(cls->ID, grade);
-
 	char** menu = new char* [3];
 	menu[0] = new char[] {"View"};
 	menu[1] = new char[] {"Print out CSV"};
@@ -336,6 +337,7 @@ void DoSomeThingInClass(Classes* cls, std::string grade) {
 	int chose = 0;
 	while (chose != -1 && chose != 2)
 	{
+		system("cls");
 		chose = Menu(menu, 5, 2);
 		switch (chose)
 		{
@@ -346,6 +348,8 @@ void DoSomeThingInClass(Classes* cls, std::string grade) {
 			break;
 		}
 	}
+	deleteStu(teee);
+	DealocatedArrString(menu);
 }
 void ViewClass() {
 	system("cls");
@@ -358,10 +362,12 @@ void ViewClass() {
 		std::string classfile = "Data\\Grade\\" + chosegrade + "\\Class\\" + choseclass;
 		Classes* classnow = LoadClass(classfile.c_str());
 
-
 		DoSomeThingInClass(classnow, chosegrade);
 		//delete classnow here
+		deleteClasses(classnow);
+		deleteFilelist(classlist);
 	}
+	deleteFilelist(grade);
 	classMenu();
 }
 void courseStaff() {
