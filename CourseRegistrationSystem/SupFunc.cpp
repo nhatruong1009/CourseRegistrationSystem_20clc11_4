@@ -454,17 +454,8 @@ bool operator<(tm& t1, tm& t2)
 	else return 0;
 }
 
-void SaveLoginHistory(char* AccountUsername)
-{
-	__time32_t now = time(0);
-	char a[100];
-	_ctime32_s(a, &now);
-	std::ofstream file;
-	file.open("History\\login.txt", std::ios::app);
-	file << AccountUsername << " " << a;
-	file.close();
-}
 void DealocatedArrString(char**& stringarr) {
+	if (stringarr == nullptr) return;
 	int n = _msize(stringarr) / sizeof(char*);
 	for (int i = 0; i < n; i++) {
 		delete[] stringarr[i];
@@ -473,6 +464,7 @@ void DealocatedArrString(char**& stringarr) {
 	stringarr = nullptr;
 }
 void DealocatedArrString(wchar_t**& stringarr) {
+	if (stringarr == nullptr) return;
 	int n = _msize(stringarr) / sizeof(wchar_t*);
 	for (int i = 0; i < n; i++) {
 		delete[] stringarr[i];

@@ -62,7 +62,6 @@ Date StringToDate(std::string ch);
 bool operator>(tm& t1, tm& t2);
 bool operator<(tm& t1, tm& t2);
 
-void SaveLoginHistory(char* AccountUsername);
 void DealocatedArrString(char**& stringarr);
 void DealocatedArrString(wchar_t**& stringarr);
 

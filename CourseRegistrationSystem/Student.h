@@ -1,7 +1,7 @@
 #ifndef _StudentMode
 #define _StudentMode
 #include"Staff.h"
-
+void SaveLoginHistory(char* AccountUsername);
 void SaveLogoutHistory(char* AccountUsername);
 void SaveCourseRegHis(char* AccountUsername, Course course);
 void SaveCourseCancelHis(char* AccountUsername, Course course);

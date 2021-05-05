@@ -1,5 +1,15 @@
 #include"Student.h"
 
+void SaveLoginHistory(char* AccountUsername)
+{
+	__time32_t now = time(0);
+	char a[100];
+	_ctime32_s(a, &now);
+	std::ofstream file;
+	file.open("History\\login.txt", std::ios::app);
+	file << AccountUsername << " " << a;
+	file.close();
+}
 void SaveLogoutHistory(char* AccountUsername)
 {
 	__time32_t now = time(0);
@@ -7,6 +17,7 @@ void SaveLogoutHistory(char* AccountUsername)
 	_ctime32_s(a, &now);
 	std::ofstream file;
 	file.open("History\\logout.txt", std::ios::app);
+	if (!file) return;
 	file << AccountUsername << " " << a;
 	file.close();
 }
@@ -17,6 +28,7 @@ void SaveCourseRegHis(char* AccountUsername, Course course)
 	_ctime32_s(a, &now);
 	std::ofstream file;
 	file.open("History\\coursereg.txt", std::ios::app);
+	if (!file) return;
 	file << AccountUsername << " " << course.ID << " " << a;
 	file.close();
 }
@@ -27,6 +39,7 @@ void SaveCourseCancelHis(char* AccountUsername, Course course)
 	_ctime32_s(a, &now);
 	std::ofstream file;
 	file.open("History\\coursecancel.txt", std::ios::app);
+	if (!file) return;
 	file << AccountUsername << " " << course.ID << " " << a;
 	file.close();
 }
@@ -59,16 +72,18 @@ void studentMode(Student* stu){
 	switch (Menu(menu, 5, 2))
 	{
 	case 0:
+		DealocatedArrString(menu);
 		StuInformation(stu);
 		break;
 	case 1:
+		DealocatedArrString(menu);
 		CourseInformaion(stu);
 		break;
 	case -1:
 	case 2:
 		Logout(stu);
 		deleteStu(stu);
-		DealocatedArrString(menu);;
+		DealocatedArrString(menu);
 		userTypeMode();
 		break;
 	}
@@ -88,7 +103,9 @@ void StuInformation(Student* stu) {
 	menu[1] = new char[] {"Return"};
 	switch (Menu(menu, 5, 7))
 	{
-	case 0: ChangeInfo(stu);
+	case 0: 
+		DealocatedArrString(menu);
+		ChangeInfo(stu);
 	case-1:
 	case 1:
 		DealocatedArrString(menu);
@@ -118,9 +135,9 @@ void CourseInformaion(Student* stu) {
 	menu[2] = new char[] {"Completed Courses"};
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2)) {
-	case 0: registerMenu(stu); break;
-	case 1: ViewCourseNow(stu); break;
-	case 2: ViewCouse(stu); break;
+	case 0: DealocatedArrString(menu);  registerMenu(stu); break;
+	case 1: DealocatedArrString(menu); ViewCourseNow(stu); break;
+	case 2: DealocatedArrString(menu); ViewCouse(stu); break;
 	case 3:
 	case -1:
 		DealocatedArrString(menu);
@@ -157,6 +174,8 @@ void registerMenu(Student* stu) {
 		}
 	}
 	takeCourseReg(course, canReg, stu, current);
+	deleteCourse(course);
+	deleteFilelist(filelist);
 }
 inline void removereg(Course** reg, Course* re) {
 	int n = 0;
@@ -260,7 +279,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 	registerCourse(newReg, current, stu->ID);
 	cancelCourse(cancelReg, current, stu->ID);
 	registerCourse(stu, reg, current);
-
+	delete[] reg, newReg, cancelReg, newReg;
 }
 void LoginStu(Student*& CurrentUser)
 {
@@ -321,11 +340,12 @@ void ChangePassword(Student* CurrentUser)
 	} while (pass1 != pass2);
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
 	foldername = foldername + CurrentUser->account.username[0] + CurrentUser->account.username[1];
+	delete[] CurrentUser->account.password;
 	CurrentUser->account.password = StrToChar(pass1);
 	StuToBin(CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser->account.username));
 	short n;
 	std::cout << "Change successfully " << std::endl;
-	std::cout << "> Go back <";
+	std::cout << "\n> Go back <";
 	_getwch();
 	ChangeInfo(CurrentUser);
 }
@@ -347,7 +367,6 @@ void ChangeSocialID(Student* CurrentUser)
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
 	foldername = foldername + CurrentUser->account.username[0] + CurrentUser->account.username[1];
 	StuToBin(CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser->account.username));
-	short n;
 	std::cout << "> Go back <";
 	_getwch();
 	ChangeInfo(CurrentUser);
@@ -374,15 +393,13 @@ void ChangeDOB(Student* CurrentUser)
 	std::string foldername = "K20"; // 21st century, will update later when 22nd century come
 	foldername = foldername + CurrentUser->account.username[0] + CurrentUser->account.username[1];
 	StuToBin(CurrentUser, "Data\\Grade\\" + foldername + "\\Student\\" + ToString(CurrentUser->account.username));
-	short n;
-	std::cout << "> Go back <";
+	std::cout << "\n> Go back <";
 	_getwch();
 	ChangeInfo(CurrentUser);
 }
 void ChangeInfo(Student*& CurrentUser)
 {
 	system("cls");
-	int num;
 	char** menu = new char* [4];
 	menu[0] = new char[] {"Password"};
 	menu[1] = new char[] {"Date Of Birth"};
@@ -391,17 +408,21 @@ void ChangeInfo(Student*& CurrentUser)
 	switch (Menu(menu, 5, 2))
 	{
 	case 0:
+		DealocatedArrString(menu);
 		ChangePassword(CurrentUser);
 		break;
 	case 1:
+		DealocatedArrString(menu);
 		ChangeDOB(CurrentUser);
 		break;
 	case 2:
+		DealocatedArrString(menu);
 		ChangeSocialID(CurrentUser);
 		break;
 	case 3:
 	case -1:
-		return;
-		// return to student mode
+		DealocatedArrString(menu);
+		break;
+		StuInformation(CurrentUser);
 	}
 }

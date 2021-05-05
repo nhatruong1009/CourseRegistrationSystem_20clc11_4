@@ -1179,6 +1179,7 @@ void delete_Stu(_Student*& a)
 }
 void deleteCourse(Course*& a)
 {
+	if (a == nullptr) return;
 	delete[]a->ID;
 	delete[]a->name;
 	delete[]a->teacher;
@@ -1194,6 +1195,14 @@ void deleteCourse(Course*& a)
 	}
 	delete a;
 	a = nullptr;
+}
+void deleteCourse(Course**& a) {
+	if (a == nullptr) return;
+	int n = _msize(a) / sizeof(a);
+	for (int i = 0; i < n; i++) {
+		deleteCourse(a[i]);
+	}
+	delete[] a;
 }
 void delete_Course(_Course*& a)
 {
