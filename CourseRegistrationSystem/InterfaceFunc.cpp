@@ -428,7 +428,7 @@ int fistrun(std::string& current) {
 	file.read((char*)&Start, sizeof(Date));
 	file.read((char*)&End, sizeof(Date));
 	Date now = GetTime();
-	if (now < Start) return 0;// not in register time;
+	if (now < Start) { current = std::to_string(Start.dd) + "\\" + std::to_string(Start.mm) + "\\" + std::to_string(Start.yy); return 0; }// not in register time;
 	else if (now >= Start && now <= End) {
 		current = "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
 		return 1;// can register

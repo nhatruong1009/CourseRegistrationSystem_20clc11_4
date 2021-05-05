@@ -873,7 +873,7 @@ std::string GetFilePath(unsigned __int64 ID)
 	else return "";
 }
 
-void SaveNewStu(_Student* stu, char* direction) {
+void SaveNewStu(_Student* stu,char* direction) {
 	if (stu == nullptr) return;
 	char* direc = StrCat(direction, "\\Student\\");
 	_Student* temp = stu;
@@ -990,7 +990,6 @@ Classes MakeClass(_Student*& all, bool cls, int x, int y) {
 	std::cout << "--------Add Student-------";
 	chooselist[0] = new char[] {"From CSV"};
 	chooselist[1] = new char[] {"TypeIn"};
-	chooselist[2] = new char[] {"Add Later"};
 
 	int take = Menu(chooselist, x, y);
 	DealocatedArrString(chooselist);
@@ -1038,7 +1037,6 @@ Classes MakeClass(_Student*& all, bool cls, int x, int y) {
 		result.ID = nullptr;
 		return result;
 	}
-
 }
 Classes* LoadClass(const char* filein) {
 	Classes* result = new Classes;
@@ -1055,6 +1053,7 @@ Classes* LoadClass(const char* filein) {
 	return result;
 }
 void AddClass(_Class*& cls, Classes sourse) {
+	if (sourse.ID = nullptr) return;
 	if (cls == nullptr) {
 		cls = new _Class{ sourse };
 		cls->pNext = cls;

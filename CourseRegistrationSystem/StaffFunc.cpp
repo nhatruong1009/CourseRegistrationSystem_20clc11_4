@@ -224,19 +224,26 @@ void classMenu() {
 	case-1:
 	case 2:DealocatedArrString(menu); staffStudentMenu();break;
 	}
+}
 
+void StaffasStu() {
+	system("cls");
+	std::cout << "ID: ";
+	unsigned __int64 id;
+	std::cin >> id;
+	Student* stu = BinToStu(GetFilePath(id));
+	if(stu!=nullptr) studentMode(stu);
+	else { std::cout << "Not have this ID student"; _getwch();	studentMenu(); }
 }
 void studentMenu() {
 	system("cls");
 	std::cout << "------------ Student --------------";
 	char** menu = new char* [3];
-	menu[0] = new char[] {"Add Student"};
-	menu[1] = new char[] {"View Student"};
+	menu[1] = new char[] {"Login to a student"};
 	menu[2] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: break;
-	case 1: break;
+	case 0: DealocatedArrString(menu); StaffasStu(); break;
 	case-1:
 	case 2:DealocatedArrString(menu); staffStudentMenu();	break;
 	}
@@ -251,7 +258,7 @@ void addGrade() {
 	std::cout << "Saving..... ";
 	SaveSchoolYear(a);
 	deleteSchoolyear(a);
-	std::cout << " done";
+	std::cout << "\ndone";
 	_getwch();
 	//delete schoolyear here
 	gradeMenu();
