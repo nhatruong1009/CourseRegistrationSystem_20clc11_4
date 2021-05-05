@@ -123,6 +123,8 @@ bool CheckDate(Date dat);
 Score* LoadScore(std::string filename);
 void SaveScore(Course* cou, std::string filename);
 void SaveScore(Course* cou, Score* score, std::string filename);
+Score GetStuScore(std::string path, Student* stu);
+Score GetScore(Student* a, Course* course);
 //***********************************************************
 
 //------------Course
