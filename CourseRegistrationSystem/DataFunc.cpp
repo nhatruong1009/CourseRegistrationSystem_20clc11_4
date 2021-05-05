@@ -245,6 +245,53 @@ void SaveScore(Course* cou, Score* score, std::string filename) {
 	}
 	fo.close();
 }
+Score GetStuScore(std::string path, Student* stu)
+{
+	std::ifstream fin(path, std::ios::binary);
+	if (!fin)
+		return Score{};
+	Score a;
+	short n;
+	fin.read((char*)&n, sizeof(n));
+	unsigned __int64 temp;
+	fin.read((char*)&temp, 8);
+	while (temp != stu->ID)
+	{
+		fin.seekg(16, fin.cur);
+		fin.read((char*)&temp, 8);
+		if (fin.eof())
+		{
+			std::cout << "Not found " << stu->ID;
+			fin.close();
+			return Score{};
+		}
+	}
+	a.ID = temp;
+	fin.read((char*)&a.totals, 4);
+	fin.read((char*)&a.finals, 4);
+	fin.read((char*)&a.mids, 4);
+	fin.read((char*)&a.others, 4);
+	fin.close();
+	return a;
+}
+Score GetScore(Student* a, Course* course)
+{
+	std::string courseID = ToString(course->ID);
+	int n = courseID.size();
+	if (n < 5)
+	{
+		return Score{};
+	}
+	std::string semester = "Semester";
+	semester += courseID[n];
+	std::string year = "";
+	year = year + courseID[n - 4] + courseID[n - 3] + courseID[n - 2] + courseID[n - 1];
+	for (int i = 0; i < 5; i++)
+		courseID.pop_back();
+	Score result = GetStuScore("Data\\SchoolYear\\" + year + "\\" + semester + "\\" + courseID + "Score", a);
+	result.ID = a->ID;
+	return result;
+}
 
 //**************Course*****************
 Course* MakeCourse() {
@@ -1187,7 +1234,7 @@ void deleteCourse(Course*& a)
 		delete[]a->stuID;
 	if (a->score)
 	{
-		int n = _msize(a->score) / sizeof(a->score);
+		int n = _msize(a->score) / sizeof(*a->score);
 		for (int i = 0; i < n; i++) {
 			delete[] a->score[i].name;
 		}
