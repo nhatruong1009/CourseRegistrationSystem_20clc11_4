@@ -190,7 +190,7 @@ void staffStudentMenu() {
 	{
 	case 0:DealocatedArrString(menu); gradeMenu(); break;
 	case 1:DealocatedArrString(menu); classMenu(); break;
-	case 2:DealocatedArrString(menu); studentMenu(); break;
+	case 2:DealocatedArrString(menu); studentMenuStaff(); break;
 	case-1:
 	case 3:DealocatedArrString(menu); staffMode(); break;
 	}
@@ -233,19 +233,19 @@ void StaffasStu() {
 	std::cin >> id;
 	Student* stu = BinToStu(GetFilePath(id));
 	if(stu!=nullptr) studentMode(stu);
-	else { std::cout << "Not have this ID student"; _getwch();	studentMenu(); }
+	else { std::cout << "Not have this ID student"; _getwch();	studentMenuStaff(); }
 }
-void studentMenu() {
+void studentMenuStaff() {
 	system("cls");
 	std::cout << "------------ Student --------------";
-	char** menu = new char* [3];
-	menu[1] = new char[] {"Login to a student"};
-	menu[2] = new char[] {"Back"};
+	char** menu = new char* [2];
+	menu[0] = new char[] {"Login to a student"};
+	menu[1] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
 	case 0: DealocatedArrString(menu); StaffasStu(); break;
 	case-1:
-	case 2:DealocatedArrString(menu); staffStudentMenu();	break;
+	case 1:DealocatedArrString(menu); staffStudentMenu();	break;
 	}
 }
 void addGrade() {
@@ -388,10 +388,10 @@ void courseStaff() {
 	menu[4] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2))
 	{
-	case 0: addCourse(); break;
-	case 1: viewCourse(); break;
-	case 2: editCourse(); break;
-	case 3:OpenRegister(); break;
+	case 0: DealocatedArrString(menu); addCourse(); break;
+	case 1: DealocatedArrString(menu); viewCourse(); break;
+	case 2: DealocatedArrString(menu); editCourse(); break;
+	case 3: DealocatedArrString(menu); OpenRegister(); break;
 	case -1:
 	case 4:
 		DealocatedArrString(menu);
@@ -408,10 +408,10 @@ void schoolPlan() {
 	time = InputNumber();
 	if (time == 0) {
 		time = GetTime().yy; std::cout << time << '\n';
-		MakeCurentTime(time);
-		std::cout << "\n__________ Sucess _________";
-		_getwch();
 	}
+	MakeCurentTime(time);
+	std::cout << "\n__________ Sucess _________";
+	_getwch();
 	staffMode();
 }
 void addCourseInSemmester(std::string current) {
@@ -424,8 +424,8 @@ void addCourseInSemmester(std::string current) {
 	menu[2] = new char[] {"back"};
 	switch (Menu(menu, 5, 3))
 	{
-	case 0: break;// csv in
-	case 1: MakeCourse(current); break; // type in
+	case 0: DealocatedArrString(menu); break;// csv in
+	case 1: DealocatedArrString(menu); MakeCourse(current); break; // type in
 	case-1:
 	case 2:
 		DealocatedArrString(menu);
@@ -442,7 +442,7 @@ void addCourse() {
 	std::string current = "";
 	switch (Menu(menu, 5, 3))
 	{
-	case 0:current = TakeCurrent(); break;
+	case 0: current = TakeCurrent(); break;
 	case 1: current = chooseTime(); break;
 	case 2:
 	case -1: break;
@@ -470,16 +470,19 @@ void viewCourse() {
 		Filelist* temp = Cour;
 		system("cls");
 		do {
-			displayCourse(BinToCourse(current + "\\" + temp->filename));
+			Course* k = BinToCourse(current + "\\" + temp->filename);
+			displayCourse(k);
+			deleteCourse(k);
 			temp = temp->pNext;
 		} while (temp != Cour);
 		_getwch();
+		deleteFilelist(Cour);
 	}
 	courseStaff();
 }
 void editCourse() {
 	std::string current = chooseTime(false);
-	if (current == "") return;
+	if (current == "") { courseStaff(); return; }
 	system("cls");
 	std::cout << "---------- Edit Course -----------";
 	Filelist* Cour = TakeFileInFolder(current);
@@ -604,6 +607,7 @@ void OpenRegister() {
 	case 1:
 		break;
 	}
+	DealocatedArrString(menu);
 }
 std::string chooseTime(bool timeout) {
 	//system("cls");
@@ -855,58 +859,60 @@ void searchScore(_Course* allcourse) {
 }
 void editCourse(Course* cou, std::string filename, std::string current) {
 	char book;
+	char** menu = new char* [3];
+	menu[0] = new char[] {"Course info"};
+	menu[1] = new char[] {"Students score"};
+	menu[2] = new char[] {"Done"};
 	while (1) {
 		system("cls");
 		std::cout << "----- Edit Course -----\n";
-		std::cout << "1. Course info\n";
-		std::cout << "2. Students score\n";
-		std::cout << "0. Cancel\n";
-		do {
-			book = _getwch();
-		} while (book < '0' || book > '2');
-		if (book == '0') break;
-		if (book == '1') {
+		book = Menu(menu, 5, 2);
+		if (book == 2 || book == -1) break;
+		if (book == 0) {
 			editInfo(cou, filename, current);
 		}
-		else if (book == '2') {
+		else if (book == 1) {
 			editScore(cou, filename, current);
 		}
 		_getwch();
 	}
-	CourseToBin(cou, filename, current);
+	DealocatedArrString(menu);
 }
 void editInfo(Course* cou, std::string filename, std::string current) {
 	char book;
+	char** menu = new char*[4];
+	menu[0] = new char[] {"Change teacher"};
+	menu[1] = new char[] {"Change credits"};
+	menu[2] = new char[] {"Change schedule"};
+	menu[3] = new char[] {"Done"};
 	while (1) {
 		system("cls");
 		displayCourse(cou);
-		std::cout << "1. Change teacher\n";
-		std::cout << "2. Change credits\n";
-		std::cout << "3. Change schedule\n";
-		std::cout << "0. Done\n\n";
-		do {
-			book = _getwch();
-		} while (book < '0' || book > '3');
-		if (book == '0') break;
-		if (book == '1') {
+		book = Menu(menu, 5, 20);
+		if (book == 3 || book == -1) break;
+		if (book == 0) {
 			_LText();
 			std::wcout << "New teacher: ";
 			std::wcin >> cou->teacher;
 			_SText();
 		}
-		else if (book == '2') {
+		else if (book == 1) {
 			_LText();
 			std::wcout << "New credits: ";
 			std::wcin >> cou->credit;
 			_SText();
 		}
-		else if (book == '3') {
+		else if (book == 2) {
 			pickSchedule(cou, 0, 14);
 		}
 		_getwch();
 	}
+	DealocatedArrString(menu);
+	CourseToBin(cou, filename, current);
+	editCourse(cou, filename, current);
 }
 void editScore(Course* cou, std::string filename, std::string current){
+	if (secondrun().compare(current) != 0) { std::cout << "Cant change now"; _getwch(); return; }
 	int test = current[current.length() - 1] - '0';
 	Date start, end;
 	char* file = new char[current.length() - 9];

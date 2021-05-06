@@ -393,9 +393,9 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 		Courses = Courses->pNext;
 	}
 }
-int secondrun() {
+std::string secondrun() {
 	std::fstream file("currentsem", std::fstream::in);
-	if (!file) return -1;// not in time of any semester
+	if (!file) return "";// not in time of any semester
 	int year, sem;
 	file.read((char*)&year, sizeof(int));
 	file.read((char*)&sem, sizeof(int));
@@ -406,15 +406,16 @@ int secondrun() {
 		file.read((char*)&start, sizeof(Date));
 		file.read((char*)&end, sizeof(Date));
 	}
-	if (GetTime() < start) return -1;// not in time so can't do anything
+	if (GetTime() < start) return "";// not in time so can't do anything
 	if (GetTime() > end) {
 		// load all student and update them score;
 		updateSemesterResult("Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem));
 
 		_wremove(L"currentsem");
-		return 1; // this end of semester so remove file, file not exits now so it can't change anything too;
+		return "done"; // this end of semester so remove file, file not exits now so it can't change anything too;
 	}
-	return 0;// can change score and somthing just like this of any thing of Course
+	return "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
+	// can change score and somthing just like this of any thing of Course
 }
 int fistrun(std::string& current) {
 	std::fstream file("firstrun", std::fstream::in | std::ios::binary);

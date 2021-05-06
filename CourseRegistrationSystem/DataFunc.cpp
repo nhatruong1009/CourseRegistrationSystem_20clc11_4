@@ -245,7 +245,7 @@ void SaveScore(Course* cou, Score* score, std::string filename) {
 	}
 	fo.close();
 }
-Score GetStuScore(std::string path, Student* stu)
+Score GetStuScore(std::string path, unsigned __int64 ID)
 {
 	std::ifstream fin(path, std::ios::binary);
 	if (!fin)
@@ -255,13 +255,13 @@ Score GetStuScore(std::string path, Student* stu)
 	fin.read((char*)&n, sizeof(n));
 	unsigned __int64 temp;
 	fin.read((char*)&temp, 8);
-	while (temp != stu->ID)
+	while (temp != ID)
 	{
 		fin.seekg(16, fin.cur);
 		fin.read((char*)&temp, 8);
 		if (fin.eof())
 		{
-			std::cout << "Not found " << stu->ID;
+			std::cout << "Not found " << ID;
 			fin.close();
 			return Score{};
 		}
@@ -274,9 +274,9 @@ Score GetStuScore(std::string path, Student* stu)
 	fin.close();
 	return a;
 }
-Score GetScore(Student* a, Course* course)
+Score GetScore(unsigned __int64 ID,char*coursename)
 {
-	std::string courseID = ToString(course->ID);
+	std::string courseID = ToString(coursename);
 	int n = courseID.size();
 	if (n < 5)
 	{
@@ -288,8 +288,8 @@ Score GetScore(Student* a, Course* course)
 	year = year + courseID[n - 4] + courseID[n - 3] + courseID[n - 2] + courseID[n - 1];
 	for (int i = 0; i < 5; i++)
 		courseID.pop_back();
-	Score result = GetStuScore("Data\\SchoolYear\\" + year + "\\" + semester + "\\" + courseID + "Score", a);
-	result.ID = a->ID;
+	Score result = GetStuScore("Data\\SchoolYear\\" + year + "\\" + semester + "\\" + courseID + "Score", ID);
+	result.ID = ID;
 	return result;
 }
 
@@ -524,6 +524,9 @@ void SessionConflict(Course** a, Course** b, int*& Register)
 	for (int i = 0; i < n; i++)
 	{
 		Register[i] = 0;
+		if (a[i]->numberofstudent == a[i]->maxstudent) {
+			Register[i] = 1; continue;
+		}
 		for (int j = 0; j < 5; j++)
 		{
 			if (b[j] == nullptr) break;
@@ -986,7 +989,7 @@ Classes MakeClass(_Student*& all, bool cls, int x, int y) {
 	std::string temp;
 	std::cin >> temp;
 	result.name = StrToChar(temp);
-	char** chooselist = new char* [3];
+	char** chooselist = new char* [2];
 	std::cout << "--------Add Student-------";
 	chooselist[0] = new char[] {"From CSV"};
 	chooselist[1] = new char[] {"TypeIn"};

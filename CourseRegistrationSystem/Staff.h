@@ -14,7 +14,7 @@ void staffMode();
 void staffStudentMenu();
 void gradeMenu();
 void classMenu();
-void studentMenu();
+void studentMenuStaff();
 void addGrade();
 void ViewGrade();
 void AddClass();

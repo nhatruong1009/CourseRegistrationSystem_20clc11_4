@@ -69,7 +69,7 @@ void StrCat(wchar_t*& destination, int size, std::wstring source) {
 	for (int i = n; i < size + n; i++) {
 		temp[i] = source[i - n];
 	}
-	delete destination;
+	delete[] destination;
 	destination = temp;
 }
 void StrCat(wchar_t*& destination, int size, wchar_t* source) {

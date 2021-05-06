@@ -2,7 +2,7 @@
 #define _Inter
 #include"Sup.h"
 
-int secondrun();
+std::string secondrun();
 int fistrun(std::string& current);
 
 void GotoXY(short x, short y);
