@@ -62,7 +62,7 @@ std::string TakeCurrent() {
 		{
 			fi.read((char*)&start, sizeof(Date));
 			fi.read((char*)&end, sizeof(Date));
-			if (start <= temp && end >= temp) { year = Plan->filename; semester = k + 1 + '0'; }
+			if (start >= temp) { year = Plan->filename; semester = k + 1 + '0'; }
 		}
 		Plan = Plan->pNext;
 	}
@@ -465,7 +465,6 @@ void viewCourse() {
 		for (int i = 0; i < CountFile(Cour); i++) {
 			if (Cour->filename.length() > 5 && Cour->filename.compare(Cour->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
 			else Cour = Cour->pNext;
-
 		}
 		Filelist* temp = Cour;
 		system("cls");
@@ -501,12 +500,15 @@ void editCourse() {
 			choseCourse[i] = StrToChar(ToWstring(temp->ID) + L"  " + ToWstring(temp->name));
 			Cour = Cour->pNext;
 			//delete temp here
+			deleteCourse(temp);
 		}
 		int k = Menu(choseCourse, 5, 3);
+		DealocatedArrString(choseCourse);
 		if (k != -1) {
 			Filelist* t = Cour;
 			for (int i = 0; i < k; i++)t = t->pNext;
 			editCourse(Cour->filename, current);
+			deleteFilelist(t);
 		}
 	}
 	else {
@@ -638,7 +640,8 @@ std::string chooseTime(bool timeout) {
 			if (year == "") break;
 			Filelist* sem = TakeFileInFolder("Data\\SchoolYear\\" + year);
 			std::fstream fi("Data\\SchoolYear\\" + year + "\\time");
-			for (int i = 0; i < 3; i++) {
+			fi.read((char*)&date, sizeof(Date));
+			for (int i = 1; i < 3; i++) {
 				fi.read((char*)&date, sizeof(Date));
 				fi.read((char*)&date, sizeof(Date));
 				if (date < GetTime() && timeout) { DeleteCurFileList(sem); }
@@ -874,38 +877,57 @@ void editCourse(Course* cou, std::string filename, std::string current) {
 		else if (book == 1) {
 			editScore(cou, filename, current);
 		}
-		_getwch();
 	}
 	DealocatedArrString(menu);
 }
 void editInfo(Course* cou, std::string filename, std::string current) {
+	if (GetTime() > TakeDateEnd(current)) {
+		std::cout << "\nCourse had end, can't change"; 
+		_getwch(); 
+		editCourse(cou, filename, current);
+		return;
+	}
 	char book;
-	char** menu = new char*[4];
+	char** menu = new char*[5];
 	menu[0] = new char[] {"Change teacher"};
 	menu[1] = new char[] {"Change credits"};
 	menu[2] = new char[] {"Change schedule"};
-	menu[3] = new char[] {"Done"};
+	menu[3] = new char[] {"Change max student"};
+	menu[4] = new char[] {"Done"};
 	while (1) {
 		system("cls");
 		displayCourse(cou);
 		book = Menu(menu, 5, 20);
-		if (book == 3 || book == -1) break;
+		if (book == 4 || book == -1) break;
 		if (book == 0) {
 			_LText();
 			std::wcout << "New teacher: ";
-			std::wcin >> cou->teacher;
+			std::wcin.ignore(1000, '\n');
+			std::wstring temp;
+			std::getline(std::wcin, temp);
+			delete[] cou->teacher;
+			cou->teacher = StrToChar(temp);
 			_SText();
 		}
 		else if (book == 1) {
-			_LText();
-			std::wcout << "New credits: ";
-			std::wcin >> cou->credit;
-			_SText();
+			std::cout << "New credits: ";
+			std::cin >> cou->credit;
+			std::cin.ignore(1000, '\n');
 		}
 		else if (book == 2) {
+			std::string check;
+			fistrun(check);
+			if (check == current) { std::cout << "\nCan't changed in register time"; break; }
 			pickSchedule(cou, 0, 14);
 		}
-		_getwch();
+		else if (book == 3) {
+			std::string check;
+			fistrun(check);
+			if (check == current) { std::cout << "\nCan't changed in register time"; break; }
+			std::cout << "Max Student: ";
+			std::cin >> cou->maxstudent;
+			std::cin.ignore(1000, '\n');
+		}
 	}
 	DealocatedArrString(menu);
 	CourseToBin(cou, filename, current);
@@ -1116,8 +1138,20 @@ void editCourse(std::string filename, std::string current) {
 	switch (chose)
 	{
 	case 0: editCourse(cour, filename, current); break;
-	case 1: deleteCourse(cour, filename, current); break;
+	case 1: 
+		std::string check;
+		fistrun(check);
+		if (check == current || TakeDateStart(current) < GetTime()) {
+			std::cout << "Can't be deleted";
+		}
+		else {
+			deleteCourse(cour, filename, current);
+			std::cout << "Success";
+		}
+		_getwch();
+		break;
 	}
+	deleteCourse(cour);
 }
 void deleteCourse(Course* cour, std::string filename, std::string current) {
 
