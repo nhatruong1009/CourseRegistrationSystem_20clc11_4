@@ -161,7 +161,7 @@ void registerMenu(Student* stu) {
 	if(run==-1){ std::cout << "Don't have any register time\n> Back < "; _getwch(); CourseInformaion(stu); return; }
 
 	Filelist* filelist = TakeFileInFolder(current);
-	if (filelist == nullptr) return;
+	if (filelist == nullptr) { std::cout << "Don't have any course to register!\n> Back <"; _getwch(); CourseInformaion(stu);  return; }
 	int n = CountFile(filelist);
 	Course** course = new Course * [n];
 	int m = 0;

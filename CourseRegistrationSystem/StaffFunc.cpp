@@ -406,6 +406,7 @@ void schoolPlan() {
 	std::cout << "--------- School Plan ---------";
 	std::cout << "\nInput Year (Pass if take current year) :";
 	time = InputNumber();
+	if (time == -1) { staffMode(); return; }
 	if (time == 0) {
 		time = GetTime().yy; std::cout << time << '\n';
 	}
@@ -445,7 +446,9 @@ void addCourse() {
 	case 0: current = TakeCurrent(); break;
 	case 1: current = chooseTime(); break;
 	case 2:
-	case -1: break;
+	case -1:DealocatedArrString(menu);
+		courseStaff();
+		return;
 	}
 	if (current != "") {
 		addCourseInSemmester(current);
@@ -575,7 +578,7 @@ void OpenRegister() {
 	std::cout << "     > pick Time <";
 	if (_getwch() == KEY_ESC) return;
 	std::string sem = chooseTime();
-	if (sem == "") return;
+	if (sem == "") { std::cout << "Don't have any invalid semester!\n > Back <"; _getwch(); courseStaff(); return; }
 	Date start = TakeDateStart(sem);
 	Date End = TakeDateEnd(sem);
 	Date startReg;
@@ -610,6 +613,7 @@ void OpenRegister() {
 		break;
 	}
 	DealocatedArrString(menu);
+	courseStaff();
 }
 std::string chooseTime(bool timeout) {
 	//system("cls");
@@ -620,7 +624,7 @@ std::string chooseTime(bool timeout) {
 		Date date;
 		for (int i = 0; i < n; i++) {
 			std::fstream fi("Data\\SchoolYear\\" + list->filename + "\\time", std::fstream::in | std::fstream::binary);
-			for (int j = 0; j < 6; j++) {
+			for (int j = 0; j < 5; j++) {
 				fi.read((char*)&date, sizeof(Date));
 			}
 			if (date < GetTime() && timeout) {
@@ -639,6 +643,8 @@ std::string chooseTime(bool timeout) {
 			std::string year = ChoseFolder(list, 5, 2);
 			if (year == "") break;
 			Filelist* sem = TakeFileInFolder("Data\\SchoolYear\\" + year);
+			sem = sem->pPrev;
+			DeleteCurFileList(sem);
 			std::fstream fi("Data\\SchoolYear\\" + year + "\\time");
 			fi.read((char*)&date, sizeof(Date));
 			for (int i = 1; i < 3; i++) {
