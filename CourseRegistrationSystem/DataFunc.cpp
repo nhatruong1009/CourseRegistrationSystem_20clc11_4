@@ -261,8 +261,6 @@ Score GetStuScore(std::string path, unsigned __int64 ID)
 		fin.read((char*)&temp, 8);
 		if (fin.eof())
 		{
-			std::cout << "Not found " << ID;
-			fin.close();
 			return Score{};
 		}
 	}

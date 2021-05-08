@@ -29,7 +29,7 @@ void editCourse();
 void resetRegister();
 void timeRegister(std::string sem, Date startReg, Date endReg);
 void OpenRegister();
-std::string chooseTime(bool timeout = true);
+std::string chooseTime(bool timeout = true,bool timestart=true);
 #endif // !_StaffMenuMode
 
 #ifndef _EditCourse

@@ -363,8 +363,8 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 			}
 			m -= 1;
 
-			Score* score = nullptr; // load score of this student here. but just need the total
-			delete[] score->name;// btw it not neccessary
+			Score score = GetStuScore(sem + "\\" + Courses->filename + "Score", stu->ID);
+			if(score.name!=nullptr) delete[] score.name;// btw it not neccessary
 			int n = 0;
 			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(stu->allcourse);
 			n += 1;
@@ -378,6 +378,7 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 
 			delete[] his; //detele the poiter point to data, not the data
 			his = stu->coursenow;
+			stu->coursenow = nullptr;
 			if (m > 0) stu->coursenow = new char* [m];
 			for (int i = 0; i < m; i++) {
 				stu->coursenow[i] = his[i];
@@ -385,7 +386,7 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 			delete[] his;
 
 			//update Score :((
-			stu->GPA = ((stu->GPA * (float(n) - 1)) + score->totals) / float(n); // Old GPA*number of olD Subject + this Course score and / for numberof subect
+			stu->GPA = ((stu->GPA * (float(n) - 1)) + score.totals) / float(n); // Old GPA*number of olD Subject + this Course score and / for numberof subect
 			StuToBin(stu, GetFilePath(stu->ID));
 			deleteStu(stu);
 		}
@@ -394,14 +395,14 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 	}
 }
 std::string secondrun() {
-	std::fstream file("currentsem", std::fstream::in);
+	std::fstream file("currentsem", std::fstream::in|std::fstream::binary);
 	if (!file) return "";// not in time of any semester
 	int year, sem;
 	file.read((char*)&year, sizeof(int));
 	file.read((char*)&sem, sizeof(int));
 	Date start, end;
 	file.close();
-	file.open("Data\\SchoolYear\\" + std::to_string(year) + "\\time", std::fstream::in);
+	file.open("Data\\SchoolYear\\" + std::to_string(year) + "\\time", std::fstream::in | std::fstream::binary);
 	for (int i = 0; i < sem; i++) {
 		file.read((char*)&start, sizeof(Date));
 		file.read((char*)&end, sizeof(Date));
@@ -457,13 +458,13 @@ int fistrun(std::string& current) {
 		file.close();
 		_wremove(L"firstrun");
 
-		file.open("currentsem", std::fstream::in);
+		file.open("currentsem", std::fstream::in | std::fstream::binary);
 		if (file) {
 			file.close();
 			return 3;// currentsem has not end // sooooo....
 		}
 
-		file.open("currentsem", std::fstream::out);
+		file.open("currentsem", std::fstream::out | std::fstream::binary);
 		file.write((char*)&year, sizeof(int));
 		file.write((char*)&sem, sizeof(int));
 		file.close();

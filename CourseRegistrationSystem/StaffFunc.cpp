@@ -461,7 +461,7 @@ void addCourse() {
 	courseStaff();
 }
 void viewCourse() {
-	std::string current = chooseTime(false);
+	std::string current = chooseTime(false,false);
 	if (current != "") {
 		Filelist* Cour = TakeFileInFolder(current);
 		std::cout << CountFile(Cour);
@@ -471,14 +471,20 @@ void viewCourse() {
 		}
 		Filelist* temp = Cour;
 		system("cls");
-		do {
-			Course* k = BinToCourse(current + "\\" + temp->filename);
-			displayCourse(k);
-			deleteCourse(k);
-			temp = temp->pNext;
-		} while (temp != Cour);
-		_getwch();
-		deleteFilelist(Cour);
+		if (temp != nullptr) {
+			do {
+				Course* k = BinToCourse(current + "\\" + temp->filename);
+				displayCourse(k);
+				deleteCourse(k);
+				temp = temp->pNext;
+			} while (temp != Cour);
+			_getwch();
+			deleteFilelist(Cour);
+		}
+		else {
+			std::cout << "Empty!";
+			_getwch();
+		}
 	}
 	courseStaff();
 }
@@ -517,6 +523,7 @@ void editCourse() {
 	else {
 		std::cout << "\nNot available\n";
 		std::cout << "> Back <";
+		_getwch();
 	}
 	courseStaff();
 }
@@ -557,7 +564,7 @@ void timeRegister(std::string sem, Date startReg, Date endReg) {
 }
 void OpenRegister() {
 	system("cls");
-	std::fstream file("firstrun", std::fstream::in | std::ios::binary);
+	std::fstream file("firstrun", std::fstream::in | std::fstream::binary);
 	if (file) {
 		file.close();
 		std::cout << "Register time had made, you will override it and reset all register data after done!";
@@ -578,7 +585,7 @@ void OpenRegister() {
 	std::cout << "     > pick Time <";
 	if (_getwch() == KEY_ESC) return;
 	std::string sem = chooseTime();
-	if (sem == "") { std::cout << "Don't have any invalid semester!\n > Back <"; _getwch(); courseStaff(); return; }
+	if (sem == "") { std::cout << "\nDon't have any invalid semester!\n > Back <"; _getwch(); courseStaff(); return; }
 	Date start = TakeDateStart(sem);
 	Date End = TakeDateEnd(sem);
 	Date startReg;
@@ -615,7 +622,7 @@ void OpenRegister() {
 	DealocatedArrString(menu);
 	courseStaff();
 }
-std::string chooseTime(bool timeout) {
+std::string chooseTime( bool timeout,bool timestart) {
 	//system("cls");
 	Filelist* list = TakeFileInFolder("Data\\SchoolYear");
 	if (list != nullptr) {
@@ -643,24 +650,28 @@ std::string chooseTime(bool timeout) {
 			std::string year = ChoseFolder(list, 5, 2);
 			if (year == "") break;
 			Filelist* sem = TakeFileInFolder("Data\\SchoolYear\\" + year);
-			sem = sem->pPrev;
-			DeleteCurFileList(sem);
 			std::fstream fi("Data\\SchoolYear\\" + year + "\\time");
-			fi.read((char*)&date, sizeof(Date));
-			for (int i = 1; i < 3; i++) {
+			Date startdate;
+			for (int i = 0; i < 3; i++) {
+				fi.read((char*)&startdate, sizeof(Date));
 				fi.read((char*)&date, sizeof(Date));
-				fi.read((char*)&date, sizeof(Date));
-				if (date < GetTime() && timeout) { DeleteCurFileList(sem); }
-				else { sem = sem->pNext; }
+				if (date < GetTime() && timeout)
+					DeleteCurFileList(sem);
+				else if (startdate < GetTime() && timestart) 
+					DeleteCurFileList(sem);
+				else { 	sem = sem->pNext; }
 			}
 			DeleteCurFileList(sem);
 			semester = ChoseFolder(sem, 20, 2);
 			if (semester != "") {
+				deleteFilelist(list);
+				deleteFilelist(sem);
 				return "Data\\SchoolYear\\" + year + "\\" + semester;
 				std::fstream a;
 			}
 		}
 	}
+	deleteFilelist(list);
 	return "";
 }
 
@@ -923,21 +934,22 @@ void editInfo(Course* cou, std::string filename, std::string current) {
 		else if (book == 2) {
 			std::string check;
 			fistrun(check);
-			if (check == current) { std::cout << "\nCan't changed in register time"; break; }
-			pickSchedule(cou, 0, 14);
+			if (check == current) { std::cout << "\nCan't changed in register time"; _getwch(); }
+			else { pickSchedule(cou, 0, 14); }
 		}
 		else if (book == 3) {
 			std::string check;
 			fistrun(check);
-			if (check == current) { std::cout << "\nCan't changed in register time"; break; }
-			std::cout << "Max Student: ";
-			std::cin >> cou->maxstudent;
-			std::cin.ignore(1000, '\n');
+			if (check == current) { std::cout << "\nCan't changed in register time"; _getwch(); }
+			else {
+				std::cout << "Max Student: ";
+				std::cin >> cou->maxstudent;
+				std::cin.ignore(1000, '\n');
+			}
 		}
 	}
 	DealocatedArrString(menu);
 	CourseToBin(cou, filename, current);
-	editCourse(cou, filename, current);
 }
 void editScore(Course* cou, std::string filename, std::string current){
 	if (secondrun().compare(current) != 0) { std::cout << "Cant change now"; _getwch(); return; }
@@ -1145,9 +1157,7 @@ void editCourse(std::string filename, std::string current) {
 	{
 	case 0: editCourse(cour, filename, current); break;
 	case 1: 
-		std::string check;
-		fistrun(check);
-		if (check == current || TakeDateStart(current) < GetTime()) {
+		if (TakeDateStart(current) < GetTime()) {
 			std::cout << "Can't be deleted";
 		}
 		else {
@@ -1160,8 +1170,34 @@ void editCourse(std::string filename, std::string current) {
 	deleteCourse(cour);
 }
 void deleteCourse(Course* cour, std::string filename, std::string current) {
-
+	int sem = current[current.length() - 1] - '0';
+	char y[5] = {""};
+	current.copy(y, 4, current.length() - 14);
+	std::string realcoureid = ToString(cour->ID) + ToString(y) + std::to_string(sem);
+	for (int i = 0; i < cour->numberofstudent; i++) {
+		Student* stu = BinToStu(GetFilePath(cour->stuID[i]));
+		int n = _msize(stu->coursenow) / sizeof(stu->coursenow);
+		for (int j = 0; j < n; j++) {
+			if (realcoureid.compare(stu->coursenow[j]) == 0) {
+				delete[] stu->coursenow[j];
+				stu->coursenow[j] = stu->coursenow[n - 1];
+				break;
+			}
+		}
+		n -= 1;
+		char** coursetemp = stu->coursenow;
+		stu->coursenow = new char* [n];
+		for (int j = 0; j < n; j++) {
+			stu->coursenow[j] = coursetemp[j];
+		}
+		delete[] coursetemp;
+		StuToBin(stu, GetFilePath(stu->ID));
+		deleteStu(stu);
+	}
+	_wremove(ToWstring(current + "\\" + filename).c_str());
+	_wremove(ToWstring(current + "\\" + filename + "Score").c_str());
 }
+
 void displayScore(Score a) {
 	_LText();
 	std::wcout << "Name: " << a.name;

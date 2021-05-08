@@ -267,7 +267,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 				had += 1;
 				SessionConflict(course, reg, take);
 				for (int i = 0; i < n; i++) {
-					GotoXY(100, i + 3);
+					GotoXY(100, 2*i + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
 					else if (take[i] == -1) { std::cout << 'X'; }
 					else std::cout << " ";
