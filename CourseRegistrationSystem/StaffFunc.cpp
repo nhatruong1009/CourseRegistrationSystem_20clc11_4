@@ -1095,7 +1095,7 @@ void FileInScore(Course* cou, std::string current) {
 
 		}
 		fi.close();
-		CourseToBin(cou, cou->ID, current);
+		SaveScore(cou, cou->score, current + "\\" + cou->ID + "Score");
 		std::cout << "done\n > Back <";
 	}
 	_getwch();
