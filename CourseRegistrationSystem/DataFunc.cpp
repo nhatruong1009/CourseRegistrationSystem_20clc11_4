@@ -218,7 +218,7 @@ Score* LoadScore(std::string filename) {
 	fi.read((char*)&numberofstu, sizeof(unsigned short));
 	Score* sco = new Score[numberofstu];
 	for (int i = 0; i < numberofstu; i++) {
-		fi.read((char*)sco[i].ID, sizeof(unsigned __int64));
+		fi.read((char*)&sco[i].ID, sizeof(unsigned __int64));
 		fi.read((char*)&sco[i].totals, sizeof(float) * 4);
 	}
 	return sco;
@@ -240,8 +240,7 @@ void SaveScore(Course* cou, Score* score, std::string filename) {
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
 	fo.write((char*)&cou->numberofstudent, sizeof(unsigned short));
 	for (int i = 0; i < cou->numberofstudent; i++) {
-		fo.write((char*)cou->stuID[i], sizeof(unsigned __int64));
-		fo.write((char*)&score->totals, sizeof(float) * 4);
+		fo.write((char*)&score[i], sizeof(Score));
 	}
 	fo.close();
 }
@@ -280,13 +279,14 @@ Score GetScore(unsigned __int64 ID,char*coursename)
 	{
 		return Score{};
 	}
-	std::string semester = "Semester";
-	semester += courseID[n];
-	std::string year = "";
-	year = year + courseID[n - 4] + courseID[n - 3] + courseID[n - 2] + courseID[n - 1];
-	for (int i = 0; i < 5; i++)
-		courseID.pop_back();
-	Score result = GetStuScore("Data\\SchoolYear\\" + year + "\\" + semester + "\\" + courseID + "Score", ID);
+	char sem = courseID[n - 1];
+	char year[5];
+	for (int i = 0; i < 4; i++) {
+		year[i] = courseID[n - (5 - i)];
+	}
+	for (int i = 0; i < 5; i++)courseID.pop_back();
+	year[4] = '\0';
+	Score result = GetStuScore("Data\\SchoolYear\\" + ToString(year) + "\\Semester"+sem+"\\"+ courseID + "Score", ID);
 	result.ID = ID;
 	return result;
 }

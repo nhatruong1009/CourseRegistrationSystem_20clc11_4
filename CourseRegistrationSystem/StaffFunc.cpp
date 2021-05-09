@@ -1063,6 +1063,7 @@ void FileInScore(Course* cou, std::string current) {
 	std::fstream fi(filein, std::fstream::in);
 	if (!fi) { std::cout << "\nFile not exits\n> Back <"; }
 	else {
+		cou->score=LoadScore(current+"\\"+cou->ID+"Score");
 		fi.seekg(-2, std::fstream::end);
 		int end = fi.tellg();
 		fi.seekg(0, std::fstream::beg);
@@ -1088,6 +1089,8 @@ void FileInScore(Course* cou, std::string current) {
 
 			for (int i = 0; i < cou->numberofstudent; i++) {
 				if (cou->stuID[i] == score.ID) {
+					std::cout << "check: " << score.finals;
+					_getwch();
 					cou->score[i] = score;
 					break;
 				}

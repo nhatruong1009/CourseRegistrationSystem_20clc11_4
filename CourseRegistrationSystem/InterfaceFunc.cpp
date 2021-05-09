@@ -350,9 +350,10 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 		Course* temp = BinToCourse(sem + "\\" + Courses->filename);
 		for (int j = 0; j < temp->numberofstudent; j++) {
 			Student* stu = BinToStu(GetFilePath(temp->stuID[j]));
-
 			//take the idCourse to the last
-			int m = _msize(stu->coursenow) / sizeof(stu->coursenow);
+			int m = 0;
+			if(stu->coursenow!=nullptr) _msize(stu->coursenow) / sizeof(stu->coursenow);
+			if (m == 0) return;
 			for (int i = 0; i < m; i++) {
 				if (strncmp(stu->coursenow[i], temp->ID, sizeof(temp->ID)) == 0) {
 					char* swap = stu->coursenow[i];
@@ -410,7 +411,6 @@ std::string secondrun() {
 	if (GetTime() > end) {
 		// load all student and update them score;
 		updateSemesterResult("Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem));
-
 		_wremove(L"currentsem");
 		return "done"; // this end of semester so remove file, file not exits now so it can't change anything too;
 	}
