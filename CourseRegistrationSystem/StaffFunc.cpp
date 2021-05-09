@@ -335,6 +335,68 @@ void AddClass() {
 	deleteFilelist(list);
 	classMenu();
 }
+
+void CsvClassWithCourse(Filelist* file, Student** stu,std::wfstream&fo,std::string sem) {
+	for (int i = 0; i < CountFile(file); i++) {
+		if (file->filename.length() > 5 && file->filename.compare(file->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(file); i -= 1; }
+		else file = file->pNext;
+	}
+	fo << "ID,Fist name,Last name,Birth,Gender,GPA overall";
+	int n = CountFile(file);
+	std::string* coursename = new std::string[n];
+	for (int i = 0; i < n; i++) {
+		fo << ',' << ToWstring(file->filename);
+		coursename[i] = file->filename;
+		file = file->pNext;
+	}
+	deleteFilelist(file);
+	fo << '\n';
+	int m = _msize(stu) / sizeof(*stu);
+	for (int i = 0; i < m; i++) {
+		fo << stu[i]->ID << ','
+			<< stu[i]->firstname << ','
+			<< stu[i]->lastname << ','
+			<< stu[i]->birth << ','
+			<< stu[i]->gender << ','
+			<< stu[i]->GPA;
+		for (int j = 0; j < n; j++) {
+			fo << ',' << GetStuScore(sem + "\\" + coursename[j] + "Score", stu[i]->ID).totals;
+		}
+		fo << '\n';
+	}
+}
+
+void CsvClass(Student**stu) {
+	system("cls");
+	std::cout << "filename: ";
+	std::string filename;
+	std::cin >> filename;
+	std::wfstream fo(filename, std::fstream::out);
+	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	fo << wchar_t(0xfeff);
+	std::string now = secondrun();
+	Filelist* filels = TakeFileInFolder(now);
+	int n = _msize(stu) / sizeof(*stu);
+	Filelist* ls=nullptr;
+	if (now != "") ls = TakeFileInFolder(now);
+	if (now == ""|| ls ==nullptr ) {
+		fo << "ID,Fist name,Last name,Birth,Gender,GPA\n";
+		for (int i = 0; i < n; i++) {
+			fo << stu[i]->ID << ','
+				<< stu[i]->firstname << ','
+				<< stu[i]->lastname << ','
+				<< stu[i]->birth << ','
+				<< stu[i]->gender << ','
+				<< stu[i]->GPA << '\n';
+		}
+	}
+	else {
+		CsvClassWithCourse(ls, stu, fo, now);
+	}
+	fo.close();
+	return;
+}
+
 void DoSomeThingInClass(Classes* cls, std::string grade) {
 	Student** teee = SearchStuArr(cls->ID, grade);
 	char** menu = new char* [3];
@@ -349,7 +411,7 @@ void DoSomeThingInClass(Classes* cls, std::string grade) {
 		switch (chose)
 		{
 		case 0:PrintStu(teee, 30); break;
-		case 1:break;//cout somthing here
+		case 1:CsvClass(teee); break;//cout somthing here
 		case 2:
 		case -1:
 			break;
@@ -555,7 +617,6 @@ void viewCourse() {
 	std::string current = chooseTime(false,false);
 	if (current != "") {
 		Filelist* Cour = TakeFileInFolder(current);
-		std::cout << CountFile(Cour);
 		for (int i = 0; i < CountFile(Cour); i++) {
 			if (Cour->filename.length() > 5 && Cour->filename.compare(Cour->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(Cour); i -= 1; }
 			else Cour = Cour->pNext;
