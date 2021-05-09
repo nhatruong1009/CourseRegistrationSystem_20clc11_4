@@ -48,7 +48,7 @@ void searchScore(_Course* allcourse);
 void editScore(Course* cou, std::string current);
 void editCourse(Course* cou, std::string filename, std::string current);
 void editInfo(Course* cou, std::string filename, std::string current);
-void editScore(Course* cou, std::string filename, std::string current);
+void TypeInScore(Course* cou, std::string current);
 void FileInScore(Course* cou, std::string current);
 void editCourse(std::string filename, std::string current);
 void deleteCourse(Course* cour, std::string filename, std::string current);

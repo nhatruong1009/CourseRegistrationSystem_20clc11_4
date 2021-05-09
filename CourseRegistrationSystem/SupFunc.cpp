@@ -257,8 +257,8 @@ std::string ToString(char* source) {
 	return result;
 }
 std::string NumToStr(unsigned __int64 num) {
-	if (num == 0) return { "" };
-	int n = ceil(log10f(num));
+	if (num == 0) return { "0" };
+	int n = ceil(log10f(num)+0.1);
 	unsigned __int64 temp = num;
 	std::string result;
 	result.resize(n);
@@ -267,6 +267,16 @@ std::string NumToStr(unsigned __int64 num) {
 		temp = temp / 10;
 	}
 	return result;
+}
+
+std::string FloatToStr(float num,int afterdot) {
+	std::string temp = NumToStr(num);
+	temp += '.';
+	for (int i = 0; i < afterdot; i++) {
+		num *= 10;
+		temp += __int64(num) % 10 + '0';
+	}
+	return temp;
 }
 
 std::wstring ToWstring(std::string source) {
@@ -297,7 +307,7 @@ std::wstring ToWstring(wchar_t* source) {
 	return result;
 }
 std::wstring NumToLStr(unsigned __int64 num) {
-	if (num == 0) return { L"" };
+	if (num == 0) return { L"0" };
 	int n = ceil(log10f(num));
 	unsigned __int64 temp = num;
 	std::wstring result;

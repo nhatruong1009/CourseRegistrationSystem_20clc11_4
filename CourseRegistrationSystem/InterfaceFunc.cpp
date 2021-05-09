@@ -276,7 +276,7 @@ void PrintStu(_Student* stu) {
 void PrintStu(Student** stu, int c) {
 	if (stu == nullptr) return;
 	system("cls");
-	int n = _msize(stu) / sizeof(stu);
+	int n = _msize(stu) / sizeof(Student*);
 	int cur = c;
 	char u;
 	std::cout << std::setw(5) << "ID" << std::setw(25) << "Fist Name" << std::setw(20) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID";
@@ -319,7 +319,7 @@ void displayCourse(Course* cou) {
 	std::cout << "------------------------\n";
 }
 void displayCourse(Course** cou) {
-	int n = _msize(cou) / sizeof(cou);
+	int n = _msize(cou) / sizeof(Course*);
 	std::cout << std::setw(10) << "ID" << std::setw(15) << "Course Name" << std::setw(15) << "Teacher" << std::setw(15) << "Student" << std::setw(30) << "Schedule";
 	for (int i = 0; i < n; i++) {
 		displaylistCourse(cou[i]);
@@ -352,7 +352,7 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 			Student* stu = BinToStu(GetFilePath(temp->stuID[j]));
 			//take the idCourse to the last
 			int m = 0;
-			if(stu->coursenow!=nullptr) _msize(stu->coursenow) / sizeof(stu->coursenow);
+			if(stu->coursenow!=nullptr) _msize(stu->coursenow) / sizeof(char*);
 			if (m == 0) return;
 			for (int i = 0; i < m; i++) {
 				if (strncmp(stu->coursenow[i], temp->ID, sizeof(temp->ID)) == 0) {
@@ -366,7 +366,7 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 
 			Score score = GetStuScore(sem + "\\" + Courses->filename + "Score", stu->ID);
 			int n = 0;
-			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(stu->allcourse);
+			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(char*);
 			n += 1;
 			//just keep;
 			char** his = stu->allcourse;
