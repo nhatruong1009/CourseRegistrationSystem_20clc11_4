@@ -159,8 +159,52 @@ void userTypeMode()
 	}
 	DealocatedArrString(menu);
 }
+bool LoginStaff()
+{
+	system("cls");
+	std::string U, P;
+	std::ifstream fin;
+	fin.open("Staff.txt");
+	std::string sth1, sth2;
+	if (std::cin.tellg() != 0) std::cin.clear();
+	do
+	{
+		fin.clear();
+		fin.seekg(0, fin.beg);
+		fin >> sth1;
+		fin >> sth2;
+		std::cout << "----------- Login -----------\n";
+		std::cout << "Username: ";
+		std::getline(std::cin, U);
+		std::cout << "Password: ";
+		P = InputHidden();
+		if (U == "" || P == "")
+			return false;
+		while (sth1 != U)
+		{
+			if (fin.eof())
+			{
+				system("cls");
+				std::cout << "Username or password is invalid\n";
+				break;
+			}
+			fin >> sth1;
+			fin >> sth2;
+			if (sth1 == U && sth2 == P)
+				return true;
+		}
+		if (sth1 == U && sth2 == P)
+			return true;
+	} while (1);
+	fin.close();
+}
 void staffMode()
 {
+	if (LoginStaff() == false)
+	{
+		userTypeMode();
+		return;
+	}
 	system("cls");
 	std::cout << "-------------STAFF---------------";
 	char** menu = new char* [4];
