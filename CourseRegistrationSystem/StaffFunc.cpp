@@ -222,7 +222,7 @@ void classMenu() {
 	case 0: DealocatedArrString(menu); AddClass(); break;
 	case 1: DealocatedArrString(menu); ViewClass();  break;
 	case-1:
-	case 2:DealocatedArrString(menu); staffStudentMenu();break;
+	case 2:DealocatedArrString(menu); staffStudentMenu(); break;
 	}
 }
 
@@ -232,7 +232,7 @@ void StaffasStu() {
 	unsigned __int64 id;
 	std::cin >> id;
 	Student* stu = BinToStu(GetFilePath(id));
-	if(stu!=nullptr) studentMode(stu);
+	if (stu != nullptr) studentMode(stu);
 	else { std::cout << "Not have this ID student"; _getwch();	studentMenuStaff(); }
 }
 void studentMenuStaff() {
@@ -403,6 +403,10 @@ void courseStaff() {
 void schoolPlan() {
 	int time;
 	system("cls");
+	std::cout << "ESC to go back, Any key to create School Plan\n";
+	char ch = _getch();
+	if (ch == 27) { staffMode(); return; }
+	system("cls");
 	std::cout << "--------- School Plan ---------";
 	std::cout << "\nInput Year (Pass if take current year) :";
 	time = InputNumber();
@@ -410,7 +414,7 @@ void schoolPlan() {
 		time = GetTime().yy; std::cout << time << '\n';
 	}
 	MakeCurentTime(time);
-	std::cout << "\n__________ Sucess _________";
+	std::cout << "\n__________ Sucess _________\nTap to continue";
 	_getwch();
 	staffMode();
 }
@@ -444,7 +448,8 @@ void addCourse() {
 	{
 	case 0: current = TakeCurrent(); break;
 	case 1: current = chooseTime(); break;
-	case 2:
+	case 2:DealocatedArrString(menu);
+		courseStaff(); break;
 	case -1: break;
 	}
 	if (current != "") {
@@ -882,13 +887,13 @@ void editCourse(Course* cou, std::string filename, std::string current) {
 }
 void editInfo(Course* cou, std::string filename, std::string current) {
 	if (GetTime() > TakeDateEnd(current)) {
-		std::cout << "\nCourse had end, can't change"; 
-		_getwch(); 
+		std::cout << "\nCourse had end, can't change";
+		_getwch();
 		editCourse(cou, filename, current);
 		return;
 	}
 	char book;
-	char** menu = new char*[5];
+	char** menu = new char* [5];
 	menu[0] = new char[] {"Change teacher"};
 	menu[1] = new char[] {"Change credits"};
 	menu[2] = new char[] {"Change schedule"};
@@ -933,7 +938,7 @@ void editInfo(Course* cou, std::string filename, std::string current) {
 	CourseToBin(cou, filename, current);
 	editCourse(cou, filename, current);
 }
-void editScore(Course* cou, std::string filename, std::string current){
+void editScore(Course* cou, std::string filename, std::string current) {
 	if (secondrun().compare(current) != 0) { std::cout << "Cant change now"; _getwch(); return; }
 	int test = current[current.length() - 1] - '0';
 	Date start, end;
@@ -1138,7 +1143,7 @@ void editCourse(std::string filename, std::string current) {
 	switch (chose)
 	{
 	case 0: editCourse(cour, filename, current); break;
-	case 1: 
+	case 1:
 		std::string check;
 		fistrun(check);
 		if (check == current || TakeDateStart(current) < GetTime()) {
