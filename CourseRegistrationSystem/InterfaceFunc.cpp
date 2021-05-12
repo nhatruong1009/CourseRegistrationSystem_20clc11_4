@@ -276,7 +276,7 @@ void PrintStu(_Student* stu) {
 void PrintStu(Student** stu, int c) {
 	if (stu == nullptr) return;
 	system("cls");
-	int n = _msize(stu) / sizeof(stu);
+	int n = _msize(stu) / sizeof(Student*);
 	int cur = c;
 	char u;
 	std::cout << std::setw(5) << "ID" << std::setw(25) << "Fist Name" << std::setw(20) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID";
@@ -319,7 +319,7 @@ void displayCourse(Course* cou) {
 	std::cout << "------------------------\n";
 }
 void displayCourse(Course** cou) {
-	int n = _msize(cou) / sizeof(cou);
+	int n = _msize(cou) / sizeof(Course*);
 	std::cout << std::setw(10) << "ID" << std::setw(15) << "Course Name" << std::setw(15) << "Teacher" << std::setw(15) << "Student" << std::setw(30) << "Schedule";
 	for (int i = 0; i < n; i++) {
 		displaylistCourse(cou[i]);
@@ -350,9 +350,10 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 		Course* temp = BinToCourse(sem + "\\" + Courses->filename);
 		for (int j = 0; j < temp->numberofstudent; j++) {
 			Student* stu = BinToStu(GetFilePath(temp->stuID[j]));
-
 			//take the idCourse to the last
-			int m = _msize(stu->coursenow) / sizeof(stu->coursenow);
+			int m = 0;
+			if(stu->coursenow!=nullptr) _msize(stu->coursenow) / sizeof(char*);
+			if (m == 0) return;
 			for (int i = 0; i < m; i++) {
 				if (strncmp(stu->coursenow[i], temp->ID, sizeof(temp->ID)) == 0) {
 					char* swap = stu->coursenow[i];
@@ -363,10 +364,9 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 			}
 			m -= 1;
 
-			Score* score = nullptr; // load score of this student here. but just need the total
-			delete[] score->name;// btw it not neccessary
+			Score score = GetStuScore(sem + "\\" + Courses->filename + "Score", stu->ID);
 			int n = 0;
-			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(stu->allcourse);
+			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(char*);
 			n += 1;
 			//just keep;
 			char** his = stu->allcourse;
@@ -378,6 +378,7 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 
 			delete[] his; //detele the poiter point to data, not the data
 			his = stu->coursenow;
+			stu->coursenow = nullptr;
 			if (m > 0) stu->coursenow = new char* [m];
 			for (int i = 0; i < m; i++) {
 				stu->coursenow[i] = his[i];
@@ -385,7 +386,7 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 			delete[] his;
 
 			//update Score :((
-			stu->GPA = ((stu->GPA * (float(n) - 1)) + score->totals) / float(n); // Old GPA*number of olD Subject + this Course score and / for numberof subect
+			stu->GPA = ((stu->GPA * (float(n) - 1)) + score.totals) / float(n); // Old GPA*number of olD Subject + this Course score and / for numberof subect
 			StuToBin(stu, GetFilePath(stu->ID));
 			deleteStu(stu);
 		}
@@ -394,14 +395,14 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 	}
 }
 std::string secondrun() {
-	std::fstream file("currentsem", std::fstream::in);
+	std::fstream file("currentsem", std::fstream::in|std::fstream::binary);
 	if (!file) return "";// not in time of any semester
 	int year, sem;
 	file.read((char*)&year, sizeof(int));
 	file.read((char*)&sem, sizeof(int));
 	Date start, end;
 	file.close();
-	file.open("Data\\SchoolYear\\" + std::to_string(year) + "\\time", std::fstream::in);
+	file.open("Data\\SchoolYear\\" + std::to_string(year) + "\\time", std::fstream::in | std::fstream::binary);
 	for (int i = 0; i < sem; i++) {
 		file.read((char*)&start, sizeof(Date));
 		file.read((char*)&end, sizeof(Date));
@@ -410,7 +411,6 @@ std::string secondrun() {
 	if (GetTime() > end) {
 		// load all student and update them score;
 		updateSemesterResult("Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem));
-
 		_wremove(L"currentsem");
 		return "done"; // this end of semester so remove file, file not exits now so it can't change anything too;
 	}
@@ -457,13 +457,13 @@ int fistrun(std::string& current) {
 		file.close();
 		_wremove(L"firstrun");
 
-		file.open("currentsem", std::fstream::in);
+		file.open("currentsem", std::fstream::in | std::fstream::binary);
 		if (file) {
 			file.close();
 			return 3;// currentsem has not end // sooooo....
 		}
 
-		file.open("currentsem", std::fstream::out);
+		file.open("currentsem", std::fstream::out | std::fstream::binary);
 		file.write((char*)&year, sizeof(int));
 		file.write((char*)&sem, sizeof(int));
 		file.close();
