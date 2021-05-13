@@ -1,0 +1,24 @@
+------------Console:-------------
+W,A,↑,↓  :to move the menu
+Enter    :choose
+ESC      :return to foward menu/action
+e	 :confimn register course ( only on student )
+
+------------Warning!-------------
+File input Student/Course must be in .csv and UTF 8
+Do not change your computer time it will have bug to your data and can't reset
+Do not turn off program without exit menu.
+
+------------Student---------------
+Username is your student id, the first password is your birthday - you can change it later
+If you don't remember your password , you can contact to staff to reset your password
+Register course will be in course menu, it will tell you when it open for you to register or review all your course
+
+-------------Staff-------------
+Login with staff account that they give you
+Reset all data(include student/class/Course/Score) in folder Data
+In some menu, you only can choose some semester becourse it agreeably
+You can delete a whole school plan of a year in Data\SchoolYear, but if is a semester in the past it may have bug for the student
+Delete Course only aviable when it haven't start
+Folder history will give you some information about what happend before you use
+File out csv of a class only have Course score when that semester still on time, if not, it only have GPA
