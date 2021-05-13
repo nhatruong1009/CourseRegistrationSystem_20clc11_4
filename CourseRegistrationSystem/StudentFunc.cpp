@@ -58,8 +58,8 @@ bool isLoggedIn() {
 	if (un == username && pw == password) return true;
 	return false;
 }
-void studentMode(Student* stu) {
-	if (stu == nullptr) {
+void studentMode(Student* stu){
+	if (stu == nullptr){
 		LoginStu(stu);
 		if (stu == 0) { userTypeMode(); return; }
 	}
@@ -103,7 +103,7 @@ void StuInformation(Student* stu) {
 	menu[1] = new char[] {"Return"};
 	switch (Menu(menu, 5, 7))
 	{
-	case 0:
+	case 0: 
 		DealocatedArrString(menu);
 		ChangeInfo(stu);
 	case-1:
@@ -155,10 +155,10 @@ void ViewCouse(Student* stu) {
 }
 void registerMenu(Student* stu) {
 	std::string current;
-	int run = fistrun(current);
+	int run= fistrun(current);
 	system("cls");
 	if (run == 0) { std::cout << "Register Open in " << current << "\n> Back <"; _getwch(); CourseInformaion(stu); return; }
-	if (run == -1) { std::cout << "Don't have any register time\n> Back < "; _getwch(); CourseInformaion(stu); return; }
+	if(run==-1){ std::cout << "Don't have any register time\n> Back < "; _getwch(); CourseInformaion(stu); return; }
 
 	Filelist* filelist = TakeFileInFolder(current);
 	if (filelist == nullptr) return;
@@ -206,7 +206,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 		reg[i] = nullptr;
 	}
 	for (int i = 0; i < n; i++) {
-		GotoXY(4, 2 * i + 3);
+		GotoXY(4, 2*i + 3);
 		displaylistCourse(course[i]);
 		if (take[i] == 1) { tempwasreg[had] = course[i]; reg[had] = course[i]; had += 1; }
 	}
@@ -221,7 +221,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 
 	SessionConflict(course, reg, take);
 	for (int i = 0; i < n; i++) {
-		GotoXY(100, 2 * i + 3);
+		GotoXY(100, 2*i + 3);
 		if (take[i] == 1) { std::cout << 'O'; }
 		else if (take[i] == -1) { std::cout << 'X'; }
 		else std::cout << " ";
@@ -233,19 +233,19 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 		get = toupper(_getwch());
 		if (get == 'W' || get == KEY_UP) {
 			if (index > 0) {
-				GotoXY(0, 3 + 2 * index);
+				GotoXY(0, 3 + 2*index);
 				std::cout << "   ";
 				index -= 1;
-				GotoXY(0, 3 + 2 * index);
+				GotoXY(0, 3 + 2*index);
 				std::cout << "->";
 			}
 		}
 		else if (get == 'S' || get == KEY_DOWN) {
 			if (index < n - 1) {
-				GotoXY(0, 3 + 2 * index);
+				GotoXY(0, 3 + 2*index);
 				std::cout << "   ";
 				index += 1;
-				GotoXY(0, 3 + 2 * index);
+				GotoXY(0, 3 + 2*index);
 				std::cout << "->";
 			}
 		}
@@ -255,7 +255,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 				had -= 1;
 				SessionConflict(course, reg, take);
 				for (int i = 0; i < n; i++) {
-					GotoXY(100, 2 * i + 3);
+					GotoXY(100, 2*i + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
 					else if (take[i] == -1) { std::cout << 'X'; }
 					else std::cout << " ";
@@ -289,19 +289,13 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 void LoginStu(Student*& CurrentUser)
 {
 	system("cls");	//clear the screen
-	bool loop = false;
 	std::string U, P;
-	std::cout << "ESC to go back, Any keys to open login\n";
-	char ch = _getch();
-	if (ch == 27) return;
-	system("cls");
 	if (std::cin.tellg() != 0) std::cin.clear();
 	do
 	{
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
 		std::getline(std::cin, U);
-		if (loop) break;
 		std::cout << "Password: ";
 		P = InputHidden();
 		if (P == "") { CurrentUser = 0; break; }// don't input password;

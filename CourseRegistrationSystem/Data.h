@@ -7,7 +7,6 @@
 #include<iomanip>
 #include<codecvt>
 #include<Windows.h>
-#include <conio.h>
 #ifndef _StructData
 #define _StructData
 // the struct use for whole program
@@ -156,7 +155,7 @@ Student* SearchStu(unsigned __int64 ID);
 Student** SearchStuArr(unsigned __int64* ID, std::string Grade);
 std::string GetFilePath(unsigned __int64 ID);
 
-void SaveNewStu(_Student* stu, char* directon);
+void SaveNewStu(_Student* stu,char* directon);
 void FileOutStudent(_Student* stu, std::string fileout);
 void StuToBin(Student* stu, std::string fileout);
 void AddStudent(_Student*& studentlist, Student* student);
