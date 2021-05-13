@@ -71,6 +71,24 @@ std::string TakeCurrent() {
 	if (year == "") return "";
 	return "Data\\SchoolYear\\" + year + "\\Semester" + semester;
 }
+
+int editPlanTime(std::string filename) {
+	std::fstream fi(filename, std::fstream::in | std::fstream::binary);
+	Date dStart[3];
+	Date dEnd[3];
+	for (int i = 0; i < 3; i++) {
+		fi.read((char*)&dStart[i], sizeof(Date));
+		fi.read((char*)&dEnd[i], sizeof(Date));
+	}
+	int index = 0;
+	for (int i = 0; i < 4; i++) {
+		if (dStart[i] > GetTime()) { index = i; break; }
+		if (i == 3) index = i;
+	}
+	fi.close();
+	return index;
+}
+
 void MakeCurentTime(int year) {
 	wchar_t* curent = new wchar_t[] {L"Data"};
 	_wmkdir(curent);
@@ -80,55 +98,72 @@ void MakeCurentTime(int year) {
 	wchar_t* temp = StrCat(curent, L"\\");
 	delete[] curent;
 	StrCat(temp, std::to_string(year).length(), std::to_wstring(year));
-	if (_wmkdir(temp) == -1) { std::cout << "--Warning! override time--\n"; };
-	StrCat(temp, 2, L"\\");
-	for (int i = 0; i < 3; i++) {
-		wchar_t* semester = StrCat(temp, L"Semester" + std::to_wstring(i + 1));
-		_wmkdir(semester);
-		delete[] semester;
+	int index = 0;
+	if (_wmkdir(temp) == -1) { 
+		index = editPlanTime(ToString(temp) + "\\time");
 	}
-	wchar_t* SemesterTime = StrCat(temp, L"time");
-	std::fstream fo(SemesterTime, std::fstream::out | std::fstream::binary);
-	std::cin.clear();
-	Date start[3], end[3];
-	char** menu = new char* [2];
-	menu[0] = new char[] {"Confirm"};
-	menu[1] = new char[] {"Again"};
-	do
-	{
-		for (int i = 0; i < 3; i++) {
-			std::cout << "Date start semester " << i + 1 << ": ";
-			while (true)
-			{
-				start[i] = InputDate();
-				if (CheckDate(start[i]) == false || (i == 0 ? false : !(start[i] >= start[i - 1]))) {
-					std::cout << "     Date not invalid! ";
-				}
-				else break;
-			}
-			std::cout << "Date end semester " << i + 1 << ": ";
-			while (true)
-			{
-				end[i] = InputDate();
-				if (CheckDate(end[i]) == false || end[i] < start[i] || (i == 0 ? false : !(end[i] >= end[i - 1]))) {
-					std::cout << "     Date not invalid! ";
-				}
-				else break;
-			}
-		}
-		system("cls");
-		std::cout << "--------------------------------------------\n";
-		for (int i = 0; i < 3; i++) {
-			std::cout << "Semester " << i + 1 << "\t start: " << start[i] << "\tend:" << end[i] << '\n';
-		}
-	} while (Menu(menu, 6, 5) != 0);
-	for (int i = 0; i < 3; i++) {
-		fo.write((char*)&start[i], sizeof(Date));
-		fo.write((char*)&end[i], sizeof(Date));
+	if(index==3){
+		std::cout << "This year can't change anymore \n> back <";
 	}
-	DealocatedArrString(menu);
-	delete[] temp, SemesterTime;//
-	fo.close();
+	else {
+		StrCat(temp, 2, L"\\");
+		for (int i = 0; i < 3; i++) {
+			wchar_t* semester = StrCat(temp, L"Semester" + std::to_wstring(i + 1));
+			_wmkdir(semester);
+			delete[] semester;
+		}
+		wchar_t* SemesterTime = StrCat(temp, L"time");
+		std::cin.clear();
+		Date start[3], end[3];
+		char** menu = new char* [3];
+		menu[0] = new char[] {"Confirm"};
+		menu[1] = new char[] {"Again"};
+		menu[2] = new char[] {"Cancel"};
+		int take = 0;
+		do
+		{
+			for (int i = index; i < 3; i++) {
+				std::cout << "Date start semester " << i + 1 << ": ";
+				while (true)
+				{
+					start[i] = InputDate();
+					if (CheckDate(start[i]) == false || (i == 0 ? false : !(start[i] >= start[i - 1]))) {
+						std::cout << "     Date not invalid! ";
+					}
+					else break;
+				}
+				std::cout << "Date end semester " << i + 1 << ": ";
+				while (true)
+				{
+					end[i] = InputDate();
+					if (CheckDate(end[i]) == false || end[i] < start[i] || (i == 0 ? false : !(end[i] >= end[i - 1]))) {
+						std::cout << "     Date not invalid! ";
+					}
+					else break;
+				}
+			}
+			system("cls");
+			std::cout << "--------------------------------------------\n";
+			for (int i = 0; i < 3; i++) {
+				std::cout << "Semester " << i + 1 << "\t start: " << start[i] << "\tend:" << end[i] << '\n';
+			}
+			take = Menu(menu, 6, 5);
+		} while (take == 1);
+		DealocatedArrString(menu);
+		delete[] temp, SemesterTime;
+		if (take == 0) {
+			for (int i = 0; i < 3; i++) {
+				std::fstream fo(SemesterTime, std::fstream::out | std::fstream::binary);
+				fo.write((char*)&start[i], sizeof(Date));
+				fo.write((char*)&end[i], sizeof(Date));
+				fo.close();
+			}
+			std::cout << "\n__________ Sucess _________\n";
+		}
+		if (take == 2) {
+			std::cout << "\n__________ Cancel _________\n";
+		}
+	}
 }
 
 void updateStudentsInClass(Classes& a) {
@@ -198,12 +233,14 @@ bool LoginStaff()
 	} while (1);
 	fin.close();
 }
-void staffMode()
+void staffMode(bool login)
 {
-	if (LoginStaff() == false)
-	{
-		userTypeMode();
-		return;
+	if (login == true) {
+		if (LoginStaff() == false)
+		{
+			userTypeMode();
+			return;
+		}
 	}
 	system("cls");
 	std::cout << "-------------STAFF---------------";
@@ -236,7 +273,7 @@ void staffStudentMenu() {
 	case 1:DealocatedArrString(menu); classMenu(); break;
 	case 2:DealocatedArrString(menu); studentMenuStaff(); break;
 	case-1:
-	case 3:DealocatedArrString(menu); staffMode(); break;
+	case 3:DealocatedArrString(menu); staffMode(false); break;
 	}
 }
 void gradeMenu() {
@@ -393,7 +430,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		coursename[i] = file->filename;
 		file = file->pNext;
 	}
-	deleteFilelist(file);
+
 	fo << '\n';
 	int m = _msize(stu) / sizeof(*stu);
 	for (int i = 0; i < m; i++) {
@@ -408,6 +445,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		}
 		fo << '\n';
 	}
+	delete[] coursename;
 }
 
 void CsvClass(Student** stu) {
@@ -419,7 +457,6 @@ void CsvClass(Student** stu) {
 	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
 	fo << wchar_t(0xfeff);
 	std::string now = secondrun();
-	Filelist* filels = TakeFileInFolder(now);
 	int n = _msize(stu) / sizeof(*stu);
 	Filelist* ls = nullptr;
 	if (now != "") ls = TakeFileInFolder(now);
@@ -438,6 +475,7 @@ void CsvClass(Student** stu) {
 		CsvClassWithCourse(ls, stu, fo, now);
 	}
 	fo.close();
+	deleteFilelist(ls);
 	return;
 }
 
@@ -501,17 +539,14 @@ void courseStaff() {
 	case -1:
 	case 4:
 		DealocatedArrString(menu);
-		staffMode();
+		staffMode(false);
 		break;
 	}
 
 }
-void schoolPlan() {
+
+void addSchoolPlan(){
 	int time;
-	system("cls");
-	std::cout << "ESC to go back, Any key to create School Plan\n";
-	char ch = _getch();
-	if (ch == 27) { staffMode(); return; }
 	system("cls");
 	std::cout << "--------- School Plan ---------";
 	std::cout << "\nInput Year (Pass if take current year) :";
@@ -521,9 +556,66 @@ void schoolPlan() {
 		time = GetTime().yy; std::cout << time << '\n';
 	}
 	MakeCurentTime(time);
-	std::cout << "\n__________ Sucess _________\nTap to continue";
 	_getwch();
-	staffMode();
+}
+
+void inline displayAllYear(int* year,int n, Date* dStart, Date* dEnd, int k=4) {
+	char get;
+	int index = 0;
+	do {
+		system("cls");
+		for (int i = index; i < index + k && i<n ; i++) {
+			std::cout << "Year: " << year[i] << '\n';
+			std::cout << "\tSemester 1:\nStart: " << dStart[3 * i + 0] << "\tEnd: " << dEnd[3 * i + 0] << '\n';
+			std::cout << "\tSemester 2:\nStart: " << dStart[3 * i + 1] << "\tEnd: " << dEnd[3 * i + 1] << '\n';
+			std::cout << "\tSemester 3:\nStart: " << dStart[3 * i + 2] << "\tEnd: " << dEnd[3 * i + 2] << "\n";
+			std::cout << "-----------------------------------\n\n";
+		}
+		while (true) {
+			get = toupper(_getwch());
+			if ((get == 'A' || get == KEY_LEFT) && index >= k) { index -= k; break; }
+			if ((get == 'D' || get == KEY_RIGHT) && index + k < n) { index += k; break; }
+			if (get == KEY_ESC || get == KEY_ENTER) break;
+		}
+	} while (!(get == KEY_ENTER || get == KEY_ESC));
+}
+
+void viewPlan() {
+	system("cls");
+	Filelist* fl = TakeFileInFolder("Data\\SchoolYear");
+	if (fl == nullptr) { std::cout << "Empty!\n> back <"; _getwch(); }
+	else {
+		int n = CountFile(fl);
+		Date* dStart = new Date[3 * n];
+		Date* dEnd = new Date[3 * n];
+		int* year = new int[n];
+		for (int i = 0; i < n; i++) {
+			year[i] = StringToInt(fl->filename);
+			std::fstream fi("Data\\SchoolYear\\" + fl->filename + "\\time", std::fstream::in | std::fstream::binary);
+			for (int j = 0; j < 3; j++) {
+				fi.read((char*)&dStart[3 * i + j], sizeof(Date));
+				fi.read((char*)&dEnd[3 * i + j], sizeof(Date));
+			}
+			fl = fl->pNext;
+		}
+		displayAllYear(year, n, dStart, dEnd);
+	}
+}
+
+void schoolPlan() {
+	system("cls");
+	char** menu = new char* [3];
+	menu[0] = new char[] {"Add/Edit a year"};
+	menu[1] = new char[] {"View years"};
+	menu[2] = new char[] {"Back"};
+	int chose = Menu(menu, 5, 2);
+	DealocatedArrString(menu);
+	switch (chose)
+	{
+	case 0: addSchoolPlan(); break;
+	case 1: viewPlan(); break;
+	}
+	staffMode(false);
 }
 
 
@@ -976,7 +1068,7 @@ _Course* FileInCourse(std::string filename) {
 	std::wfstream fi(filename, std::wfstream::in);
 	if (!fi) { return nullptr; }
 	fi.imbue(std::locale(fi.getloc(), new std::codecvt_utf8<wchar_t>));
-	fi.ignore(1i64, wchar_t(0xfeff));
+	fi.ignore(3, wchar_t(0xfeff));
 	_Course* cou = nullptr;
 	std::wstring temp;
 	while (fi)

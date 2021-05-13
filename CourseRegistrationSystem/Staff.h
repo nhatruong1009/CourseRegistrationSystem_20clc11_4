@@ -10,7 +10,7 @@
 
 void updateStudentsInClass(Classes& a);
 void userTypeMode();
-void staffMode();
+void staffMode(bool login=true);
 void staffStudentMenu();
 void gradeMenu();
 void classMenu();

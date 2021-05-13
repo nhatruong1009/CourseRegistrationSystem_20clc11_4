@@ -9,11 +9,13 @@ e	 :confimn register course ( only on student )
 File input Student/Course must be in .csv and UTF 8
 Do not change your computer time it will have bug to your data and can't reset
 Do not turn off program without exit menu.
+Edit semester time may broken system so be sure that you don't have any action in semesters that you change time
 
 ------------Student---------------
 Username is your student id, the first password is your birthday - you can change it later
 If you don't remember your password , you can contact to staff to reset your password
 Register course will be in course menu, it will tell you when it open for you to register or review all your course
+When register courses, O that mean you registed these courses, X that mean you can't register these course (because of time conflict) 
 
 -------------Staff-------------
 Login with staff account that they give you
@@ -23,3 +25,4 @@ You can delete a whole school plan of a year in Data\SchoolYear, but if is a sem
 Delete Course only aviable when it haven't start
 Folder history will give you some information about what happend before you use
 File out csv of a class only have Course score when that semester still on time, if not, it only have GPA
+Schoolyear time only can change semesters that haven't started

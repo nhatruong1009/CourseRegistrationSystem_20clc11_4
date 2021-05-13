@@ -327,14 +327,14 @@ void displayCourse(Course** cou) {
 	}
 }
 void displaylistCourse(Course* cou) {
-	std::cout << cou->ID << '\t';
+	std::cout << cou->ID<<'\t';
 	_LText();
-	std::wcout << cou->name << '\t' << cou->teacher;
+	std::wcout << std::setw(30)<<std::left << cou->name << std::setw(30) << cou->teacher;
 	_SText();
-	std::cout << '\t' << cou->numberofstudent << "/" << cou->maxstudent << "\t";
+	std::cout << std::setw(8) << '\t' << cou->numberofstudent << "/" << cou->maxstudent << "\t";
 	for (int i = 0; i < 2; i++) {
 		printCourseDay(cou->performed[i].day);
-		std::cout << "  S" << cou->performed[i].session + 1 << "  ";
+		std::cout<<std::setw(4) << "  S" << cou->performed[i].session + 1 << "  ";
 	}
 }
 

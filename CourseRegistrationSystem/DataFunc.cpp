@@ -458,6 +458,7 @@ void registerCourse(Course** newReg, std::string sem, unsigned __int64 stuID) {
 		char* accountID = StrToChar(NumToStr(stuID));
 		SaveCourseRegHis(accountID, *newReg[i]);
 		delete[]accountID;
+		filecou.close();
 	}
 }
 void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID) {
@@ -1320,10 +1321,6 @@ void deleteSemester(Semester* a)
 }
 void deleteSchoolyear(SchoolYear*& a)
 {
-	int n = _msize(a->semester) / sizeof(*a->semester);
-	for (int i = 0; i < n; i++) {
-		deleteSemester(&a->semester[i]);
-	}
 	delete_Class(a->classes);
 	delete_Stu(a->student);
 	delete a;

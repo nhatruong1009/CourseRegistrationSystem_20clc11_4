@@ -195,6 +195,7 @@ void registerMenu(Student* stu) {
 	takeCourseReg(course, canReg, stu, current);
 	deleteCourse(course);
 	deleteFilelist(filelist);
+	delete[] canReg;
 	CourseInformaion(stu);
 }
 inline void removereg(Course** reg, Course* re) {
@@ -210,19 +211,17 @@ inline void removereg(Course** reg, Course* re) {
 	}
 	reg[4] = nullptr;
 }
-void takeCourseReg(Course** course, int*& take, Student* stu, std::string current) {
-	system("cls");
+void takeCourseReg(Course** course, int*& take, Student* stu, std::string current,int m) {
 	int index = 0;
 	int n = _msize(course) / sizeof(course);
+	int begin = 0;
 	int had = 0;
 	Course** reg = new Course * [5];
 	Course** tempwasreg = new Course * [5];
 	for (int i = 0; i < 5; i++) {
 		reg[i] = nullptr;
 	}
-	for (int i = 0; i < n; i++) {
-		GotoXY(4, 2 * i + 3);
-		displaylistCourse(course[i]);
+	for (int i = 0; i < n ; i++) {
 		if (take[i] == 1) { tempwasreg[had] = course[i]; reg[had] = course[i]; had += 1; }
 	}
 	Course** wasreg = nullptr;
@@ -233,15 +232,17 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 		}
 	}
 	delete[] tempwasreg;
-
+	system("cls");
 	SessionConflict(course, reg, take);
-	for (int i = 0; i < n; i++) {
-		GotoXY(100, 2 * i + 3);
+	for (int i = begin; i < n && i < begin + m; i++) {
+		GotoXY(4, 2 * (i - begin) + 3);
+		displaylistCourse(course[i]);
+		GotoXY(150, 2 * (i - begin) + 3);
 		if (take[i] == 1) { std::cout << 'O'; }
 		else if (take[i] == -1) { std::cout << 'X'; }
-		else std::cout << " ";
 	}
-	GotoXY(0, 3); std::cout << "->";
+	GotoXY(0, 2 * index + 3);
+	std::cout << "->";
 	char get;
 	do
 	{
@@ -254,35 +255,63 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 				GotoXY(0, 3 + 2 * index);
 				std::cout << "->";
 			}
+			if (index == 0 && begin != 0) {
+				begin -= m;
+				system("cls");
+				index = m - 1;
+				for (int i = begin; i < n && i < begin + m; i++) {
+					GotoXY(4, 2 * (i-begin) + 3);
+					displaylistCourse(course[i]);
+					GotoXY(150, 2 * (i - begin) + 3);
+					if (take[i] == 1) { std::cout << 'O'; }
+					else if (take[i] == -1) { std::cout << 'X'; }
+				}
+				GotoXY(0, 2 * index + 3);
+				std::cout << "->";
+			}
 		}
 		else if (get == 'S' || get == KEY_DOWN) {
-			if (index < n - 1) {
+			if (index < m - 1 && begin+index < n-1 ) {
 				GotoXY(0, 3 + 2 * index);
 				std::cout << "   ";
 				index += 1;
 				GotoXY(0, 3 + 2 * index);
 				std::cout << "->";
 			}
+			else if (index == m - 1  && begin + m < n) {
+				begin += m;
+				system("cls");
+				index = 0;
+				for (int i = begin; i < n && i < begin + m; i++) {
+					GotoXY(4, 2 * (i - begin) + 3);
+					displaylistCourse(course[i]);
+					GotoXY(150, 2 * (i - begin) + 3);
+					if (take[i] == 1) { std::cout << 'O'; }
+					else if (take[i] == -1) { std::cout << 'X'; }
+				}
+				GotoXY(0, 2 * index + 3);
+				std::cout << "->";
+			}
 		}
 		else if (get == KEY_ENTER) {
-			if (take[index] == 1) {
-				removereg(reg, course[index]);
+			if (take[begin+index] == 1) {
+				removereg(reg, course[begin+index]);
 				had -= 1;
 				SessionConflict(course, reg, take);
-				for (int i = 0; i < n; i++) {
-					GotoXY(100, 2 * i + 3);
+				for (int i = begin; i < n && i < begin + m; i++) {
+					GotoXY(150, 2 * (i-begin) + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
 					else if (take[i] == -1) { std::cout << 'X'; }
 					else std::cout << " ";
 				}
 
 			}
-			else if (take[index] == 0 && had < 5) {
-				reg[had] = course[index];
+			else if (take[begin+index] == 0 && had < 5) {
+				reg[had] = course[begin+index];
 				had += 1;
 				SessionConflict(course, reg, take);
-				for (int i = 0; i < n; i++) {
-					GotoXY(100, 2*i + 3);
+				for (int i = begin; i < n && i < begin + m; i++) {
+					GotoXY(150, 2*(i-begin) + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
 					else if (take[i] == -1) { std::cout << 'X'; }
 					else std::cout << " ";
@@ -291,7 +320,6 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 		}
 	} while (get != 'E');
 	// phan loai mon sau do save
-	std::cout << "out";
 	Course** newReg = nullptr;
 	Course** cancelReg = nullptr;
 
@@ -306,9 +334,6 @@ void LoginStu(Student*& CurrentUser)
 	system("cls");	//clear the screen
 	bool loop = false;
 	std::string U, P;
-	std::cout << "ESC to go back, Any keys to open login\n";
-	char ch = _getch();
-	if (ch == 27) return;
 	system("cls");
 	if (std::cin.tellg() != 0) std::cin.clear();
 	do

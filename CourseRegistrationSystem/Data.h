@@ -89,7 +89,6 @@ struct Semester
 struct SchoolYear
 {
 	int year;
-	Semester* semester;
 	_Class* classes;
 	_Student* student;
 };
