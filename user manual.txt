@@ -1,5 +1,6 @@
 ------------Console:-------------
-W,A,↑,↓  :to move the menu
+W,S,↑,↓  :to move the menu
+A,D,←,→  :next page( in some view menu )
 Enter    :choose
 ESC      :return to foward menu/action
 e	 :confimn register course ( only on student )
@@ -17,7 +18,7 @@ Register course will be in course menu, it will tell you when it open for you to
 -------------Staff-------------
 Login with staff account that they give you
 Reset all data(include student/class/Course/Score) in folder Data
-In some menu, you only can choose some semester becourse it agreeably
+In some menu, you only can choose some semester because they agreeably
 You can delete a whole school plan of a year in Data\SchoolYear, but if is a semester in the past it may have bug for the student
 Delete Course only aviable when it haven't start
 Folder history will give you some information about what happend before you use
