@@ -1087,8 +1087,8 @@ void editInfo(Course* cou, std::string filename, std::string current) {
 	DealocatedArrString(menu);
 	CourseToBin(cou, filename, current);
 }
-<<<<<< < HEAD
-	void editScore(Course * cou, std::string filename, std::string current) {
+
+void editScore(Course* cou, std::string filename, std::string current) {
 	if (secondrun().compare(current) != 0) { std::cout << "Cant change now"; _getwch(); return; }
 	int test = current[current.length() - 1] - '0';
 	Date start, end;
@@ -1103,250 +1103,248 @@ void editInfo(Course* cou, std::string filename, std::string current) {
 	}
 	delete[] file;
 	if (!(GetTime() > start && GetTime() < end)) { return; }
-	====== =
-		>>>>>> > f975d470f3db875787fbf692268020c492e8bc7f
+}
 
-		void editScore(Course * cou, std::string current) {
-		system("cls");
-		if (secondrun().compare(current) != 0) { std::cout << "Cant change now"; _getwch(); return; }
-		char** menu = new char* [3];
-		menu[0] = new char[] {"Type in"};
-		menu[1] = new char[] {"File in"};
-		menu[2] = new char[] {"back"};
-		int check = Menu(menu, 5, 3);
-		DealocatedArrString(menu);
-		switch (check)
-		{
-		case 0: TypeInScore(cou, current); break;
-		case 1: FileInScore(cou, current); break;
-		case 2:
-		case -1:
-			break;
-		}
+void editScore(Course* cou, std::string current) {
+	system("cls");
+	if (secondrun().compare(current) != 0) { std::cout << "Cant change now"; _getwch(); return; }
+	char** menu = new char* [3];
+	menu[0] = new char[] {"Type in"};
+	menu[1] = new char[] {"File in"};
+	menu[2] = new char[] {"back"};
+	int check = Menu(menu, 5, 3);
+	DealocatedArrString(menu);
+	switch (check)
+	{
+	case 0: TypeInScore(cou, current); break;
+	case 1: FileInScore(cou, current); break;
+	case 2:
+	case -1:
+		break;
 	}
-	void TypeInScore(Course * cou, std::string current) {
-		system("cls");
-		std::cout << "---------- edit score ----------\n";
-		cou->score = LoadScore(current + "\\" + cou->ID + "Score");
-		if (cou->score == nullptr) { std::cout << "Haven't had scores yet\n> Back <"; _getwch(); }
-		else {
-			char** allscore = new char* [cou->numberofstudent];
-			for (int i = 0; i < cou->numberofstudent; i++) {
-				std::string temp = std::to_string(cou->score[i].ID) + '\t' + FloatToStr(cou->score[i].mids) + '\t' + FloatToStr(cou->score[i].finals) + '\t' + FloatToStr(cou->score[i].others) + '\t' + FloatToStr(cou->score[i].totals);
-				allscore[i] = StrToChar(temp);
-			}
-			int index = 0;
-			std::cout << "     ID\t\tmid\tFinal\tOther\tTotal\n";
-			for (int i = 0; i < cou->numberofstudent; i++) {
-				GotoXY(5, 3 + i); std::cout << allscore[i] << '\n';
-			}
-			char check;
-			do {
-				GotoXY(0, 3 + index);
-				std::cout << "->";
-				check = toupper(_getwch());
-				if (check == 'W' || check == KEY_UP) {
-					if (index != 0) {
-						GotoXY(0, 3 + index);
-						std::cout << "  ";
-						index -= 1;
-					}
+}
+void TypeInScore(Course* cou, std::string current) {
+	system("cls");
+	std::cout << "---------- edit score ----------\n";
+	cou->score = LoadScore(current + "\\" + cou->ID + "Score");
+	if (cou->score == nullptr) { std::cout << "Haven't had scores yet\n> Back <"; _getwch(); }
+	else {
+		char** allscore = new char* [cou->numberofstudent];
+		for (int i = 0; i < cou->numberofstudent; i++) {
+			std::string temp = std::to_string(cou->score[i].ID) + '\t' + FloatToStr(cou->score[i].mids) + '\t' + FloatToStr(cou->score[i].finals) + '\t' + FloatToStr(cou->score[i].others) + '\t' + FloatToStr(cou->score[i].totals);
+			allscore[i] = StrToChar(temp);
+		}
+		int index = 0;
+		std::cout << "     ID\t\tmid\tFinal\tOther\tTotal\n";
+		for (int i = 0; i < cou->numberofstudent; i++) {
+			GotoXY(5, 3 + i); std::cout << allscore[i] << '\n';
+		}
+		char check;
+		do {
+			GotoXY(0, 3 + index);
+			std::cout << "->";
+			check = toupper(_getwch());
+			if (check == 'W' || check == KEY_UP) {
+				if (index != 0) {
+					GotoXY(0, 3 + index);
+					std::cout << "  ";
+					index -= 1;
 				}
-				else if (check == 'S' || check == KEY_DOWN) {
-					if (index != cou->numberofstudent - 1) {
-						GotoXY(0, 3 + index);
-						std::cout << "  ";
-						index += 1;
-					}
+			}
+			else if (check == 'S' || check == KEY_DOWN) {
+				if (index != cou->numberofstudent - 1) {
+					GotoXY(0, 3 + index);
+					std::cout << "  ";
+					index += 1;
 				}
-				else if (check == KEY_ENTER) {
-					char** menu = new char* [5];
-					menu[0] = new char[] { "Mid term" };
-					menu[1] = new char[] {"Last term"};
-					menu[2] = new char[] {"Other score"};
-					menu[3] = new char[] {"Total Score"};
-					menu[4] = new char[] {"Confinm"};
-					check = 0;
-					do {
-						system("cls");
-						std::cout << "ID\t\tmid\tFinal\tOther\tTotal\n";
-						std::cout << allscore[index];
-						check = Menu(menu, 5, 4);
-						switch (check)
-						{
-						case 0: std::cout << "Input new score: "; std::cin >> cou->score[index].mids; break;
-						case 1: std::cout << "Input new score: "; std::cin >> cou->score[index].finals; break;
-						case 2: std::cout << "Input new score: "; std::cin >> cou->score[index].others; break;
-						case 3: std::cout << "Input new score: "; std::cin >> cou->score[index].totals; break;
-						}
-						std::string temp = std::to_string(cou->score[index].ID) + '\t' + FloatToStr(cou->score[index].mids) + '\t' + FloatToStr(cou->score[index].finals) + '\t' + FloatToStr(cou->score[index].others) + '\t' + FloatToStr(cou->score[index].totals);
-						delete[] allscore[index];
-						allscore[index] = StrToChar(temp);
-					} while (check != -1 && check != 4);
-					DealocatedArrString(menu);
+			}
+			else if (check == KEY_ENTER) {
+				char** menu = new char* [5];
+				menu[0] = new char[] { "Mid term" };
+				menu[1] = new char[] {"Last term"};
+				menu[2] = new char[] {"Other score"};
+				menu[3] = new char[] {"Total Score"};
+				menu[4] = new char[] {"Confinm"};
+				check = 0;
+				do {
 					system("cls");
-					std::cout << "---------- edit score ----------\n";
-					std::cout << "     ID\t\tmid\tFinal\tOther\tTotal\n";
-					for (int i = 0; i < cou->numberofstudent; i++) {
-						GotoXY(5, 3 + i); std::cout << allscore[i] << '\n';
+					std::cout << "ID\t\tmid\tFinal\tOther\tTotal\n";
+					std::cout << allscore[index];
+					check = Menu(menu, 5, 4);
+					switch (check)
+					{
+					case 0: std::cout << "Input new score: "; std::cin >> cou->score[index].mids; break;
+					case 1: std::cout << "Input new score: "; std::cin >> cou->score[index].finals; break;
+					case 2: std::cout << "Input new score: "; std::cin >> cou->score[index].others; break;
+					case 3: std::cout << "Input new score: "; std::cin >> cou->score[index].totals; break;
 					}
-				}
-			} while (check != 'E' && check != KEY_ESC);
-			DealocatedArrString(allscore);
-			SaveScore(cou, cou->score, current + "\\" + cou->ID + "Score");
-			GotoXY(0, 3 + cou->numberofstudent);
-			std::cout << "\ndone\n > Back <";
-			_getwch();
-		}
-
-	}
-	void FileInScore(Course * cou, std::string current) {
-		system("cls");
-		std::string filein;
-		std::cout << "File in :";
-		std::cin >> filein;
-		std::fstream fi(filein, std::fstream::in);
-		if (!fi) { std::cout << "\nFile not exits\n> Back <"; }
-		else {
-			cou->score = LoadScore(current + "\\" + cou->ID + "Score");
-			fi.seekg(-2, std::fstream::end);
-			int end = fi.tellg();
-			fi.seekg(0, std::fstream::beg);
-			Score score;
-			std::string temp;
-
-			while (fi.tellg() < end)
-			{
-				std::getline(fi, temp, ',');
-				score.ID = StringToInt(temp);
-
-				std::getline(fi, temp, ',');
-				score.mids = std::stof(temp);
-
-				std::getline(fi, temp, ',');
-				score.finals = std::stof(temp);
-
-				std::getline(fi, temp, ',');
-				score.others = std::stof(temp);
-
-				std::getline(fi, temp, '\n');
-				score.totals = std::stof(temp);
-
+					std::string temp = std::to_string(cou->score[index].ID) + '\t' + FloatToStr(cou->score[index].mids) + '\t' + FloatToStr(cou->score[index].finals) + '\t' + FloatToStr(cou->score[index].others) + '\t' + FloatToStr(cou->score[index].totals);
+					delete[] allscore[index];
+					allscore[index] = StrToChar(temp);
+				} while (check != -1 && check != 4);
+				DealocatedArrString(menu);
+				system("cls");
+				std::cout << "---------- edit score ----------\n";
+				std::cout << "     ID\t\tmid\tFinal\tOther\tTotal\n";
 				for (int i = 0; i < cou->numberofstudent; i++) {
-					if (cou->stuID[i] == score.ID) {
-						std::cout << "check: " << score.finals;
-						_getwch();
-						cou->score[i] = score;
-						break;
-					}
+					GotoXY(5, 3 + i); std::cout << allscore[i] << '\n';
 				}
-
 			}
-			fi.close();
-			SaveScore(cou, cou->score, current + "\\" + cou->ID + "Score");
-			std::cout << "done\n > Back <";
-		}
+		} while (check != 'E' && check != KEY_ESC);
+		DealocatedArrString(allscore);
+		SaveScore(cou, cou->score, current + "\\" + cou->ID + "Score");
+		GotoXY(0, 3 + cou->numberofstudent);
+		std::cout << "\ndone\n > Back <";
 		_getwch();
 	}
-	void FileOutCourse(_Course * cou, std::string fileout) {
-		_LText();
-		std::wfstream fo(fileout, std::wfstream::out);
-		fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
-		_Course* temp = cou;
-		fo << wchar_t(0xfeff);
-		do
+}
+
+void FileInScore(Course* cou, std::string current) {
+	system("cls");
+	std::string filein;
+	std::cout << "File in :";
+	std::cin >> filein;
+	std::fstream fi(filein, std::fstream::in);
+	if (!fi) { std::cout << "\nFile not exits\n> Back <"; }
+	else {
+		cou->score = LoadScore(current + "\\" + cou->ID + "Score");
+		fi.seekg(-2, std::fstream::end);
+		int end = fi.tellg();
+		fi.seekg(0, std::fstream::beg);
+		Score score;
+		std::string temp;
+
+		while (fi.tellg() < end)
 		{
-			fo << cou->course->ID << L',' << cou->course->name << L',' << cou->course->teacher << L',' << cou->course->credit << L',' << cou->course->performed[0].day << L',';
-			fo << cou->course->performed[0].session << L',' << cou->course->performed[1].day << L',' << cou->course->performed[1].session << L'\n';
-			cou = cou->pNext;
-		} while (cou != temp);
-		fo.close();
-		_SText();
+			std::getline(fi, temp, ',');
+			score.ID = StringToInt(temp);
+
+			std::getline(fi, temp, ',');
+			score.mids = std::stof(temp);
+
+			std::getline(fi, temp, ',');
+			score.finals = std::stof(temp);
+
+			std::getline(fi, temp, ',');
+			score.others = std::stof(temp);
+
+			std::getline(fi, temp, '\n');
+			score.totals = std::stof(temp);
+
+			for (int i = 0; i < cou->numberofstudent; i++) {
+				if (cou->stuID[i] == score.ID) {
+					std::cout << "check: " << score.finals;
+					_getwch();
+					cou->score[i] = score;
+					break;
+				}
+			}
+
+		}
+		fi.close();
+		SaveScore(cou, cou->score, current + "\\" + cou->ID + "Score");
+		std::cout << "done\n > Back <";
 	}
+	_getwch();
+}
 
-	void editCourse(std::string filename, std::string current) {
-		system("cls");
-		std::cout << "-------- Edit Course ----------\n";
-		Course* cour = BinToCourse(current + "\\" + filename);
-		displayCourse(cour);
-		char** menu = new char* [3];
-		menu[0] = new char[] {"Edit"};
-		menu[1] = new char[] {"Delete (Only before register time) "};
-		menu[2] = new char[] {"back"};
-		int chose = Menu(menu, 5, 10);
-		DealocatedArrString(menu);
-		switch (chose)
-		{
-		case 0: editCourse(cour, filename, current); break;
-			<<<<<< < HEAD
-		case 1:
-			std::string check;
-			fistrun(check);
-			if (check == current || TakeDateStart(current) < GetTime()) {
-				====== =
-		case 1:
-			if (TakeDateStart(current) < GetTime()) {
-				>>>>>> > f975d470f3db875787fbf692268020c492e8bc7f
-					std::cout << "Can't be deleted";
-			}
-			else {
-				deleteCourse(cour, filename, current);
-				std::cout << "Success";
-			}
-			_getwch();
-			break;
-			}
-			deleteCourse(cour);
-		}
-		void deleteCourse(Course * cour, std::string filename, std::string current) {
-			int sem = current[current.length() - 1] - '0';
-			char y[5] = { "" };
-			current.copy(y, 4, current.length() - 14);
-			std::string realcoureid = ToString(cour->ID) + ToString(y) + std::to_string(sem);
-			for (int i = 0; i < cour->numberofstudent; i++) {
-				Student* stu = BinToStu(GetFilePath(cour->stuID[i]));
-				int n = _msize(stu->coursenow) / sizeof(*stu->coursenow);
-				for (int j = 0; j < n; j++) {
-					if (realcoureid.compare(stu->coursenow[j]) == 0) {
-						delete[] stu->coursenow[j];
-						stu->coursenow[j] = stu->coursenow[n - 1];
-						break;
-					}
-				}
-				n -= 1;
-				char** coursetemp = stu->coursenow;
-				stu->coursenow = new char* [n];
-				for (int j = 0; j < n; j++) {
-					stu->coursenow[j] = coursetemp[j];
-				}
-				delete[] coursetemp;
-				StuToBin(stu, GetFilePath(stu->ID));
-				deleteStu(stu);
-			}
-			_wremove(ToWstring(current + "\\" + filename).c_str());
-			_wremove(ToWstring(current + "\\" + filename + "Score").c_str());
-		}
+void FileOutCourse(_Course* cou, std::string fileout) {
+	_LText();
+	std::wfstream fo(fileout, std::wfstream::out);
+	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
+	_Course* temp = cou;
+	fo << wchar_t(0xfeff);
+	do
+	{
+		fo << cou->course->ID << L',' << cou->course->name << L',' << cou->course->teacher << L',' << cou->course->credit << L',' << cou->course->performed[0].day << L',';
+		fo << cou->course->performed[0].session << L',' << cou->course->performed[1].day << L',' << cou->course->performed[1].session << L'\n';
+		cou = cou->pNext;
+	} while (cou != temp);
+	fo.close();
+	_SText();
+}
 
-		std::string GetFilePath(char* CourseID) {
-			char sem = CourseID[strlen(CourseID) - 1];
-			char y[5];
-			ToString(CourseID).copy(y, 4, strlen(CourseID) - 5);
-			y[4] = '\0';
-			int n = strlen(CourseID) - 5;
-			char* temp = new char[n + 1];
-			for (int i = 0; i < n; i++) {
-				temp[i] = CourseID[i];
-			}
-			temp[n] = '\0';
-			std::string k = ToString(temp);
-			delete[] temp;
-			return "Data\\SchoolYear\\" + ToString(y) + "\\Semester" + sem + "\\" + k;
+void editCourse(std::string filename, std::string current) {
+	system("cls");
+	std::cout << "-------- Edit Course ----------\n";
+	Course* cour = BinToCourse(current + "\\" + filename);
+	displayCourse(cour);
+	char** menu = new char* [3];
+	menu[0] = new char[] {"Edit"};
+	menu[1] = new char[] {"Delete (Only before register time) "};
+	menu[2] = new char[] {"back"};
+	int chose = Menu(menu, 5, 10);
+	DealocatedArrString(menu);
+	switch (chose)
+	{
+	case 0: editCourse(cour, filename, current); break;
+	case 1:
+		std::string check;
+		fistrun(check);
+		if (check == current || TakeDateStart(current) < GetTime()) {
+		if (TakeDateStart(current) < GetTime()) {
+			std::cout << "Can't be deleted";
 		}
+		else {
+			deleteCourse(cour, filename, current);
+			std::cout << "Success";
+		}
+		_getwch();
+		break;
+		}
+		deleteCourse(cour);
+	}
+}
 
-		void displayScore(Score a) {
-			std::cout << "    ID: " << a.ID;
-			std::cout << "\t" << std::setw(16) << "Mid term: " << std::setw(4) << a.mids;
-			std::cout << std::setw(16) << "Final: " << std::setw(4) << a.finals;
-			std::cout << std::setw(16) << "Others: " << std::setw(4) << a.others;
-			std::cout << "\t" << std::setw(16) << "Total: " << a.totals << "\n";
+void deleteCourse(Course* cour, std::string filename, std::string current) {
+	int sem = current[current.length() - 1] - '0';
+	char y[5] = { "" };
+	current.copy(y, 4, current.length() - 14);
+	std::string realcoureid = ToString(cour->ID) + ToString(y) + std::to_string(sem);
+	for (int i = 0; i < cour->numberofstudent; i++) {
+		Student* stu = BinToStu(GetFilePath(cour->stuID[i]));
+		int n = _msize(stu->coursenow) / sizeof(*stu->coursenow);
+		for (int j = 0; j < n; j++) {
+			if (realcoureid.compare(stu->coursenow[j]) == 0) {
+				delete[] stu->coursenow[j];
+				stu->coursenow[j] = stu->coursenow[n - 1];
+				break;
+			}
 		}
+		n -= 1;
+		char** coursetemp = stu->coursenow;
+		stu->coursenow = new char* [n];
+		for (int j = 0; j < n; j++) {
+			stu->coursenow[j] = coursetemp[j];
+		}
+		delete[] coursetemp;
+		StuToBin(stu, GetFilePath(stu->ID));
+		deleteStu(stu);
+	}
+	_wremove(ToWstring(current + "\\" + filename).c_str());
+	_wremove(ToWstring(current + "\\" + filename + "Score").c_str());
+}
+
+std::string GetFilePath(char* CourseID) {
+	char sem = CourseID[strlen(CourseID) - 1];
+	char y[5];
+	ToString(CourseID).copy(y, 4, strlen(CourseID) - 5);
+	y[4] = '\0';
+	int n = strlen(CourseID) - 5;
+	char* temp = new char[n + 1];
+	for (int i = 0; i < n; i++) {
+		temp[i] = CourseID[i];
+	}
+	temp[n] = '\0';
+	std::string k = ToString(temp);
+	delete[] temp;
+	return "Data\\SchoolYear\\" + ToString(y) + "\\Semester" + sem + "\\" + k;
+}
+
+void displayScore(Score a) {
+	std::cout << "    ID: " << a.ID;
+	std::cout << "\t" << std::setw(16) << "Mid term: " << std::setw(4) << a.mids;
+	std::cout << std::setw(16) << "Final: " << std::setw(4) << a.finals;
+	std::cout << std::setw(16) << "Others: " << std::setw(4) << a.others;
+	std::cout << "\t" << std::setw(16) << "Total: " << a.totals << "\n";
+}
