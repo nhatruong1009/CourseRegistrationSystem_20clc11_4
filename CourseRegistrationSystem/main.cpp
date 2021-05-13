@@ -2,7 +2,8 @@
 #include"Sup.h"
 #include"Interface.h"
 #include"Staff.h"
-void main(){
+void main()
+{
 	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
@@ -11,7 +12,7 @@ void main(){
 	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);
 	{
 		std::string current = "";
-		fistrun(current);
+		std::cout << fistrun(current) << " ";
 		secondrun();
 		userTypeMode();
 	}
@@ -20,5 +21,4 @@ void main(){
 		std::cout << "Leak";
 	}
 	else std::cout << "No";
-	
 }

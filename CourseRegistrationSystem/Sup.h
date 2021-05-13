@@ -42,7 +42,6 @@ std::string ToString(std::wstring source);
 std::string ToString(wchar_t* source);
 std::string ToString(char* source);
 std::string NumToStr(unsigned __int64 num);
-std::string FloatToStr(float num, int afterdot=2);
 
 std::wstring ToWstring(std::string source);
 std::wstring ToWstring(char* source);

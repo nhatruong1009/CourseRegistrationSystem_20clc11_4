@@ -115,19 +115,14 @@ void StuInformation(Student* stu) {
 }
 void ViewCourseNow(Student* stu) {
 	system("cls");
-	std::cout << "------------- Course now ---------------\n";
-	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); CourseInformaion(stu); return; }
-	int n = _msize(stu->coursenow) / sizeof(stu->coursenow);
-	for (int i = 0; i < n; i++) {
-		Course* cou = BinToCourse(GetFilePath(stu->coursenow[i]));
-		Score temp = GetScore(stu->ID, stu->coursenow[i]);
-		std::cout << cou->ID << "\t";
-		_LText();
-		std::wcout << cou->name << '\t' << cou->teacher << '\t';
-		_SText();
-		std::cout << temp.mids << "\t" << temp.finals << '\t' << temp.others << '\t' << temp.totals << '\n';
-		deleteCourse(cou);
-	}
+	std::cout << "------------- Registed Course ---------------";
+	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
+	int n = _msize(stu->coursenow) / sizeof(char*);
+	char sem = stu->coursenow[0][strlen(stu->coursenow[0]) - 1];
+	char y[5];
+	ToString(stu->coursenow[0]).copy(y, 4, strlen(stu->coursenow[0]) - 5);
+	y[4] = '\0';
+	std::cout << "[]" << sem << ":" << y;
 	_getwch();
 	CourseInformaion(stu);
 }
@@ -136,7 +131,7 @@ void CourseInformaion(Student* stu) {
 	std::cout << "------------- Course ---------------";
 	char** menu = new char* [4];
 	menu[0] = new char[] {"Register Course"};
-	menu[1] = new char[] {"Couse now"};
+	menu[1] = new char[] {"Regsited Couse"};
 	menu[2] = new char[] {"Completed Courses"};
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2)) {
@@ -152,19 +147,9 @@ void CourseInformaion(Student* stu) {
 }
 void ViewCouse(Student* stu) {
 	system("cls");
-	std::cout << "------------- All Course ---------------\n";
-	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); CourseInformaion(stu); return; }
-	int n = _msize(stu->allcourse) / sizeof(stu->allcourse);
-	for (int i = 0; i < n; i++) {
-		Course* cou = BinToCourse(GetFilePath(stu->allcourse[i]));
-		Score temp = GetScore(stu->ID, stu->allcourse[i]);
-		std::cout << cou->ID << "\t";
-		_LText();
-		std::wcout << cou->name << '\t' << cou->teacher << '\t';
-		_SText();
-		std::cout << temp.mids << "\t" << temp.finals << '\t' << temp.others << '\t' << temp.totals << '\n';
-		deleteCourse(cou);
-	}
+	std::cout << "------------- All Course ---------------";
+	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
+	int n = _msize(stu->allcourse) / sizeof(char*);
 	_getwch();
 	CourseInformaion(stu);
 }
@@ -176,7 +161,7 @@ void registerMenu(Student* stu) {
 	if (run == -1) { std::cout << "Don't have any register time\n> Back < "; _getwch(); CourseInformaion(stu); return; }
 
 	Filelist* filelist = TakeFileInFolder(current);
-	if (filelist == nullptr) { std::cout << "Don't have any course to register!\n> Back <"; _getwch(); CourseInformaion(stu);  return; }
+	if (filelist == nullptr) return;
 	int n = CountFile(filelist);
 	Course** course = new Course * [n];
 	int m = 0;
@@ -282,7 +267,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 				had += 1;
 				SessionConflict(course, reg, take);
 				for (int i = 0; i < n; i++) {
-					GotoXY(100, 2*i + 3);
+					GotoXY(100, i + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
 					else if (take[i] == -1) { std::cout << 'X'; }
 					else std::cout << " ";

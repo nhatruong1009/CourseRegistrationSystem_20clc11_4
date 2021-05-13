@@ -29,27 +29,27 @@ void editCourse();
 void resetRegister();
 void timeRegister(std::string sem, Date startReg, Date endReg);
 void OpenRegister();
-std::string chooseTime(bool timeout = true,bool timestart=true);
+std::string chooseTime(bool timeout = true);
 #endif // !_StaffMenuMode
 
 #ifndef _EditCourse
 #define _EditCourse
 
 unsigned short LStringToPerform(wchar_t* temp);
+float StringToFloat(wchar_t* ch);
 Course* StringToCourse(std::wstring str);
 Course* searchID(_Course* courselist, std::wstring search);
 Course* searchName(_Course* courselist, std::wstring search);
 Course* searchTeacher(_Course* courselist, std::wstring search);
 Course* searchCourse(_Course* courselist, std::wstring& search);
 _Course* FileInCourse(std::string filename);
-std::string GetFilePath(char* CourseID);
 void FileOutCourse(_Course* cou, std::string fileout);
 void searchScore(_Course* allcourse);
-void editScore(Course* cou, std::string current);
 void editCourse(Course* cou, std::string filename, std::string current);
 void editInfo(Course* cou, std::string filename, std::string current);
-void TypeInScore(Course* cou, std::string current);
-void FileInScore(Course* cou, std::string current);
+void editScore(Course* cou, std::string filename, std::string current);
+void FileInScore(Course* cou, std::string direction);
+void StringToScore(Score& a, std::wstring str);
 void editCourse(std::string filename, std::string current);
 void deleteCourse(Course* cour, std::string filename, std::string current);
 void displayScore(Score a);

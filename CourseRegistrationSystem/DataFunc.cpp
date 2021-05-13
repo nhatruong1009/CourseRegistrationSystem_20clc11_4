@@ -218,7 +218,7 @@ Score* LoadScore(std::string filename) {
 	fi.read((char*)&numberofstu, sizeof(unsigned short));
 	Score* sco = new Score[numberofstu];
 	for (int i = 0; i < numberofstu; i++) {
-		fi.read((char*)&sco[i].ID, sizeof(unsigned __int64));
+		fi.read((char*)sco[i].ID, sizeof(unsigned __int64));
 		fi.read((char*)&sco[i].totals, sizeof(float) * 4);
 	}
 	return sco;
@@ -236,11 +236,12 @@ void SaveScore(Course* cou, std::string filename) {
 	fo.close();
 }
 void SaveScore(Course* cou, Score* score, std::string filename) {
-	if (cou == nullptr || score==nullptr) return;
+	if (cou == nullptr) return;
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
 	fo.write((char*)&cou->numberofstudent, sizeof(unsigned short));
 	for (int i = 0; i < cou->numberofstudent; i++) {
-		fo.write((char*)&score[i], sizeof(Score));
+		fo.write((char*)cou->stuID[i], sizeof(unsigned __int64));
+		fo.write((char*)&score->totals, sizeof(float) * 4);
 	}
 	fo.close();
 }
@@ -260,6 +261,8 @@ Score GetStuScore(std::string path, unsigned __int64 ID)
 		fin.read((char*)&temp, 8);
 		if (fin.eof())
 		{
+			std::cout << "Not found " << ID;
+			fin.close();
 			return Score{};
 		}
 	}
@@ -279,14 +282,13 @@ Score GetScore(unsigned __int64 ID,char*coursename)
 	{
 		return Score{};
 	}
-	char sem = courseID[n - 1];
-	char year[5];
-	for (int i = 0; i < 4; i++) {
-		year[i] = courseID[n - (5 - i)];
-	}
-	for (int i = 0; i < 5; i++)courseID.pop_back();
-	year[4] = '\0';
-	Score result = GetStuScore("Data\\SchoolYear\\" + ToString(year) + "\\Semester"+sem+"\\"+ courseID + "Score", ID);
+	std::string semester = "Semester";
+	semester += courseID[n];
+	std::string year = "";
+	year = year + courseID[n - 4] + courseID[n - 3] + courseID[n - 2] + courseID[n - 1];
+	for (int i = 0; i < 5; i++)
+		courseID.pop_back();
+	Score result = GetStuScore("Data\\SchoolYear\\" + year + "\\" + semester + "\\" + courseID + "Score", ID);
 	result.ID = ID;
 	return result;
 }
@@ -446,7 +448,7 @@ void CourseToBin(Course* course, std::string filename, std::string current) {
 }
 void registerCourse(Course** newReg, std::string sem, unsigned __int64 stuID) {
 	if (newReg == nullptr) return;
-	int n = _msize(newReg) / sizeof(*newReg);
+	int n = _msize(newReg) / sizeof(newReg);
 	for (int i = 0; i < n; i++) {
 		newReg[i]->numberofstudent += 1;
 		std::fstream filecou(sem + "\\" + newReg[i]->ID, std::fstream::in | std::fstream::out | std::fstream::binary);
@@ -462,7 +464,7 @@ void registerCourse(Course** newReg, std::string sem, unsigned __int64 stuID) {
 }
 void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID) {
 	if (cancelReg == nullptr) return;
-	int n = _msize(cancelReg) / sizeof(*cancelReg);
+	int n = _msize(cancelReg) / sizeof(cancelReg);
 	for (int i = 0; i < n; i++) {
 		int n = 0;
 		for (int j = 0; j < cancelReg[i]->maxstudent; j++) {
@@ -517,7 +519,7 @@ bool isConflict(Course* a, Course* b)		// true means conflict, false is not
 }
 void SessionConflict(Course** a, Course** b, int*& Register)
 {
-	int n = _msize(a) / sizeof(*a);
+	int n = _msize(a) / sizeof(a);
 
 	for (int i = 0; i < n; i++)
 	{
@@ -554,7 +556,7 @@ void classifyCourse(Course** reg, Course** wasReg, Course**& cancelReg, Course**
 		}
 	}
 
-	if (wasReg != nullptr) m = _msize(wasReg) / sizeof(*wasReg);
+	if (wasReg != nullptr) m = _msize(wasReg) / sizeof(wasReg);
 	if (m + n == 0) return;
 	int* a = new int[n + m];
 	int* b = new int[n + m];
@@ -769,7 +771,7 @@ Student* StringToStudent(std::wstring str) {
 	_LText();
 	stu->ID = StringToInt(temp);
 	stu->account.username = new char[end - beg + 1];
-	stu->account.username[end - beg] = '\0';
+	stu->account.username[end - beg] = L'\0';
 	LStrToStr(stu->account.username, end - beg, temp);
 	delete[] temp;
 
@@ -926,7 +928,7 @@ void StuToBin(Student* stu, std::string fileout) {
 	fo.write((char*)&stu->birth, sizeof(Date));
 
 	if (stu->coursenow == nullptr) k = 0;
-	else k = _msize(stu->coursenow) / sizeof(*stu->coursenow);
+	else k = _msize(stu->coursenow) / sizeof(stu->coursenow);
 	fo.write((char*)&k, sizeof(int));
 	for (int i = 0; i < k; i++) {
 		int e = _msize(stu->coursenow[i]) / sizeof(char) + 1;
@@ -934,7 +936,7 @@ void StuToBin(Student* stu, std::string fileout) {
 		fo.write(stu->coursenow[i], e);
 	}
 	if (stu->allcourse == nullptr) k = 0;
-	else k = _msize(stu->allcourse) / sizeof(*stu->allcourse);
+	else k = _msize(stu->allcourse) / sizeof(stu->allcourse);
 	fo.write((char*)&k, sizeof(int));
 	for (int i = 0; i < k; i++) {
 		int e = _msize(stu->allcourse[i]) / sizeof(char) + 1;
@@ -1194,14 +1196,14 @@ void deleteStu(Student*& a)
 	delete[]a->lastname;
 	if (a->coursenow)
 	{
-		int n = _msize(a->coursenow) / sizeof(char*);
+		int n = _msize(a->coursenow) / sizeof(a->coursenow);
 		for (int i = 0; i < n; i++)
 			delete[]a->coursenow[i];
 		delete[]a->coursenow;
 	}
 	if (a->allcourse)
 	{
-		int n = _msize(a->allcourse) / sizeof(char*);
+		int n = _msize(a->allcourse) / sizeof(a->allcourse);
 		for (int i = 0; i < n; i++)
 			delete[]a->allcourse[i];
 		delete[]a->allcourse;
@@ -1211,7 +1213,7 @@ void deleteStu(Student*& a)
 }
 void deleteStu(Student**& a) {
 	if (a == nullptr) return;
-	int n = _msize(a) / sizeof(Student*);
+	int n = _msize(a) / sizeof(a);
 	for (int i = 0; i < n; i++) {
 		deleteStu(a[i]);
 	}
@@ -1245,14 +1247,17 @@ void deleteCourse(Course*& a)
 	if (a->score)
 	{
 		int n = _msize(a->score) / sizeof(*a->score);
-		delete[] a->score;
+		for (int i = 0; i < n; i++) {
+			delete[] a->score[i].name;
+		}
+		delete a->score;
 	}
 	delete a;
 	a = nullptr;
 }
 void deleteCourse(Course**& a) {
 	if (a == nullptr) return;
-	int n = _msize(a) / sizeof(*a);
+	int n = _msize(a) / sizeof(a);
 	for (int i = 0; i < n; i++) {
 		deleteCourse(a[i]);
 	}
@@ -1285,7 +1290,7 @@ void deleteClasses(Classes*& a)
 
 void deleteClasses(Classes**& a) {
 	if (a == nullptr) return;
-	int n = _msize(a) / sizeof(*a);
+	int n = _msize(a) / sizeof(a);
 	for (int i = 0; i < n; i++) {
 		deleteClasses(a[i]);
 	}
@@ -1320,7 +1325,7 @@ void deleteSemester(Semester* a)
 }
 void deleteSchoolyear(SchoolYear*& a)
 {
-	int n = _msize(a->semester) / sizeof(*a->semester);
+	int n = _msize(a->semester) / sizeof(a->semester);
 	for (int i = 0; i < n; i++) {
 		deleteSemester(&a->semester[i]);
 	}
@@ -1356,7 +1361,7 @@ void deleteStuArray(Student**& a)
 {
 	if (a == nullptr)
 		return;
-	int n = _msize(a) / sizeof(*a);
+	int n = _msize(a) / sizeof(a);
 	for (int i = 0; i < n; i++)
 	{
 		if (a[i])

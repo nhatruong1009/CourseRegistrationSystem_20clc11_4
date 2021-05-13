@@ -23,6 +23,7 @@ struct Account
 struct Score
 {
 	unsigned __int64 ID;
+	wchar_t* name = nullptr;
 	float totals = 0;
 	float finals = 0;
 	float mids = 0;
@@ -124,7 +125,7 @@ bool CheckDate(Date dat);
 Score* LoadScore(std::string filename);
 void SaveScore(Course* cou, std::string filename);
 void SaveScore(Course* cou, Score* score, std::string filename);
-Score GetStuScore(std::string path, unsigned __int64 ID);
+Score GetStuScore(std::string path, Student* stu);
 Score GetScore(unsigned __int64 ID, char* coursename);
 //***********************************************************
 
