@@ -777,18 +777,49 @@ void viewCourse() {
 			else Cour = Cour->pNext;
 		}
 		Filelist* temp = Cour;
-		system("cls");
 		if (temp != nullptr) {
-			do {
+
+			int m = 3;
+			int beg = 0;
+			int max = CountFile(temp);
+
+			char take;
+			system("cls");
+			for (int i = beg; i < beg + m && i < max; i++) {
 				Course* k = BinToCourse(current + "\\" + temp->filename);
 				displayCourse(k);
 				deleteCourse(k);
 				temp = temp->pNext;
-			} while (temp != Cour);
-			_getwch();
+			}
+			do {
+				take = toupper(_getwch());
+				if ((take == 'A' || take == KEY_LEFT) && beg != 0) {
+					beg -= m;
+					system("cls");
+					for (int i = 0; i < m; i++) temp = temp->pPrev;
+					for (int i = beg; i < beg + m && i < max; i++) {
+						Course* k = BinToCourse(current + "\\" + temp->filename);
+						displayCourse(k);
+						deleteCourse(k);
+						temp = temp->pNext;
+					}
+				}
+				else if ((take == 'D' || take == KEY_RIGHT) && beg + m < max) {
+					beg += m;
+					system("cls");
+					for (int i = beg; i < beg + m && i < max; i++) {
+						Course* k = BinToCourse(current + "\\" + temp->filename);
+						displayCourse(k);
+						deleteCourse(k);
+						temp = temp->pNext;
+					}
+				}
+
+			} while (take != KEY_ENTER && take != 'E');
 			deleteFilelist(Cour);
 		}
 		else {
+			system("cls");
 			std::cout << "Empty!";
 			_getwch();
 		}
