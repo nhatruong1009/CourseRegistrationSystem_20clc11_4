@@ -121,11 +121,11 @@ void ViewCourseNow(Student* stu) {
 	for (int i = 0; i < n; i++) {
 		Course* cou = BinToCourse(GetFilePath(stu->coursenow[i]));
 		Score temp = GetScore(stu->ID, stu->coursenow[i]);
-		std::cout << cou->ID << "\t";
+		std::cout <<std::setw(20)<<std::right<< cou->ID;
 		_LText();
-		std::wcout << cou->name << '\t' << cou->teacher << '\t';
+		std::wcout << std::setw(30)<< cou->name << std::setw(30) << cou->teacher;
 		_SText();
-		std::cout << temp.mids << "\t" << temp.finals << '\t' << temp.others << '\t' << temp.totals << '\n';
+		std::cout << std::setw(7) <<temp.mids << std::setw(7) << temp.finals << std::setw(7) << temp.others << std::setw(7) << temp.totals << '\n';
 		deleteCourse(cou);
 	}
 	_getwch();

@@ -47,7 +47,9 @@ void SaveSchoolYear(SchoolYear* sch) {
 	char* direction = StrCat(local, year);
 	SaveNewStu(sch->student, direction);
 	SaveClass(sch->classes, direction);
-	delete[]local, year, direction;
+	delete[]local;
+	delete[]year;
+	delete[]direction;
 }
 std::string TakeCurrent() {
 	Filelist* Plan = TakeFileInFolder("Data\\SchoolYear");
@@ -157,8 +159,8 @@ void MakeCurentTime(int year) {
 			for (int i = 0; i < 3; i++) {
 				fo.write((char*)&start[i], sizeof(Date));
 				fo.write((char*)&end[i], sizeof(Date));
-				fo.close();
 			}
+			fo.close();
 			std::cout << "\n__________ Sucess _________\n";
 		}
 		if (take == 2) {
@@ -414,8 +416,10 @@ void AddClass() {
 	if (grade != "") {
 		int year = StringToInt(&grade[1]);
 		SchoolYear* newscholl = AddSchoolYear(year);
+		std::cout << "Saving .....";
 		SaveSchoolYear(newscholl);
 		deleteSchoolyear(newscholl);
+		std::cout << "\nDone";
 	}
 
 	deleteFilelist(list);
@@ -602,6 +606,7 @@ void viewPlan() {
 				fi.read((char*)&dEnd[3 * i + j], sizeof(Date));
 			}
 			fl = fl->pNext;
+			fi.close();
 		}
 		displayAllYear(year, n, dStart, dEnd);
 	}
@@ -709,6 +714,8 @@ void CSVCourse(std::string current) {
 	std::cin >> filename;
 	_Course* cou = FileInCourse(filename);
 	CourseToBin(cou, current);
+	_getwch();
+
 	delete_Course(cou);
 	std::cout << "Done\n> back <";
 	_getwch();

@@ -1075,6 +1075,7 @@ void SaveClass(_Class* cls, char* direction) {
 		delete[] direction;
 		cls = cls->pNext;
 	} while (cls != temp);
+	delete[] direc;
 }
 void SaveClass(Classes cl, const char* fileout) {
 	std::fstream fo(fileout, std::fstream::out | std::fstream::binary);
@@ -1303,15 +1304,15 @@ void delete_Class(_Class*& a)
 {
 	if (a == nullptr)
 		return;
-	_Class* cur = a->pNext;
-	while (cur != a)	// Deallocate Second Node afterwards
+	_Class* cur = a;
+	do	// Deallocate Second Node afterwards
 	{
+		deleteClasses(cur->classes);
 		_Class* temp = cur;
 		cur = cur->pNext;
 		delete temp;
-	}
+	} while (cur != a);
 	// Deallocate First Node 
-	delete cur;
 	a = nullptr;
 }
 void deleteSemester(Semester* a)
@@ -1324,6 +1325,7 @@ void deleteSchoolyear(SchoolYear*& a)
 	delete_Class(a->classes);
 	delete_Stu(a->student);
 	delete a;
+	a = nullptr;
 }
 void deleteFilelist(Filelist*& a)
 {
