@@ -193,7 +193,7 @@ void deleteCourse(Course**& a);
 void delete_Course(_Course*& a);
 void deleteClasses(Classes*& a);
 void deleteClasses(Classes**& a);
-void deleteSemester(Semester* a);
+void deleteSemester(Semester*& a);
 void deleteSchoolyear(SchoolYear*& a);
 void deleteFilelist(Filelist*& a);
 void deleteIntArray(int*& a);

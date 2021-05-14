@@ -1315,13 +1315,18 @@ void delete_Class(_Class*& a)
 	// Deallocate First Node 
 	a = nullptr;
 }
-void deleteSemester(Semester* a)
+void deleteSemester(Semester*& a)
 {
+	if (a == nullptr)
+		return;
 	delete_Course(a->course);
 	delete a;
+	a = nullptr;
 }
 void deleteSchoolyear(SchoolYear*& a)
 {
+	if (a == nullptr)
+		return;
 	delete_Class(a->classes);
 	delete_Stu(a->student);
 	delete a;
