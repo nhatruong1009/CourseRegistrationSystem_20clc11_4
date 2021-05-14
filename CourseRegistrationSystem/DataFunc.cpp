@@ -447,7 +447,6 @@ void registerCourse(Course** newReg, std::string sem, unsigned __int64 stuID) {
 	if (newReg == nullptr) return;
 	int n = _msize(newReg) / sizeof(*newReg);
 	for (int i = 0; i < n; i++) {
-		newReg[i]->numberofstudent += 1;
 		std::fstream filecou(sem + "\\" + newReg[i]->ID, std::fstream::in | std::fstream::out | std::fstream::binary);
 		filecou.seekp(0, std::fstream::beg);
 		filecou.write((char*)&newReg[i]->numberofstudent, sizeof(unsigned short));
@@ -471,7 +470,6 @@ void cancelCourse(Course** cancelReg, std::string sem, unsigned __int64 stuID) {
 				break;
 			}
 		}
-		cancelReg[i]->numberofstudent -= 1;
 		cancelReg[i]->stuID[n] = cancelReg[i]->stuID[cancelReg[i]->numberofstudent];
 		CourseToBin(cancelReg[i], cancelReg[i]->ID, sem);
 		char* accountID = StrToChar(NumToStr(stuID));
@@ -522,9 +520,6 @@ void SessionConflict(Course** a, Course** b, int*& Register)
 	for (int i = 0; i < n; i++)
 	{
 		Register[i] = 0;
-		if (a[i]->numberofstudent == a[i]->maxstudent) {
-			Register[i] = 1; continue;
-		}
 		for (int j = 0; j < 5; j++)
 		{
 			if (b[j] == nullptr) break;
@@ -539,6 +534,9 @@ void SessionConflict(Course** a, Course** b, int*& Register)
 				break;
 			}
 
+		}
+		if (a[i]->numberofstudent == a[i]->maxstudent && Register[i]!=1) {
+			Register[i] = -1; continue;
 		}
 	}
 

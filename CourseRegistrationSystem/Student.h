@@ -16,7 +16,7 @@ void CourseInformaion(Student* stu);
 void ViewCouse(Student* stu);
 void registerMenu(Student* stu);
 inline void removereg(Course** reg, Course* re);
-void takeCourseReg(Course** course, int*& take, Student* stu, std::string current,int m=3);
+void takeCourseReg(Course** course, int*& take, Student* stu, std::string current,int m=5);
 void ChangeInfo(Student*& CurrentUser);
 #endif // !_StudentMode
 

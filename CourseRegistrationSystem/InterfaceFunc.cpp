@@ -338,6 +338,8 @@ void displaylistCourse(Course* cou) {
 	}
 }
 
+//std::cout<<"ID\t"<<std::setw(30)<<std::left<<"Course name"<<std::setw(30)<<"Teacher"<<std::setw(8)<<'\t'<<"Slots\t"<<"Day1"<<setw(4)<<"  "<<"Day2";
+
 void inline updateSemesterResult(std::string sem) {// this really hard :(( i hope it work
 	Filelist* Courses = TakeFileInFolder(sem);
 	int n = CountFile(Courses);
