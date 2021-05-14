@@ -483,13 +483,3 @@ void DealocatedArrString(wchar_t**& stringarr) {
 	delete[] stringarr;
 	stringarr = nullptr;
 }
-
-
-
-
-
-
-
-
-
-

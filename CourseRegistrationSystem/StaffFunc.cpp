@@ -535,7 +535,7 @@ void courseStaff() {
 	std::cout << "---------- Course ----------";
 	char** menu = new char* [5];
 	menu[0] = new char[] {"Add Course"};
-	menu[1] = new char[] {"View Course"};
+	menu[1] = new char[] {"View list Courses"};
 	menu[2] = new char[] {"Edit Course"};
 	menu[3] = new char[] {"Open Register time"};
 	menu[4] = new char[] {"Back"};
@@ -768,6 +768,19 @@ void addCourse() {
 	DealocatedArrString(menu);
 	courseStaff();
 }
+
+void infomationScoreOfCourse(std::string coursefile) {
+	Score*sco = LoadScore(coursefile + "Score");
+	if (sco == nullptr) std::cout << "Course's scores empty!";
+	else {
+		int n = _msize(sco) / sizeof(*sco);
+		std::cout << std::setw(15) << std::right << "ID" << std::setw(6) << "Mid score" << std::setw(6) << "Final score" << std::setw(6) << "Other score" << std::setw(6) << "Total score\n";
+		for (int i = 0; i < n; i++) {
+			std::cout << std::setw(15) << std::right << sco[i].ID << std::setw(6) << sco[i].mids << std::setw(6) << sco[i].finals << std::setw(6) << sco[i].others << std::setw(6) << sco[i].totals << '\n';
+		}
+	}
+}
+
 void viewCourse() {
 	std::string current = chooseTime(false, false);
 	if (current != "") {
@@ -791,31 +804,64 @@ void viewCourse() {
 				deleteCourse(k);
 				temp = temp->pNext;
 			}
+			int index = 0;
+			GotoXY(60, 3 + 9 * index);
+			std::cout << "<---";
 			do {
 				take = toupper(_getwch());
-				if ((take == 'A' || take == KEY_LEFT) && beg != 0) {
-					beg -= m;
-					system("cls");
-					for (int i = 0; i < m; i++) temp = temp->pPrev;
-					for (int i = beg; i < beg + m && i < max; i++) {
-						Course* k = BinToCourse(current + "\\" + temp->filename);
-						displayCourse(k);
-						deleteCourse(k);
-						temp = temp->pNext;
+				if(take=='W'||take ==KEY_UP){
+					if (index != 0) {
+						GotoXY(60, 3 + 9 * index);
+						std::cout << "    ";
+						index -= 1;
+						GotoXY(60, 3 + 9 * index);
+						std::cout << "<---";
 					}
-				}
-				else if ((take == 'D' || take == KEY_RIGHT) && beg + m < max) {
-					beg += m;
-					system("cls");
-					for (int i = beg; i < beg + m && i < max; i++) {
-						Course* k = BinToCourse(current + "\\" + temp->filename);
-						displayCourse(k);
-						deleteCourse(k);
-						temp = temp->pNext;
+					else if (index == 0 && beg != 0) {
+						beg -= m;
+						system("cls");
+						for (int i = 0; i < m; i++) temp = temp->pPrev;
+						for (int i = beg; i < beg + m && i < max; i++) {
+							Course* k = BinToCourse(current + "\\" + temp->filename);
+							displayCourse(k);
+							deleteCourse(k);
+							temp = temp->pNext;
+						}
+						index = m - 1;
+						GotoXY(60, 3 + 9 * index);
+						std::cout << "<---";
 					}
 				}
 
-			} while (take != KEY_ENTER && take != 'E');
+				else if (take == 'S' || take == KEY_DOWN) {
+					if (index < m-1 && beg + index < max - 1) {
+						GotoXY(60, 3 + 9 * index);
+						std::cout << "    ";
+						index += 1;
+						GotoXY(60, 3 + 9 * index);
+						std::cout << "<---";
+					}
+					else if (index == m-1 && beg + m < max) {
+						beg += m;
+						system("cls");
+						for (int i = beg; i < beg + m && i < max; i++) {
+							Course* k = BinToCourse(current + "\\" + temp->filename);
+							displayCourse(k);
+							deleteCourse(k);
+							temp = temp->pNext;
+						}
+						index = 0;
+						GotoXY(60, 3 + 9 * index);
+						std::cout << "<---";
+					}
+				}
+			} while (take != KEY_ENTER && take != KEY_ESC);
+			if (take == KEY_ENTER) {
+				for (int i = 0; i < index; i++)temp = temp->pNext;
+				infomationScoreOfCourse(current + "\\" + temp->filename);
+				_getwch();
+				viewCourse();
+			}
 			deleteFilelist(Cour);
 		}
 		else {
