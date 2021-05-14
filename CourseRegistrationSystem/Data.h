@@ -61,7 +61,7 @@ struct Classes
 {
 	char* name;
 	int numberofstudent = 0;
-	unsigned __int64* ID = nullptr;
+	unsigned __int64* ID;
 };
 struct _Student
 {

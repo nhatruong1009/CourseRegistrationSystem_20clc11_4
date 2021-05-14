@@ -223,7 +223,6 @@ Score* LoadScore(std::string filename) {
 	}
 	return sco;
 }
-
 void SaveScore(Course* cou, std::string filename) {
 	if (cou == nullptr) return;
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
@@ -236,7 +235,7 @@ void SaveScore(Course* cou, std::string filename) {
 	fo.close();
 }
 void SaveScore(Course* cou, Score* score, std::string filename) {
-	if (cou == nullptr || score==nullptr) return;
+	if (cou == nullptr || score == nullptr) return;
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
 	fo.write((char*)&cou->numberofstudent, sizeof(unsigned short));
 	for (int i = 0; i < cou->numberofstudent; i++) {
@@ -271,7 +270,7 @@ Score GetStuScore(std::string path, unsigned __int64 ID)
 	fin.close();
 	return a;
 }
-Score GetScore(unsigned __int64 ID,char*coursename)
+Score GetScore(unsigned __int64 ID, char* coursename)
 {
 	std::string courseID = ToString(coursename);
 	int n = courseID.size();
@@ -286,7 +285,7 @@ Score GetScore(unsigned __int64 ID,char*coursename)
 	}
 	for (int i = 0; i < 5; i++)courseID.pop_back();
 	year[4] = '\0';
-	Score result = GetStuScore("Data\\SchoolYear\\" + ToString(year) + "\\Semester"+sem+"\\"+ courseID + "Score", ID);
+	Score result = GetStuScore("Data\\SchoolYear\\" + ToString(year) + "\\Semester" + sem + "\\" + courseID + "Score", ID);
 	result.ID = ID;
 	return result;
 }
@@ -793,7 +792,7 @@ Student* StringToStudent(std::wstring str) {
 	temp = new wchar_t[end - beg + 1];
 	temp[end - beg] = L'\0';
 	str.copy(temp, end - beg, beg);
-	if (wcscmp(temp, L"Nam") == 0 || wcscmp(temp, L"Men")==0)stu->gender = 'M';
+	if (wcscmp(temp, L"Nam") == 0 || wcscmp(temp, L"Men") == 0)stu->gender = 'M';
 	else stu->gender = 'W';
 	delete[] temp;
 
@@ -875,7 +874,7 @@ std::string GetFilePath(unsigned __int64 ID)
 	else return "";
 }
 
-void SaveNewStu(_Student* stu,char* direction) {
+void SaveNewStu(_Student* stu, char* direction) {
 	if (stu == nullptr) return;
 	char* direc = StrCat(direction, "\\Student\\");
 	_Student* temp = stu;
@@ -1036,9 +1035,11 @@ Classes MakeClass(_Student*& all, bool cls, int x, int y) {
 		return result;
 	}
 	else {
+		result.numberofstudent = 0;
 		result.ID = nullptr;
 		return result;
 	}
+
 }
 Classes* LoadClass(const char* filein) {
 	Classes* result = new Classes;
@@ -1055,7 +1056,6 @@ Classes* LoadClass(const char* filein) {
 	return result;
 }
 void AddClass(_Class*& cls, Classes sourse) {
-	if (sourse.ID = nullptr) return;
 	if (cls == nullptr) {
 		cls = new _Class{ sourse };
 		cls->pNext = cls;

@@ -341,6 +341,7 @@ void LoginStu(Student*& CurrentUser)
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
 		std::getline(std::cin, U);
+		if (U == "") { CurrentUser = 0; break; }
 		if (loop) break;
 		std::cout << "Password: ";
 		P = InputHidden();

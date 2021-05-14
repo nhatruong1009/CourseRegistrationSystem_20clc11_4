@@ -12,11 +12,13 @@ SchoolYear* AddSchoolYear(int year) {
 	wchar_t* yy = StrToChar(NumToLStr(a->year));
 	wchar_t* file = new wchar_t[] { L"Data\\Grade\\K" };
 	StrCat(file, wcslen(yy), yy);
+	delete[]yy;
 	_wmkdir(file);
 	wchar_t* temp = StrCat(file, L"\\Student");
 	_wmkdir(temp);
 	delete[] temp;
 	temp = StrCat(file, L"\\Class");
+	delete[] file;
 	_wmkdir(temp);
 	delete[] temp;
 	a->classes = nullptr;
@@ -36,7 +38,6 @@ SchoolYear* AddSchoolYear(int year) {
 		chose = Menu(choselist, 5, 1);
 	}
 	DealocatedArrString(choselist);
-	delete[]yy, file;
 	return a;
 }
 void SaveSchoolYear(SchoolYear* sch) {
@@ -152,8 +153,8 @@ void MakeCurentTime(int year) {
 		DealocatedArrString(menu);
 		delete[] temp, SemesterTime;
 		if (take == 0) {
+			std::fstream fo(SemesterTime, std::fstream::out | std::fstream::binary);
 			for (int i = 0; i < 3; i++) {
-				std::fstream fo(SemesterTime, std::fstream::out | std::fstream::binary);
 				fo.write((char*)&start[i], sizeof(Date));
 				fo.write((char*)&end[i], sizeof(Date));
 				fo.close();
@@ -211,9 +212,10 @@ bool LoginStaff()
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
 		std::getline(std::cin, U);
+		if (U == "") return false;
 		std::cout << "Password: ";
 		P = InputHidden();
-		if (U == "" || P == "")
+		if (P == "")
 			return false;
 		while (sth1 != U)
 		{
@@ -333,15 +335,18 @@ void addGrade() {
 	system("cls");
 	std::cout << "---------- Add Grande ----------";
 	std::cout << "\nGrade: ";
-	int grade;
-	std::cin >> grade;
-	SchoolYear* a = AddSchoolYear(grade);
-	std::cout << "Saving..... ";
-	SaveSchoolYear(a);
-	deleteSchoolyear(a);
-	std::cout << "\ndone";
+	int grade = InputNumber();
+	if (grade != -1) {
+		SchoolYear* a = AddSchoolYear(grade);
+		std::cout << "Saving..... ";
+		SaveSchoolYear(a);
+		deleteSchoolyear(a);
+		std::cout << "\ndone";
+	}
+	else {
+		std::cout << "\nCancel";
+	}
 	_getwch();
-	//delete schoolyear here
 	gradeMenu();
 }
 void ViewGrade() {
