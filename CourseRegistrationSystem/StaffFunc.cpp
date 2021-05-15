@@ -917,7 +917,7 @@ void editCourse() {
 		if (k != -1) {
 			Filelist* t = Cour;
 			for (int i = 0; i < k; i++)t = t->pNext;
-			editCourse(Cour->filename, current);
+			editCourse(t->filename, current);
 			deleteFilelist(t);
 		}
 		else
