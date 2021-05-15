@@ -920,6 +920,8 @@ void editCourse() {
 			editCourse(Cour->filename, current);
 			deleteFilelist(t);
 		}
+		else
+			deleteFilelist(Cour);
 	}
 	else {
 		std::cout << "\nNot available\n";
@@ -1073,6 +1075,11 @@ std::string chooseTime(bool timeout, bool timestart) {
 				deleteFilelist(sem);
 				return "Data\\SchoolYear\\" + year + "\\" + semester;
 				std::fstream a;
+			}
+			else
+			{
+				deleteFilelist(list);
+				deleteFilelist(sem);
 			}
 		}
 	}
@@ -1475,7 +1482,13 @@ void editCourse(std::string filename, std::string current) {
 	DealocatedArrString(menu);
 	switch (chose)
 	{
+	case -1:
+		deleteCourse(cour);
+		break;
 	case 0: editCourse(cour, filename, current); break;
+	case 2:
+		deleteCourse(cour);
+		break;
 	case 1:
 		std::string check;
 		fistrun(check);
