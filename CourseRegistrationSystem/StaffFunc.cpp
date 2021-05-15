@@ -65,7 +65,8 @@ std::string TakeCurrent() {
 		{
 			fi.read((char*)&start, sizeof(Date));
 			fi.read((char*)&end, sizeof(Date));
-			if (start >= temp) { year = Plan->filename; semester = k + 1 + '0'; }
+			//start >= temp bi loi
+			if (start <= temp) { year = Plan->filename; semester = k + 1 + '0'; }
 		}
 		Plan = Plan->pNext;
 	}
@@ -102,13 +103,13 @@ void MakeCurentTime(int year) {
 	delete[] curent;
 	StrCat(temp, std::to_string(year).length(), std::to_wstring(year));
 	int index = 0;
-	if (_wmkdir(temp) == -1) { 
+	if (_wmkdir(temp) == -1) {
 		index = editPlanTime(ToString(temp) + "\\time");
 	}
-	if(index==3){
+	if (index == 3) {
 		std::cout << "This year can't change anymore \n> back <";
 	}
-	else 
+	else
 	{
 		StrCat(temp, 2, L"\\");
 		for (int i = 0; i < 3; i++) {
@@ -321,14 +322,13 @@ void StaffasStu() {
 	unsigned __int64 id;
 	std::cin >> id;
 	Student* stu = BinToStu(GetFilePath(id));
-	if (stu != nullptr) 
+	if (stu != nullptr)
 	{
-		deleteStu(stu);
 		studentMode(stu);
 	}
-	else 
-	{ 
-		std::cout << "This student does not exist"; 
+	else
+	{
+		std::cout << "This student does not exist";
 		_getwch();
 		studentMenuStaff();
 	}
@@ -567,7 +567,7 @@ void courseStaff() {
 
 }
 
-void addSchoolPlan(){
+void addSchoolPlan() {
 	int time;
 	system("cls");
 	std::cout << "--------- School Plan ---------";
@@ -581,12 +581,12 @@ void addSchoolPlan(){
 	_getwch();
 }
 
-void inline displayAllYear(int* year,int n, Date* dStart, Date* dEnd, int k=4) {
+void inline displayAllYear(int* year, int n, Date* dStart, Date* dEnd, int k = 4) {
 	char get;
 	int index = 0;
 	do {
 		system("cls");
-		for (int i = index; i < index + k && i<n ; i++) {
+		for (int i = index; i < index + k && i < n; i++) {
 			std::cout << "Year: " << year[i] << '\n';
 			std::cout << "\tSemester 1:\nStart: " << dStart[3 * i + 0] << "\tEnd: " << dEnd[3 * i + 0] << '\n';
 			std::cout << "\tSemester 2:\nStart: " << dStart[3 * i + 1] << "\tEnd: " << dEnd[3 * i + 1] << '\n';
@@ -606,13 +606,13 @@ void viewPlan() {
 	system("cls");
 	Filelist* fl = TakeFileInFolder("Data\\SchoolYear");
 	if (fl == nullptr) { std::cout << "Empty!\n> back <"; _getwch(); }
-	else 
+	else
 	{
 		int n = CountFile(fl);
 		Date* dStart = new Date[3 * n];
 		Date* dEnd = new Date[3 * n];
 		int* year = new int[n];
-		for (int i = 0; i < n; i++) 
+		for (int i = 0; i < n; i++)
 		{
 			year[i] = StringToInt(fl->filename);
 			std::fstream fi("Data\\SchoolYear\\" + fl->filename + "\\time", std::fstream::in | std::fstream::binary);
@@ -767,21 +767,21 @@ void addCourse() {
 	std::string current = "";
 	switch (Menu(menu, 5, 3))
 	{
-	case 0: current = TakeCurrent(); break;
-	case 1: current = chooseTime(); break;
-
-	case 2:DealocatedArrString(menu);
+	case 0: current = TakeCurrent();  break;
+	case 1: current = chooseTime(false,false); break;
+	case 2:
+		DealocatedArrString(menu);
 		courseStaff(); break;
-	case -1:DealocatedArrString(menu);
+	case -1:
+		DealocatedArrString(menu);
 		courseStaff();
 		return;
-
 	}
 	if (current != "") {
 		addCourseInSemmester(current);
 	}
 	else {
-		std::cout << "None Exits";
+		std::cout << "None Exitsssss";
 		_getwch();
 	}
 	DealocatedArrString(menu);
@@ -789,7 +789,7 @@ void addCourse() {
 }
 
 void infomationScoreOfCourse(std::string coursefile) {
-	Score*sco = LoadScore(coursefile + "Score");
+	Score* sco = LoadScore(coursefile + "Score");
 	if (sco == nullptr) std::cout << "Course's scores empty!";
 	else {
 		int n = _msize(sco) / sizeof(*sco);
@@ -828,7 +828,7 @@ void viewCourse() {
 			std::cout << "<---";
 			do {
 				take = toupper(_getwch());
-				if(take=='W'||take ==KEY_UP){
+				if (take == 'W' || take == KEY_UP) {
 					if (index != 0) {
 						GotoXY(60, 3 + 9 * index);
 						std::cout << "    ";
@@ -853,14 +853,14 @@ void viewCourse() {
 				}
 
 				else if (take == 'S' || take == KEY_DOWN) {
-					if (index < m-1 && beg + index < max - 1) {
+					if (index < m - 1 && beg + index < max - 1) {
 						GotoXY(60, 3 + 9 * index);
 						std::cout << "    ";
 						index += 1;
 						GotoXY(60, 3 + 9 * index);
 						std::cout << "<---";
 					}
-					else if (index == m-1 && beg + m < max) {
+					else if (index == m - 1 && beg + m < max) {
 						beg += m;
 						system("cls");
 						for (int i = beg; i < beg + m && i < max; i++) {
@@ -1369,7 +1369,7 @@ void TypeInScore(Course* cou, std::string current) {
 			else if (check == KEY_ENTER) {
 				char** menu = new char* [5];
 				menu[0] = new char[] { "Mid term" };
-				menu[1] = new char[] {"Last term"};
+				menu[1] = new char[] {"Final term"};
 				menu[2] = new char[] {"Other score"};
 				menu[3] = new char[] {"Total Score"};
 				menu[4] = new char[] {"Confinm"};
@@ -1488,7 +1488,10 @@ void editCourse(std::string filename, std::string current) {
 	case -1:
 		deleteCourse(cour);
 		break;
-	case 0: editCourse(cour, filename, current); break;
+	case 0:
+		editCourse(cour, filename, current);
+		deleteCourse(cour);
+		break;
 	case 2:
 		deleteCourse(cour);
 		break;
@@ -1496,15 +1499,15 @@ void editCourse(std::string filename, std::string current) {
 		std::string check;
 		fistrun(check);
 		if (check == current || TakeDateStart(current) < GetTime()) {
-		if (TakeDateStart(current) < GetTime()) {
-			std::cout << "Can't be deleted";
-		}
-		else {
-			deleteCourse(cour, filename, current);
-			std::cout << "Success";
-		}
-		_getwch();
-		break;
+			if (TakeDateStart(current) < GetTime()) {
+				std::cout << "Can't be deleted";
+			}
+			else {
+				deleteCourse(cour, filename, current);
+				std::cout << "Success";
+			}
+			_getwch();
+			break;
 		}
 		deleteCourse(cour);
 	}

@@ -258,7 +258,7 @@ std::string ToString(char* source) {
 }
 std::string NumToStr(unsigned __int64 num) {
 	if (num == 0) return { "0" };
-	int n = ceil(log10f(num)+0.1);
+	int n = ceil(log10f(num) + 0.1);
 	unsigned __int64 temp = num;
 	std::string result;
 	result.resize(n);
@@ -269,7 +269,7 @@ std::string NumToStr(unsigned __int64 num) {
 	return result;
 }
 
-std::string FloatToStr(float num,int afterdot) {
+std::string FloatToStr(float num, int afterdot) {
 	std::string temp = NumToStr(num);
 	temp += '.';
 	for (int i = 0; i < afterdot; i++) {
