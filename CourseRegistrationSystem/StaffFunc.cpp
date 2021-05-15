@@ -1260,6 +1260,7 @@ void editInfo(Course* cou, std::string filename, std::string current) {
 		if (book == 0) {
 			_LText();
 			std::wcout << "New teacher: ";
+			std::wcin.putback('\n');
 			std::wcin.ignore(1000, '\n');
 			std::wstring temp;
 			std::getline(std::wcin, temp);
