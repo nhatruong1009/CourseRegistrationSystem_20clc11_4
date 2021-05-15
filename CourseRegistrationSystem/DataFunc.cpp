@@ -629,7 +629,6 @@ _Student* TypeInStudent() {
 		do {
 			std::cout << "Birth(dd/mm/yy): "; stu->birth = InputDate();
 		} while (CheckDate(stu->birth) == false);
-		std::cin.ignore(1000, '\n');
 		std::cout << "Social ID: "; std::cin >> stu->SocialID;
 
 		stu->account.username = StrToChar(NumToStr(stu->ID));

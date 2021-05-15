@@ -359,7 +359,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 	delete[] reg;
 	delete[] newReg;
 	delete[] cancelReg;
-	delete[] newReg;
+	delete[] wasreg;
 }
 void LoginStu(Student*& CurrentUser)
 {

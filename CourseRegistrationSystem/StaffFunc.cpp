@@ -323,7 +323,6 @@ void StaffasStu() {
 	Student* stu = BinToStu(GetFilePath(id));
 	if (stu != nullptr) 
 	{
-		deleteStu(stu);
 		studentMode(stu);
 	}
 	else 
@@ -1369,7 +1368,7 @@ void TypeInScore(Course* cou, std::string current) {
 			else if (check == KEY_ENTER) {
 				char** menu = new char* [5];
 				menu[0] = new char[] { "Mid term" };
-				menu[1] = new char[] {"Last term"};
+				menu[1] = new char[] {"Final term"};
 				menu[2] = new char[] {"Other score"};
 				menu[3] = new char[] {"Total Score"};
 				menu[4] = new char[] {"Confinm"};
@@ -1488,7 +1487,10 @@ void editCourse(std::string filename, std::string current) {
 	case -1:
 		deleteCourse(cour);
 		break;
-	case 0: editCourse(cour, filename, current); break;
+	case 0: 
+		editCourse(cour, filename, current); 
+		deleteCourse(cour);
+		break;
 	case 2:
 		deleteCourse(cour);
 		break;
