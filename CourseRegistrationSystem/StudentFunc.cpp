@@ -68,7 +68,7 @@ void studentMode(Student* stu) {
 	char** menu = new char* [3];
 	menu[0] = new char[] {"Infomation"};
 	menu[1] = new char[] {"Course"};
-	menu[2] = new char[] {"Back"};
+	menu[2] = new char[] {"Logout"};
 	switch (Menu(menu, 5, 2))
 	{
 	case 0:

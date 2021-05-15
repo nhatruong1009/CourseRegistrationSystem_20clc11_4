@@ -108,7 +108,8 @@ void MakeCurentTime(int year) {
 	if(index==3){
 		std::cout << "This year can't change anymore \n> back <";
 	}
-	else {
+	else 
+	{
 		StrCat(temp, 2, L"\\");
 		for (int i = 0; i < 3; i++) {
 			wchar_t* semester = StrCat(temp, L"Semester" + std::to_wstring(i + 1));
@@ -153,7 +154,7 @@ void MakeCurentTime(int year) {
 			take = Menu(menu, 6, 5);
 		} while (take == 1);
 		DealocatedArrString(menu);
-		delete[] temp, SemesterTime;
+		delete[] temp;
 		if (take == 0) {
 			std::fstream fo(SemesterTime, std::fstream::out | std::fstream::binary);
 			for (int i = 0; i < 3; i++) {
@@ -166,6 +167,7 @@ void MakeCurentTime(int year) {
 		if (take == 2) {
 			std::cout << "\n__________ Cancel _________\n";
 		}
+		delete[] SemesterTime;
 	}
 }
 
@@ -252,7 +254,7 @@ void staffMode(bool login)
 	menu[0] = new char[] {"Student"}; // in side this, creative class / grande
 	menu[1] = new char[] {"Course"}; // in side this, edit course 
 	menu[2] = new char[] {"School Plan"};
-	menu[3] = new char[] {"Back"};
+	menu[3] = new char[] {"Logout"};
 	switch (Menu(menu, 5, 2))
 	{
 	case 0:DealocatedArrString(menu); staffStudentMenu(); break;
@@ -317,8 +319,17 @@ void StaffasStu() {
 	unsigned __int64 id;
 	std::cin >> id;
 	Student* stu = BinToStu(GetFilePath(id));
-	if (stu != nullptr) studentMode(stu);
-	else { std::cout << "Not have this ID student"; _getwch();	studentMenuStaff(); }
+	if (stu != nullptr) 
+	{
+		deleteStu(stu);
+		studentMode(stu);
+	}
+	else 
+	{ 
+		std::cout << "This student does not exist"; 
+		_getwch();
+		studentMenuStaff();
+	}
 }
 void studentMenuStaff() {
 	system("cls");
@@ -593,12 +604,14 @@ void viewPlan() {
 	system("cls");
 	Filelist* fl = TakeFileInFolder("Data\\SchoolYear");
 	if (fl == nullptr) { std::cout << "Empty!\n> back <"; _getwch(); }
-	else {
+	else 
+	{
 		int n = CountFile(fl);
 		Date* dStart = new Date[3 * n];
 		Date* dEnd = new Date[3 * n];
 		int* year = new int[n];
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < n; i++) 
+		{
 			year[i] = StringToInt(fl->filename);
 			std::fstream fi("Data\\SchoolYear\\" + fl->filename + "\\time", std::fstream::in | std::fstream::binary);
 			for (int j = 0; j < 3; j++) {
@@ -609,7 +622,11 @@ void viewPlan() {
 			fi.close();
 		}
 		displayAllYear(year, n, dStart, dEnd);
+		delete[]dStart;
+		delete[]dEnd;
+		delete year;
 	}
+	deleteFilelist(fl);
 }
 
 void schoolPlan() {

@@ -2,6 +2,7 @@
 #include"Sup.h"
 #include"Interface.h"
 #include"Staff.h"
+
 void main(){
 	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
@@ -20,5 +21,6 @@ void main(){
 		std::cout << "Leak";
 	}
 	else std::cout << "No";
+	
 	
 }
