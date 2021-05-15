@@ -215,6 +215,8 @@ bool LoginStaff()
 		fin >> sth2;
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
+		std::cin.putback('\n');
+		std::cin.ignore(1000, '\n');
 		std::getline(std::cin, U);
 		if (U == "") return false;
 		std::cout << "Password: ";

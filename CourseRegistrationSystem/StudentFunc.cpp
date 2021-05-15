@@ -372,6 +372,8 @@ void LoginStu(Student*& CurrentUser)
 	{
 		std::cout << "----------- Login -----------\n";
 		std::cout << "Username: ";
+		std::cin.putback('\n');
+		std::cin.ignore(1000, '\n');
 		std::getline(std::cin, U);
 		if (U == "") { CurrentUser = 0; break; }
 		if (loop) break;
