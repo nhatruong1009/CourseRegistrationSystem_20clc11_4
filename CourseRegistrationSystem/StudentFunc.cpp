@@ -97,7 +97,6 @@ void StuInformation(Student* stu) {
 	std::cout << "Birth: " << stu->birth << "\t\t" << "Social ID: " << stu->SocialID << '\n';
 	std::cout << "Gender: "; stu->gender == 'M' ? std::cout << "Men\n" : std::cout << "Women\n";
 	std::cout << "GPA: " << stu->GPA << '\n';
-
 	char** menu = new char* [2];
 	menu[0] = new char[] {"Change Infomation"};
 	menu[1] = new char[] {"Return"};
@@ -174,7 +173,6 @@ void registerMenu(Student* stu) {
 	system("cls");
 	if (run == 0) { std::cout << "Register Open in " << current << "\n> Back <"; _getwch(); CourseInformaion(stu); return; }
 	if (run == -1) { std::cout << "Don't have any register time\n> Back < "; _getwch(); CourseInformaion(stu); return; }
-
 	Filelist* filelist = TakeFileInFolder(current);
 	if (filelist == nullptr) { std::cout << "Don't have any course to register!\n> Back <"; _getwch(); CourseInformaion(stu);  return; }
 	int n = CountFile(filelist);
