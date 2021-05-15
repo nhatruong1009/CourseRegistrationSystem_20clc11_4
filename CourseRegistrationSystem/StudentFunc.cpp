@@ -121,11 +121,11 @@ void ViewCourseNow(Student* stu) {
 	for (int i = 0; i < n; i++) {
 		Course* cou = BinToCourse(GetFilePath(stu->coursenow[i]));
 		Score temp = GetScore(stu->ID, stu->coursenow[i]);
-		std::cout <<std::setw(20)<<std::right<< cou->ID;
+		std::cout << std::setw(20) << std::right << cou->ID;
 		_LText();
-		std::wcout << std::setw(30)<< cou->name << std::setw(30) << cou->teacher;
+		std::wcout << std::setw(30) << cou->name << std::setw(30) << cou->teacher;
 		_SText();
-		std::cout << std::setw(7) <<temp.mids << std::setw(7) << temp.finals << std::setw(7) << temp.others << std::setw(7) << temp.totals << '\n';
+		std::cout << std::setw(7) << temp.mids << std::setw(7) << temp.finals << std::setw(7) << temp.others << std::setw(7) << temp.totals << '\n';
 		deleteCourse(cou);
 	}
 	_getwch();
@@ -212,7 +212,7 @@ inline void removereg(Course** reg, Course* re) {
 	reg[4] = nullptr;
 }
 
-void inline printCourseIn(Course**cou,int n){
+void inline printCourseIn(Course** cou, int n) {
 	GotoXY(4, 13);
 	std::cout << "-------------------------------------In list------------------------------------------";
 	GotoXY(4, 14);
@@ -225,7 +225,7 @@ void inline printCourseIn(Course**cou,int n){
 	}
 }
 
-void takeCourseReg(Course** course, int*& take, Student* stu, std::string current,int m) {
+void takeCourseReg(Course** course, int*& take, Student* stu, std::string current, int m) {
 	int index = 0;
 	int n = _msize(course) / sizeof(course);
 	int begin = 0;
@@ -235,7 +235,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 	for (int i = 0; i < 5; i++) {
 		reg[i] = nullptr;
 	}
-	for (int i = 0; i < n ; i++) {
+	for (int i = 0; i < n; i++) {
 		if (take[i] == 1) { tempwasreg[had] = course[i]; reg[had] = course[i]; had += 1; }
 	}
 	Course** wasreg = nullptr;
@@ -259,7 +259,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 	}
 
 	printCourseIn(reg, had);
-	
+
 	GotoXY(0, 2 * index + 3);
 	std::cout << "->";
 	char get;
@@ -281,7 +281,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 				GotoXY(4, 1);
 				std::cout << "ID\t\t" << std::setw(30) << std::left << "Course name" << std::setw(30) << "Teacher" << std::setw(8) << '\t' << "Slots\t" << "Day1" << std::setw(4) << "  " << "\t Day2";
 				for (int i = begin; i < n && i < begin + m; i++) {
-					GotoXY(4, 2 * (i-begin) + 3);
+					GotoXY(4, 2 * (i - begin) + 3);
 					displaylistCourse(course[i]);
 					GotoXY(150, 2 * (i - begin) + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
@@ -293,14 +293,14 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 			}
 		}
 		else if (get == 'S' || get == KEY_DOWN) {
-			if (index < m - 1 && begin+index < n-1 ) {
+			if (index < m - 1 && begin + index < n - 1) {
 				GotoXY(0, 3 + 2 * index);
 				std::cout << "   ";
 				index += 1;
 				GotoXY(0, 3 + 2 * index);
 				std::cout << "->";
 			}
-			else if (index == m - 1  && begin + m < n) {
+			else if (index == m - 1 && begin + m < n) {
 				begin += m;
 				system("cls");
 				index = 0;
@@ -319,13 +319,13 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 			}
 		}
 		else if (get == KEY_ENTER) {
-			if (take[begin+index] == 1) {
-				removereg(reg, course[begin+index]);
+			if (take[begin + index] == 1) {
+				removereg(reg, course[begin + index]);
 				had -= 1;
 				course[begin + index]->numberofstudent -= 1;
 				SessionConflict(course, reg, take);
 				for (int i = begin; i < n && i < begin + m; i++) {
-					GotoXY(150, 2 * (i-begin) + 3);
+					GotoXY(150, 2 * (i - begin) + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
 					else if (take[i] == -1) { std::cout << 'X'; }
 					else std::cout << " ";
@@ -333,13 +333,13 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 				printCourseIn(reg, had);
 
 			}
-			else if (take[begin+index] == 0 && had < 5) {
-				reg[had] = course[begin+index];
+			else if (take[begin + index] == 0 && had < 5) {
+				reg[had] = course[begin + index];
 				had += 1;
 				course[begin + index]->numberofstudent += 1;
 				SessionConflict(course, reg, take);
 				for (int i = begin; i < n && i < begin + m; i++) {
-					GotoXY(150, 2*(i-begin) + 3);
+					GotoXY(150, 2 * (i - begin) + 3);
 					if (take[i] == 1) { std::cout << 'O'; }
 					else if (take[i] == -1) { std::cout << 'X'; }
 					else std::cout << " ";
