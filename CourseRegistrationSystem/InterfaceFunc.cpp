@@ -340,61 +340,60 @@ void displaylistCourse(Course* cou) {
 
 //std::cout<<"ID\t"<<std::setw(30)<<std::left<<"Course name"<<std::setw(30)<<"Teacher"<<std::setw(8)<<'\t'<<"Slots\t"<<"Day1"<<setw(4)<<"  "<<"Day2";
 
-void inline updateSemesterResult(std::string sem) {// this really hard :(( i hope it work
+void updateSemesterResult(std::string sem) {// this really hard :(( i hope it work
 	Filelist* Courses = TakeFileInFolder(sem);
 	int n = CountFile(Courses);
 	for (int i = 0; i < n; i++) {
 		if (Courses->filename.length() > 5 && Courses->filename.compare(Courses->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(Courses); i -= 1; n -= 1; }
 		else Courses = Courses->pNext;
 	}
-
 	for (int i = 0; i < n; i++) { // ok, time to update :<
 		Course* temp = BinToCourse(sem + "\\" + Courses->filename);
 		for (int j = 0; j < temp->numberofstudent; j++) {
 			Student* stu = BinToStu(GetFilePath(temp->stuID[j]));
 			//take the idCourse to the last
 			int m = 0;
-			if(stu->coursenow!=nullptr) _msize(stu->coursenow) / sizeof(char*);
-			if (m == 0) return;
-			for (int i = 0; i < m; i++) {
-				if (strncmp(stu->coursenow[i], temp->ID, sizeof(temp->ID)) == 0) {
-					char* swap = stu->coursenow[i];
-					stu->coursenow[i] = stu->coursenow[m - 1];
+			if(stu->coursenow!=nullptr) m=_msize(stu->coursenow) / sizeof(char*);
+			if (m == 0) continue;
+			for (int k = 0; k < m; k++) {
+				if (strncmp(stu->coursenow[k], temp->ID, sizeof(temp->ID)) == 0) {
+					char* swap = stu->coursenow[k];
+					stu->coursenow[k] = stu->coursenow[m - 1];
 					stu->coursenow[m - 1] = swap;
 					break;
 				}
 			}
 			m -= 1;
-
 			Score score = GetStuScore(sem + "\\" + Courses->filename + "Score", stu->ID);
-			int n = 0;
-			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(char*);
-			n += 1;
+			int e = 0;
+			if (stu->allcourse != nullptr) e = _msize(stu->allcourse) / sizeof(char*);
+			e += 1;
 			//just keep;
 			char** his = stu->allcourse;
-			stu->allcourse = new char* [n];
-			for (int i = 0; i < n - 1; i++) {
-				stu->allcourse[i] = his[i];
+			stu->allcourse = new char* [e];
+			for (int k = 0; k < e - 1; k++) {
+				stu->allcourse[k] = his[k];
 			}
-			stu->allcourse[n - 1] = stu->coursenow[m];
+			stu->allcourse[e - 1] = stu->coursenow[m];
 
 			delete[] his; //detele the poiter point to data, not the data
 			his = stu->coursenow;
 			stu->coursenow = nullptr;
 			if (m > 0) stu->coursenow = new char* [m];
-			for (int i = 0; i < m; i++) {
-				stu->coursenow[i] = his[i];
+			for (int k = 0; k < m; k++) {
+				stu->coursenow[k] = his[k];
 			}
 			delete[] his;
 
 			//update Score :((
-			stu->GPA = ((stu->GPA * (float(n) - 1)) + score.totals) / float(n); // Old GPA*number of olD Subject + this Course score and / for numberof subect
+			stu->GPA = ((stu->GPA * (float(e) - 1)) + score.totals) / float(e); // Old GPA*number of olD Subject + this Course score and / for numberof subect
 			StuToBin(stu, GetFilePath(stu->ID));
 			deleteStu(stu);
 		}
 		deleteCourse(temp);
 		Courses = Courses->pNext;
 	}
+	_getwch();
 }
 std::string secondrun() {
 	std::fstream file("currentsem", std::fstream::in|std::fstream::binary);
@@ -439,8 +438,12 @@ int fistrun(std::string& current) {
 	else {//end register // save new score file and made current time semester to update file.
 		current = "Data\\SchoolYear\\" + std::to_string(year) + "\\Semester" + std::to_string(sem);
 		Filelist* filelist = TakeFileInFolder(current);
-		//std::cout << filelist->filename;
 		int n = CountFile(filelist);
+		for (int i = 0; i < n; i++) {
+			if (filelist->filename.length() > 5 && filelist->filename.compare(filelist->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(filelist); i -= 1; n -= 1; }
+			else filelist = filelist->pNext;
+		}
+		n = CountFile(filelist);
 		for (int i = 0; i < n; i++) {
 			Course* cour = BinToCourse(current + "\\" + filelist->filename);
 			for (int m = 0; m < cour->numberofstudent; m++) {
