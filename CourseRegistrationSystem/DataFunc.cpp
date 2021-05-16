@@ -250,10 +250,10 @@ Score GetStuScore(std::string path, unsigned __int64 ID)
 		return Score{};
 	Score a;
 	short n;
-	fin.read((char*)&n, sizeof(n));
+	fin.read((char*)&n, sizeof(short));
 	unsigned __int64 temp;
 	fin.read((char*)&temp, 8);
-	while (temp != ID)
+	while (temp != ID && fin.tellg()!=-1)
 	{
 		fin.seekg(16, fin.cur);
 		fin.read((char*)&temp, 8);

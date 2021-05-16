@@ -439,22 +439,23 @@ void AddClass() {
 }
 
 void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::string sem) {
-	for (int i = 0; i < CountFile(file); i++) {
-		if (file->filename.length() > 5 && file->filename.compare(file->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(file); i -= 1; }
+	int n = CountFile(file);
+	for (int i = 0; i < n; i++) {
+		if (file->filename.length() > 5 && file->filename.compare(file->filename.length() - 5, 5, "Score") == 0) { DeleteCurFileList(file); i -= 1; n -= 1; }
 		else file = file->pNext;
 	}
 	fo << "ID,Fist name,Last name,Birth,Gender,GPA overall";
-	int n = CountFile(file);
+	n = CountFile(file);
 	std::string* coursename = new std::string[n];
 	for (int i = 0; i < n; i++) {
 		fo << ',' << ToWstring(file->filename);
 		coursename[i] = file->filename;
 		file = file->pNext;
 	}
-
-	fo << '\n';
+	fo << ",This semester GPA\n";
 	int m = _msize(stu) / sizeof(*stu);
 	for (int i = 0; i < m; i++) {
+		std::cout << stu[i]->ID;
 		fo << stu[i]->ID << ','
 			<< stu[i]->firstname << ','
 			<< stu[i]->lastname << ','
@@ -464,6 +465,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		for (int j = 0; j < n; j++) {
 			fo << ',' << GetStuScore(sem + "\\" + coursename[j] + "Score", stu[i]->ID).totals;
 		}
+		fo << "GPA Sem";
 		fo << '\n';
 	}
 	delete[] coursename;
@@ -477,24 +479,12 @@ void CsvClass(Student** stu) {
 	std::wfstream fo(filename, std::fstream::out);
 	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
 	fo << wchar_t(0xfeff);
-	std::string now = secondrun();
+	std::string now = chooseTime();
+	if (now == "") return;
 	int n = _msize(stu) / sizeof(*stu);
 	Filelist* ls = nullptr;
-	if (now != "") ls = TakeFileInFolder(now);
-	if (now == "" || ls == nullptr) {
-		fo << "ID,Fist name,Last name,Birth,Gender,GPA\n";
-		for (int i = 0; i < n; i++) {
-			fo << stu[i]->ID << ','
-				<< stu[i]->firstname << ','
-				<< stu[i]->lastname << ','
-				<< stu[i]->birth << ','
-				<< stu[i]->gender << ','
-				<< stu[i]->GPA << '\n';
-		}
-	}
-	else {
-		CsvClassWithCourse(ls, stu, fo, now);
-	}
+	ls = TakeFileInFolder(now);
+	CsvClassWithCourse(ls, stu, fo, now);
 	fo.close();
 	deleteFilelist(ls);
 	return;
@@ -572,7 +562,7 @@ void addSchoolPlan(){
 	std::cout << "--------- School Plan ---------";
 	std::cout << "\nInput Year (Pass if take current year) :";
 	time = InputNumber();
-	if (time == -1) { staffMode(); return; }
+	if (time == -1) {  return; }
 	if (time == 0) {
 		time = GetTime().yy; std::cout << time << '\n';
 	}
@@ -794,9 +784,15 @@ void infomationScoreOfCourse(std::string coursefile) {
 	if (sco == nullptr) std::cout << "Course's scores empty!";
 	else {
 		int n = _msize(sco) / sizeof(*sco);
-		std::cout << std::setw(15) << std::right << "ID" << std::setw(6) << "Mid score" << std::setw(6) << "Final score" << std::setw(6) << "Other score" << std::setw(6) << "Total score\n";
+		std::cout << std::right << "ID\t"<<std::setw(35)<< "Student name"<< "\tMid score\tFinal score\tOther score\tTotal score\n";
 		for (int i = 0; i < n; i++) {
-			std::cout << std::setw(15) << std::right << sco[i].ID << std::setw(6) << sco[i].mids << std::setw(6) << sco[i].finals << std::setw(6) << sco[i].others << std::setw(6) << sco[i].totals << '\n';
+			Student* temp = BinToStu(GetFilePath(sco[i].ID));
+			std::cout <<std::right << sco[i].ID<<'\t';
+			_LText();
+			std::wcout << std::setw(20) << temp->firstname<<std::setw(9) << temp->lastname;
+			_SText();
+			std::cout<<"\t\t"<< sco[i].mids <<"\t\t"<< sco[i].finals <<"\t\t"<< sco[i].others <<"\t\t"<< sco[i].totals << '\n';
+			deleteStu(temp);
 		}
 	}
 }
@@ -840,7 +836,7 @@ void viewCourse() {
 					else if (index == 0 && beg != 0) {
 						beg -= m;
 						system("cls");
-						for (int i = 0; i < m; i++) temp = temp->pPrev;
+						for (int i = 0; i < 2 * m; i++) temp = temp->pPrev; 
 						for (int i = beg; i < beg + m && i < max; i++) {
 							Course* k = BinToCourse(current + "\\" + temp->filename);
 							displayCourse(k);
@@ -1263,7 +1259,6 @@ void editInfo(Course* cou, std::string filename, std::string current) {
 		if (book == 0) {
 			_LText();
 			std::wcout << "New teacher: ";
-			std::wcin.putback('\n');
 			std::wcin.ignore(1000, '\n');
 			std::wstring temp;
 			std::getline(std::wcin, temp);
@@ -1442,8 +1437,6 @@ void FileInScore(Course* cou, std::string current) {
 
 			for (int i = 0; i < cou->numberofstudent; i++) {
 				if (cou->stuID[i] == score.ID) {
-					std::cout << "check: " << score.finals;
-					_getwch();
 					cou->score[i] = score;
 					break;
 				}
