@@ -788,12 +788,9 @@ void addCourse() {
 }
 
 void infomationScoreOfCourse(std::string coursefile) {
-<<<<<<< HEAD
+
 	Score* sco = LoadScore(coursefile + "Score");
 	system("cls");
-=======
-	Score*sco = LoadScore(coursefile + "Score");
->>>>>>> parent of ef39bd4 (fix lai add course,test add course bang input)
 	if (sco == nullptr) std::cout << "Course's scores empty!";
 	else {
 		int n = _msize(sco) / sizeof(*sco);
