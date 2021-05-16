@@ -356,6 +356,7 @@ void takeCourseReg(Course** course, int*& take, Student* stu, std::string curren
 	registerCourse(newReg, current, stu->ID);
 	cancelCourse(cancelReg, current, stu->ID);
 	registerCourse(stu, reg, current);
+	deleteCourse(wasreg);
 	delete[] reg;
 	delete[] newReg;
 	delete[] cancelReg;

@@ -457,7 +457,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		coursename[i] = file->filename;
 		file = file->pNext;
 	}
-	fo << ",This semester GPA\n";
+	fo << ",GPA(4)\n";
 	int m = _msize(stu) / sizeof(*stu);
 	for (int i = 0; i < m; i++) {
 		std::cout << stu[i]->ID;
