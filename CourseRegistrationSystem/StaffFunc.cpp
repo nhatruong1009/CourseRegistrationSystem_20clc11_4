@@ -238,6 +238,11 @@ bool LoginStaff()
 		}
 		if (sth1 == U && sth2 == P)
 			return true;
+		else 
+		{
+			system("cls");
+			std::cout << "Username or password is invalid\n";
+		}
 	} while (1);
 	fin.close();
 }
