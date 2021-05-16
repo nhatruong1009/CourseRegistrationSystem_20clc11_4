@@ -289,11 +289,11 @@ Score GetScore(unsigned __int64 ID, char* coursename)
 	result.ID = ID;
 	return result;
 }
-void GetGPA(Student* a)
+float GetGPA(Student* a)
 {
 	int n = _msize(a->coursenow) / sizeof(*a->coursenow);
 	if (n == 0)
-		return;
+		return 0;
 	Score* now = new Score[n];
 	float temp = 0;
 	for (int i = 0; i < n; i++)
@@ -303,8 +303,8 @@ void GetGPA(Student* a)
 	}
 	temp /= n;
 	temp *= 0.4;
-	a->GPA = temp;
 	delete[]now;
+	return temp;
 }
 
 //**************Course*****************

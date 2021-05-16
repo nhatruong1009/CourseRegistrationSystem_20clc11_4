@@ -470,7 +470,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		for (int j = 0; j < n; j++) {
 			fo << ',' << GetStuScore(sem + "\\" + coursename[j] + "Score", stu[i]->ID).totals;
 		}
-		fo << "GPA Sem";
+		fo << ',' << GetGPA(stu[i]);
 		fo << '\n';
 	}
 	delete[] coursename;

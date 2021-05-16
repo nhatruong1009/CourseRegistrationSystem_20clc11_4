@@ -125,7 +125,7 @@ void SaveScore(Course* cou, std::string filename);
 void SaveScore(Course* cou, Score* score, std::string filename);
 Score GetStuScore(std::string path, unsigned __int64 ID);
 Score GetScore(unsigned __int64 ID, char* coursename);
-void GetGPA(Student* a);
+float GetGPA(Student* a);
 //***********************************************************
 
 //------------Course
@@ -201,7 +201,7 @@ void deleteIntArray(int*& a);
 void deleteIntArray(unsigned __int64*& a);
 void deleteStuArray(Student**& a);
 
-#endif // !_DealocateData
+#endif // !_DealocatedData
 
 
 #endif // !_Data
