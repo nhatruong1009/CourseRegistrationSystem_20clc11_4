@@ -790,6 +790,7 @@ void addCourse() {
 
 void infomationScoreOfCourse(std::string coursefile) {
 	Score* sco = LoadScore(coursefile + "Score");
+	system("cls");
 	if (sco == nullptr) std::cout << "Course's scores empty!";
 	else {
 		int n = _msize(sco) / sizeof(*sco);

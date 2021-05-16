@@ -300,7 +300,7 @@ void PrintStu(Student** stu, int c) {
 				std::cout << std::setw(5) << "ID" << std::setw(25) << "Fist Name" << std::setw(20) << "Last name" << std::setw(10) << "Gender" << std::setw(12) << "Birth" << std::setw(20) << "Social ID";
 			}
 		}
-	} while (u != KEY_ENTER);
+	} while (u != KEY_ENTER && u != KEY_ESC && u != 'E');
 }
 
 void displayCourse(Course* cou) {
@@ -393,7 +393,6 @@ void updateSemesterResult(std::string sem) {// this really hard :(( i hope it wo
 		deleteCourse(temp);
 		Courses = Courses->pNext;
 	}
-	_getwch();
 }
 std::string secondrun() {
 	std::fstream file("currentsem", std::fstream::in|std::fstream::binary);
