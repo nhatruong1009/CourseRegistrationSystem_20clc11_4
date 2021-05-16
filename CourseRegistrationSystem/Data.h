@@ -125,6 +125,7 @@ void SaveScore(Course* cou, std::string filename);
 void SaveScore(Course* cou, Score* score, std::string filename);
 Score GetStuScore(std::string path, unsigned __int64 ID);
 Score GetScore(unsigned __int64 ID, char* coursename);
+void GetGPA(Student* a);
 //***********************************************************
 
 //------------Course

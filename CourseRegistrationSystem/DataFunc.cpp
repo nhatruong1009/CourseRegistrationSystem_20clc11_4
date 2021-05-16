@@ -289,6 +289,23 @@ Score GetScore(unsigned __int64 ID, char* coursename)
 	result.ID = ID;
 	return result;
 }
+void GetGPA(Student* a)
+{
+	int n = _msize(a->coursenow) / sizeof(*a->coursenow);
+	if (n == 0)
+		return;
+	Score* now = new Score[n];
+	float temp = 0;
+	for (int i = 0; i < n; i++)
+	{
+		now[i] = GetScore(a->ID, a->coursenow[i]);
+		temp += now[i].totals;
+	}
+	temp /= n;
+	temp *= 0.4;
+	a->GPA = temp;
+	delete[]now;
+}
 
 //**************Course*****************
 Course* MakeCourse() {

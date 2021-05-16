@@ -21,6 +21,4 @@ void main(){
 		std::cout << "Leak";
 	}
 	else std::cout << "No";
-	
-	
 }
