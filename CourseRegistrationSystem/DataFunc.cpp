@@ -290,6 +290,7 @@ Score GetScore(unsigned __int64 ID, char* coursename)
 }
 float GetGPA(Student* a)
 {
+	if (a->coursenow == nullptr) return 0;
 	int n = _msize(a->coursenow) / sizeof(*a->coursenow);
 	if (n == 0)
 		return 0;
