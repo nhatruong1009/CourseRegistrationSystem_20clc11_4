@@ -451,13 +451,14 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 	}
 	fo << "ID,Fist name,Last name,Birth,Gender,GPA overall";
 	n = CountFile(file);
-	std::string* coursename = new std::string[n];
+	std::string* coursename;
+	if (n != 0) coursename = new std::string[n];
 	for (int i = 0; i < n; i++) {
 		fo << ',' << ToWstring(file->filename);
 		coursename[i] = file->filename;
 		file = file->pNext;
 	}
-	fo << ",GPA(4)\n";
+	fo << ",GPA\n";
 	int m = _msize(stu) / sizeof(*stu);
 	for (int i = 0; i < m; i++) {
 		std::cout << stu[i]->ID;
@@ -473,7 +474,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		fo << ',' << GetGPA(stu[i]);
 		fo << '\n';
 	}
-	delete[] coursename;
+	if (n != 0) delete[] coursename;
 }
 
 void CsvClass(Student** stu) {

@@ -45,6 +45,7 @@ inline void removereg(Course** reg, Course* re) {
 
 //*******************************
 
+
 void GotoXY(short x, short y) {
 	COORD coord;
 	coord.X = x;

@@ -302,7 +302,6 @@ float GetGPA(Student* a)
 		temp += now[i].totals;
 	}
 	temp /= n;
-	temp *= 0.4;
 	delete[]now;
 	return temp;
 }

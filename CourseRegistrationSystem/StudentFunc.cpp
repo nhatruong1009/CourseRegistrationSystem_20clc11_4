@@ -96,7 +96,7 @@ void StuInformation(Student* stu) {
 	_SText();
 	std::cout << "Birth: " << stu->birth << "\t\t" << "Social ID: " << stu->SocialID << '\n';
 	std::cout << "Gender: "; stu->gender == 'M' ? std::cout << "Men\n" : std::cout << "Women\n";
-	std::cout << "GPA: " << stu->GPA << '\n';
+	std::cout << "GPA: " << stu->GPA << "\t this semester GPA: " << GetGPA(stu) << '\n';
 
 	char** menu = new char* [2];
 	menu[0] = new char[] {"Change Infomation"};

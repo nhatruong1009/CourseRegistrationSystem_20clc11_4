@@ -4,7 +4,6 @@
 
 std::string secondrun();
 int fistrun(std::string& current);
-
 void GotoXY(short x, short y);
 short Menu(wchar_t** list, short Xposition, short Yposition);
 short Menu(char** list, short Xposition, short Yposition);
