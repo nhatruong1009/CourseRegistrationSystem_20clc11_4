@@ -458,7 +458,8 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		coursename[i] = file->filename;
 		file = file->pNext;
 	}
-	fo << ",GPA\n";
+	if (n != 0) fo << ",GPA";
+	fo << "\n";
 	int m = _msize(stu) / sizeof(*stu);
 	for (int i = 0; i < m; i++) {
 		fo << stu[i]->ID << ','
@@ -470,7 +471,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 		for (int j = 0; j < n; j++) {
 			fo << ',' << GetStuScore(sem + "\\" + coursename[j] + "Score", stu[i]->ID).totals;
 		}
-		fo << ',' << GetGPA(stu[i]);
+		if (n != 0)fo << ',' << GetGPA(stu[i]);
 		fo << '\n';
 	}
 	if (n != 0) delete[] coursename;
@@ -484,7 +485,7 @@ void CsvClass(Student** stu) {
 	std::wfstream fo(filename, std::fstream::out);
 	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
 	fo << wchar_t(0xfeff);
-	std::string now = chooseTime();
+	std::string now = chooseTime(false, false);
 	int n = _msize(stu) / sizeof(*stu);
 	Filelist* ls = nullptr;
 	ls = TakeFileInFolder(now);
