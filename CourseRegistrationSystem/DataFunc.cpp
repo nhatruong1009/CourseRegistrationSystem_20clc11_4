@@ -218,8 +218,7 @@ Score* LoadScore(std::string filename) {
 	fi.read((char*)&numberofstu, sizeof(unsigned short));
 	Score* sco = new Score[numberofstu];
 	for (int i = 0; i < numberofstu; i++) {
-		fi.read((char*)&sco[i].ID, sizeof(unsigned __int64));
-		fi.read((char*)&sco[i].totals, sizeof(float) * 4);
+		fi.read((char*)&sco[i], sizeof(Score));
 	}
 	return sco;
 }

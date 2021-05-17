@@ -451,7 +451,7 @@ void CsvClassWithCourse(Filelist* file, Student** stu, std::wfstream& fo, std::s
 	}
 	fo << "ID,Fist name,Last name,Birth,Gender,GPA overall";
 	n = CountFile(file);
-	std::string* coursename;
+	std::string* coursename=nullptr;
 	if (n != 0) coursename = new std::string[n];
 	for (int i = 0; i < n; i++) {
 		fo << ',' << ToWstring(file->filename);
@@ -784,7 +784,6 @@ void addCourse() {
 }
 
 void infomationScoreOfCourse(std::string coursefile) {
-
 	Score* sco = LoadScore(coursefile + "Score");
 	system("cls");
 	if (sco == nullptr) std::cout << "Course's scores empty!";
@@ -879,7 +878,7 @@ void viewCourse() {
 				}
 			} while (take != KEY_ENTER && take != KEY_ESC);
 			if (take == KEY_ENTER) {
-				for (int i = 0; i < index; i++)temp = temp->pNext;
+				for (int i = 0; i < 3-index; i++)temp = temp->pPrev;
 				infomationScoreOfCourse(current + "\\" + temp->filename);
 				_getwch();
 				viewCourse();
