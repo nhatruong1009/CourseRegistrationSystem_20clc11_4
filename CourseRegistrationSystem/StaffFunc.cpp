@@ -485,7 +485,6 @@ void CsvClass(Student** stu) {
 	fo.imbue(std::locale(fo.getloc(), new std::codecvt_utf8_utf16<wchar_t>));
 	fo << wchar_t(0xfeff);
 	std::string now = chooseTime();
-	if (now == "") return;
 	int n = _msize(stu) / sizeof(*stu);
 	Filelist* ls = nullptr;
 	ls = TakeFileInFolder(now);
