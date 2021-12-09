@@ -364,7 +364,6 @@ void inline updateSemesterResult(std::string sem) {// this really hard :(( i hop
 			m -= 1;
 
 			Score score = GetStuScore(sem + "\\" + Courses->filename + "Score", stu->ID);
-			if(score.name!=nullptr) delete[] score.name;// btw it not neccessary
 			int n = 0;
 			if (stu->allcourse != nullptr) n = _msize(stu->allcourse) / sizeof(stu->allcourse);
 			n += 1;

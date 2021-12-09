@@ -236,7 +236,7 @@ void SaveScore(Course* cou, std::string filename) {
 	fo.close();
 }
 void SaveScore(Course* cou, Score* score, std::string filename) {
-	if (cou == nullptr) return;
+	if (cou == nullptr || score==nullptr) return;
 	std::fstream fo(filename, std::fstream::out | std::fstream::binary);
 	fo.write((char*)&cou->numberofstudent, sizeof(unsigned short));
 	for (int i = 0; i < cou->numberofstudent; i++) {
@@ -1245,10 +1245,7 @@ void deleteCourse(Course*& a)
 	if (a->score)
 	{
 		int n = _msize(a->score) / sizeof(*a->score);
-		for (int i = 0; i < n; i++) {
-			delete[] a->score[i].name;
-		}
-		delete a->score;
+		delete[] a->score;
 	}
 	delete a;
 	a = nullptr;

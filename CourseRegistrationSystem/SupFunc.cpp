@@ -364,6 +364,7 @@ unsigned __int64 StringToInt(std::string str) {
 	return a;
 }
 
+
 Date StringToDate(const wchar_t* ch) {
 	int n = wcslen(ch);
 	int i = 0;

@@ -115,14 +115,19 @@ void StuInformation(Student* stu) {
 }
 void ViewCourseNow(Student* stu) {
 	system("cls");
-	std::cout << "------------- Registed Course ---------------";
-	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
-	int n = _msize(stu->coursenow) / sizeof(char*);
-	char sem = stu->coursenow[0][strlen(stu->coursenow[0]) - 1];
-	char y[5];
-	ToString(stu->coursenow[0]).copy(y, 4, strlen(stu->coursenow[0]) - 5);
-	y[4] = '\0';
-	std::cout << "[]" << sem << ":" << y;
+	std::cout << "------------- Course now ---------------\n";
+	if (stu->coursenow == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); CourseInformaion(stu); return; }
+	int n = _msize(stu->coursenow) / sizeof(stu->coursenow);
+	for (int i = 0; i < n; i++) {
+		Course* cou = BinToCourse(GetFilePath(stu->coursenow[i]));
+		Score temp = GetScore(stu->ID, stu->coursenow[i]);
+		std::cout << cou->ID << "\t";
+		_LText();
+		std::wcout << cou->name << '\t' << cou->teacher << '\t';
+		_SText();
+		std::cout << temp.mids << "\t" << temp.finals << '\t' << temp.others << '\t' << temp.totals << '\n';
+		deleteCourse(cou);
+	}
 	_getwch();
 	CourseInformaion(stu);
 }
@@ -131,7 +136,7 @@ void CourseInformaion(Student* stu) {
 	std::cout << "------------- Course ---------------";
 	char** menu = new char* [4];
 	menu[0] = new char[] {"Register Course"};
-	menu[1] = new char[] {"Regsited Couse"};
+	menu[1] = new char[] {"Couse now"};
 	menu[2] = new char[] {"Completed Courses"};
 	menu[3] = new char[] {"Back"};
 	switch (Menu(menu, 5, 2)) {
@@ -147,9 +152,19 @@ void CourseInformaion(Student* stu) {
 }
 void ViewCouse(Student* stu) {
 	system("cls");
-	std::cout << "------------- All Course ---------------";
-	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <";	CourseInformaion(stu); _getwch(); return; }
-	int n = _msize(stu->allcourse) / sizeof(char*);
+	std::cout << "------------- All Course ---------------\n";
+	if (stu->allcourse == nullptr) { std::cout << "\n_Empty_\n> Return <"; _getwch(); CourseInformaion(stu); return; }
+	int n = _msize(stu->allcourse) / sizeof(stu->allcourse);
+	for (int i = 0; i < n; i++) {
+		Course* cou = BinToCourse(GetFilePath(stu->allcourse[i]));
+		Score temp = GetScore(stu->ID, stu->allcourse[i]);
+		std::cout << cou->ID << "\t";
+		_LText();
+		std::wcout << cou->name << '\t' << cou->teacher << '\t';
+		_SText();
+		std::cout << temp.mids << "\t" << temp.finals << '\t' << temp.others << '\t' << temp.totals << '\n';
+		deleteCourse(cou);
+	}
 	_getwch();
 	CourseInformaion(stu);
 }

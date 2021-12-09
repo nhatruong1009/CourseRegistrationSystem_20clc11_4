@@ -22,7 +22,6 @@ struct Account
 struct Score
 {
 	unsigned __int64 ID;
-	wchar_t* name = nullptr;
 	float totals = 0;
 	float finals = 0;
 	float mids = 0;
